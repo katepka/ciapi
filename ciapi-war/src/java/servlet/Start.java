@@ -1,5 +1,7 @@
-package client;
+package servlet;
 
+import client.CategoryClient;
+import client.CategoryClient;
 import entry.CategoryEntry;
 import java.io.IOException;
 import java.io.PrintWriter;
