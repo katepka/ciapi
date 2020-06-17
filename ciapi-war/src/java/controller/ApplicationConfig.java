@@ -22,6 +22,7 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(controller.CategoryController.class);
         resources.add(controller.IdeaController.class);
+        resources.add(controller.LocationController.class);
         resources.add(controller.RatingController.class);
         resources.add(controller.RegistrationController.class);
         resources.add(controller.RoleController.class);
