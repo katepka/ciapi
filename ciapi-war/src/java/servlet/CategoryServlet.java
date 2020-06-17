@@ -18,7 +18,8 @@ import javax.ws.rs.ClientErrorException;
 @WebServlet(name = "CategoryServlet", urlPatterns = {"/category"})
 public class CategoryServlet extends HttpServlet {
     
-    private CategoryEntry category = new CategoryEntry(); // TODO: получить из предыдущей jsp
+    private String categoryId = null;
+    private CategoryEntry category = null;
     private CategoryClient categoryClient;
     private List<IdeaEntry> ideas = new ArrayList<>();
     
@@ -34,14 +35,13 @@ public class CategoryServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         
         int numImplementedIdeas = 0;
-        
-        // TODO: убрать потом
-        category.setId(1L);
-        category.setTitle("some category");
-        category.setDescription("category description");
+        categoryId = request.getParameter("categoryId"); // тоже может быть null
         
         try {
-            ideas = categoryClient.getIdeasByCategoryId_JSON("1");
+            
+            category = categoryClient.getCategoryById_JSON(CategoryEntry.class, categoryId);
+            ideas = categoryClient.getIdeasByCategoryId_JSON(categoryId);
+            
             if (ideas != null) {
                 for (IdeaEntry idea : ideas) {
                     if (idea.getStatus().getId() == 3) {
@@ -53,8 +53,10 @@ public class CategoryServlet extends HttpServlet {
             } else {
                 request.setAttribute("numIdeas", 0);
             }
-            request.setAttribute("categoryTitle", category.getTitle());
-            request.setAttribute("categoryDescription", category.getDescription());
+            if (category != null) {
+                request.setAttribute("categoryTitle", category.getTitle());
+                request.setAttribute("categoryDescription", category.getDescription());
+            }
             request.setAttribute("numImplementedIdeas", numImplementedIdeas);
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/category.jsp");
             if (requestDispatcher != null) {
@@ -62,8 +64,13 @@ public class CategoryServlet extends HttpServlet {
             }
 
         } catch (ClientErrorException cee) {
-            // TODO: handle it
-            System.out.println(Arrays.toString(cee.getStackTrace()));
+            // TODO: handle it!!!
+            System.out.println("404 | " + Arrays.toString(cee.getStackTrace()));
+            
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/category.jsp");
+            if (requestDispatcher != null) {
+                requestDispatcher.forward(request, response);
+            }
         }
         
     }

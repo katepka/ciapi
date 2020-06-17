@@ -38,13 +38,13 @@ public class IdeaServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         
-        // TODO: Получить id из request с предыдущей jsp, где выбираем идею
-        ideaId = "1";
+        ideaId = request.getParameter("ideaId");
         
         if (ideaId != null && !ideaId.trim().isEmpty()) {
             try {
                 IdeaEntry idea = ideaClient.getIdeaById_JSON(IdeaEntry.class, ideaId);
-                comments = ideaClient.getCommentsByIdeaId_JSON(ideaId);
+                System.out.println(idea.getTitle());
+                
                 
                 if (idea != null) {
                     if (idea.getCoordinator() == null) {
@@ -64,21 +64,26 @@ public class IdeaServlet extends HttpServlet {
                     // TODO: Подтянуть голоса
                     request.setAttribute("votesFor", votesFor);
                     request.setAttribute("votesAgainst", votesAgainst);
-                    // TODO: Подтянуть комментарии
-                    request.setAttribute("comments", comments);
-                    
-                    RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/idea.jsp");
-                    if (requestDispatcher != null) {
-                        requestDispatcher.forward(request, response);
-                    }
+                                      
                 }
                 
             } catch (ClientErrorException cee) {
                 // TODO: handle it
                 System.out.println(cee.getStackTrace());
             }
+            try {
+                comments = ideaClient.getCommentsByIdeaId_JSON(ideaId);
+                request.setAttribute("comments", comments);
+            } catch (ClientErrorException cee) {
+                // TODO: handle it
+                System.out.println(cee.getStackTrace());
+            }
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/idea.jsp");
+            if (requestDispatcher != null) {
+                requestDispatcher.forward(request, response);
+            }
         } else {
-            // TODO: handle the situation
+            // TODO: handle the situation when there isn't ideaId
         }
     }
 

@@ -44,7 +44,7 @@
                     <tr>
                         <td width="33%">
                             <form action="ideas" method="GET">
-                                <input type="submit" value="Предложить идею">
+                                <input type="submit" name="createIdea" value="Предложить идею">
                             </form>
                         </td>
                         <td>
@@ -56,15 +56,15 @@
                             Фильтр по статусу
                         </td>
                     </tr>
-                    
-                            
-                            <c:forEach var="idea" items="ideas">
+                            <c:forEach var="idea" items="${ideas}">
                                 <tr>
                                     <td>
-                                        <br>${idea.status.title} 
-                                        <br>${idea.created} | ${idea.location.name}
-                                        <br>${idea.status.title}
-                                        <br>${idea.title}
+                                        <form action="ideas" method="GET">
+                                            <br>${idea.status.title}
+                                            <br>${idea.created} | ${idea.location.name}
+                                            <input type="hidden" name="ideaId" value="${idea.id}">
+                                            <input type="submit" name="go" value="${idea.title}">
+                                        </form>
                                     </td>
                                 </tr>
                             </c:forEach>

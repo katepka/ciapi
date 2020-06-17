@@ -46,7 +46,7 @@
                         <td width="33%"></td>
                         <td align="center">
                             <form action="ideas" method="GET">
-                                <input type="submit" value="Предложить идею">
+                                <input type="submit" name="createIdea" value="Предложить идею">
                             </form>
                                 
                         </td>
@@ -56,10 +56,12 @@
                     <c:forEach var="category" items="${categories}" >
                     <tr>
                         <td>
-                            <br>${category.id}
-                            <br>${category.title}
-                            <br>${category.description}
-                            <br>${category.iconRef}
+                            <form action="category" method="GET">
+                                <input type="submit" name="go" value="${category.title}">
+                                <input type="hidden" name="categoryId" value="${category.id}">
+                                <br>${category.description}
+                                <br>${category.iconRef}
+                            </form>
                         </td>
                     </tr>
                     </c:forEach>
