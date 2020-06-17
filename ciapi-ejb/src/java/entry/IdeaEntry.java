@@ -105,5 +105,20 @@ public class IdeaEntry extends AbstractDataEntry {
     public void setImplementationInfo(ImplementationInfoEntry implementationInfo) {
         this.implementationInfo = implementationInfo;
     }
+
+    @Override
+    public String toString() {
+        return "IdeaEntry{" + "title=" + title 
+                + ", description=" + description 
+                + ", category=" + category 
+                + ", location=" + location 
+                + ", author=" + author 
+                + ", created=" + created 
+                + ", coordinator=" + coordinator 
+                + ", status=" + status 
+                + ", implementationInfo=" + implementationInfo + '}';
+    }
+    
+    
     
 }

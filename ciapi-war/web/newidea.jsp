@@ -4,7 +4,11 @@
     Author     : mi
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="entry.CategoryEntry"%>
+<%@page import="entry.LocationEntry"%>
+<%@page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,15 +20,15 @@
             <table border="1" width="100%">
                 <tr>
                     <td><h1>Идеи для города</h1></td>
-                    <td>
+                    <td align="right">
                         <form action="authorization" method="GET">
                             <input type="submit" value="ВОЙТИ">
                         </form>
                     </td>
                 </tr>
                 <form action="ideas" method="POST">
+                    <table border="1" width="100%">
                 <tr>
-                
                     <td colspan="2" align="left">
                         <h2>Есть идея, как сделать жизнь города лучше?</h2>
                     </td>
@@ -33,22 +37,24 @@
                     <td>
                         <p>Выберите категорию:</p>
                         <p>
-                            <select>
-                                <option>Категория 1</option>
-                                <option>Категория 2</option>
-                                <option>Категория 3</option>
-                                <option>Категория 4</option>
+                            <select name="categorySelected">
+                                <c:forEach var="category" items="${categories}">
+                                    <option>${category.title}</option>
+                                    <input type="hidden" name="categoryId" value="${category.id}">
+                                </c:forEach>
                             </select>
                         </p>
                     </td>
                     <td>
                         <p>Выберите город или отметьте место на карте:</p>
                         <p>
-                            <select>
-                                <option>Место 1</option>
-                                <option>Место 2</option>
-                                <option>Место 3</option>
-                                <option>Место 4</option>
+                            <select name="locationNameSelected">
+                                <c:forEach var="location" items="${locations}">
+                                    <c:if test="${location.name != null}">
+                                        <option>${location.name}</option>
+                                        <input type="hidden" name="locationId" value="${location.id}">
+                                    </c:if>
+                                </c:forEach>
                             </select>
                         </p>
                         
@@ -58,7 +64,7 @@
                     <td>
                         <p>В чем заключается идея? Сформулируйте кратко суть:</p>
                         <p>
-                            <input type="text" value="Заголовок идеи">
+                            <input type="text" name="title" value="Заголовок идеи">
                         </p>
                     </td>
                     <td rowspan="2">
@@ -69,7 +75,7 @@
                     <td>
                         <p>Добавьте описание идеи:</p>
                         <p>
-                            <input type="text" value="Описание">
+                            <input type="text" name="description" value="Описание">
                         </p>
                     </td>
                     
@@ -89,6 +95,7 @@
                         <input type="submit" value="ОТМЕНА" name="cancel">
                     </td>
                 </tr>
+                    </table>
                 </form>
 
                 <tr>

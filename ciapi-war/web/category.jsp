@@ -61,7 +61,10 @@
                                     <td>
                                         <form action="ideas" method="GET">
                                             <br>${idea.status.title}
-                                            <br>${idea.created} | ${idea.location.name}
+                                            <br>${idea.created} | 
+                                            <c:if test="${idea.location.name != null}">
+                                                ${idea.location.name}
+                                            </c:if>
                                             <input type="hidden" name="ideaId" value="${idea.id}">
                                             <input type="submit" name="go" value="${idea.title}">
                                         </form>
