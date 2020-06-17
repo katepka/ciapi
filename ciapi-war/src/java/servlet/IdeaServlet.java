@@ -18,7 +18,7 @@ import javax.ws.rs.ClientErrorException;
 public class IdeaServlet extends HttpServlet {
     
     private String ideaId = null;
-    private IdeaClient ideaClient = new IdeaClient();
+    private IdeaClient ideaClient;
     
     private String ideaCoordinatorName = null;
     private String ideaLocationName = null;
@@ -26,6 +26,11 @@ public class IdeaServlet extends HttpServlet {
     private List<CommentEntry> comments = new ArrayList<>();
     private long votesFor = 0;
     private long votesAgainst = 0;
+    
+    @Override
+    public void init() {
+        ideaClient = new IdeaClient();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -90,5 +95,11 @@ public class IdeaServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }
-
+    
+    @Override
+    public void destroy() {
+        if (ideaClient != null) {
+            ideaClient.close();
+        }
+    }
 }

@@ -6,7 +6,6 @@ import client.StatusClient;
 import entry.CategoryEntry;
 import entry.IdeaEntry;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -19,15 +18,22 @@ import javax.ws.rs.ClientErrorException;
 @WebServlet(name = "Start", urlPatterns = {"/start"})
 public class MainServlet extends HttpServlet {
    
-    private CategoryClient categoryClient = new CategoryClient();
-    private IdeaClient ideaClient = new IdeaClient();
-    private StatusClient statusClient = new StatusClient();
+    private CategoryClient categoryClient;
+    private IdeaClient ideaClient;
+    private StatusClient statusClient;
     
     private List<CategoryEntry> categories = null;
     private List<IdeaEntry> ideas = null;
     private List<IdeaEntry> implementedIdeas = null;
     long numIdeas = 0; // TODO: Оптимизировать запросы с подсчетом
 
+    @Override
+    public void init() {
+        categoryClient = new CategoryClient();
+        ideaClient = new IdeaClient();
+        statusClient = new StatusClient();
+    }
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -71,22 +77,25 @@ public class MainServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         
-        CategoryEntry category = new CategoryEntry();
-        
-//        category.setTitle("novyi zagolovok");
-//        category.setDescription("novoe opisanie");
-//        category.setIconRef("refer");
-        
-        try (PrintWriter out = response.getWriter()) {
-//            out.print(categoryClient.createCategory_JSON(category).getStatus());
-                out.println(categoryClient.deleteCategory_JSON(CategoryEntry.class, "2").getStatus());
-        }
     }
     
 
     @Override
     public String getServletInfo() {
         return "Short description";
+    }
+    
+    @Override
+    public void destroy() {
+        if (categoryClient != null) {
+            categoryClient.close();
+        }
+        if (ideaClient != null) {
+            ideaClient.close();
+        }
+        if (statusClient != null) {
+            statusClient.close();
+        }
     }
 
 }

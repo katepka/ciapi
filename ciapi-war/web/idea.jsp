@@ -68,7 +68,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="2">
+                <td colspan="2" align="center">
                     Футер со всякой полезной и не очень полезной информацией о сайте. All rights 2020 (c)
                 </td>
             </tr>

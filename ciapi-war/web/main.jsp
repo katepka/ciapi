@@ -50,7 +50,7 @@
                             </form>
                                 
                         </td>
-                        <td width="33%">${id}</td>
+                        <td width="33%"></td>
                     </tr>
                     
                     <c:forEach var="category" items="${categories}" >

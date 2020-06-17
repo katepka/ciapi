@@ -4,7 +4,12 @@
     Author     : mi
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="entry.IdeaEntry"%>
+<%@page import="entry.StatusEntry"%>
+<%@page import="entry.LocationEntry"%>
+<%@page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -23,13 +28,13 @@
             </tr>
             <tr>
                 <td>
-                    <h1>Название категории</h1>
-                    <h3>Описание категории</h3>
+                    <h1>${categoryTitle}</h1>
+                    <h3>${categoryDescription}</h3>
                 </td>
                 <td width="33%">
                     
-                    Идей в категории: <%= 34 %> <br>
-                    Реализовано идей: <%= 5 %> <br>
+                    Идей в категории: ${numIdeas} <br>
+                    Реализовано идей: ${numImplementedIdeas} <br>
                     <a href="http://localhost:8080/ciapi-war/rating">Посмотреть статистику</a>
                 </td>
             </tr>
@@ -51,10 +56,20 @@
                             Фильтр по статусу
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <h2>Идея 1</h2>
-                        </td>
+                    
+                            
+                            <c:forEach var="idea" items="ideas">
+                                <tr>
+                                    <td>
+                                        <br>${idea.status.title} 
+                                        <br>${idea.created} | ${idea.location.name}
+                                        <br>${idea.status.title}
+                                        <br>${idea.title}
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                            
+                        
                         <td>
                             <h2>Идея 2</h2>
                         </td>
@@ -76,7 +91,7 @@
                 </table>
             </td>
             <tr>
-                <td colspan="2">
+                <td colspan="2" align="center">
                     Футер со всякой полезной и не очень полезной информацией о сайте. All rights 2020 (c)
                 </td>
             </tr>
