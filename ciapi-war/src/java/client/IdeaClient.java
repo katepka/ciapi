@@ -1,5 +1,6 @@
 package client;
 
+import entry.CommentEntry;
 import entry.IdeaEntry;
 import java.text.MessageFormat;
 import java.util.List;
@@ -77,6 +78,18 @@ public class IdeaClient {
         WebTarget resource = webTarget;
         resource = resource.path("");
         return resource.request(MediaType.APPLICATION_JSON).get(new GenericType<List<IdeaEntry>>() {});
+    }
+    
+    public List<CommentEntry> getCommentsByIdeaId_XML(String id) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(MessageFormat.format("{0}/comments", new Object[]{id}));
+        return resource.request(MediaType.APPLICATION_XML).get(new GenericType<List<CommentEntry>>() {});
+    }
+
+    public List<CommentEntry> getCommentsByIdeaId_JSON(String id) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(MessageFormat.format("{0}/comments", new Object[]{id}));
+        return resource.request(MediaType.APPLICATION_JSON).get(new GenericType<List<CommentEntry>>() {});
     }
 
     public void close() {

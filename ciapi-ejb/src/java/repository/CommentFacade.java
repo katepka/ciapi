@@ -28,5 +28,11 @@ public class CommentFacade extends AbstractFacade<Comment> implements CommentFac
                 .setParameter("authorId", authorId)
                 .getResultList();
     }
-    
+
+    @Override
+    public List<Comment> findByIdea(long ideaId) {
+        return em.createNamedQuery("Comment.findByIdea")
+                .setParameter("ideaId", ideaId)
+                .getResultList();
+    } 
 }

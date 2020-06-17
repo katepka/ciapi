@@ -26,18 +26,15 @@ public class MainServlet extends HttpServlet {
     private List<CategoryEntry> categories = null;
     private List<IdeaEntry> ideas = null;
     private List<IdeaEntry> implementedIdeas = null;
-    long numIdeas = 0;
+    long numIdeas = 0; // TODO: Оптимизировать запросы с подсчетом
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-        
-        
-        
+  
         try {
-            numIdeas = 
             categories = categoryClient.getAllCategories_JSON();
             ideas = ideaClient.getAllIdeas_JSON();
             implementedIdeas = statusClient.getIdeasByStatusId_JSON("3");

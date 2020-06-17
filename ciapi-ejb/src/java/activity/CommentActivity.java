@@ -61,6 +61,12 @@ public class CommentActivity {
         return entryList;
     }
     
+    public List<CommentEntry> findByIdea(long ideaId) {
+        List<Comment> commentList = commentFacade.findByIdea(ideaId);
+        List<CommentEntry> entryList = commentMapper.mapCommentListToCommentEntryList(commentList);
+        return entryList;
+    }
+    
     public CommentEntry updateComment(long id, CommentEntry entry) {
         Comment entity = commentFacade.find(id);
         if (entity != null) {

@@ -27,7 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Comment.findAll", query = "SELECT c FROM Comment c"),
     @NamedQuery(name = "Comment.findById", query = "SELECT c FROM Comment c WHERE c.id = :id"),
     @NamedQuery(name = "Comment.findByCreated", query = "SELECT c FROM Comment c WHERE c.created = :created"),
-    @NamedQuery(name = "Comment.findByAuthor", query = "SELECT c FROM Comment c JOIN c.author s WHERE s.id = :authorId")})
+    @NamedQuery(name = "Comment.findByAuthor", query = "SELECT c FROM Comment c JOIN c.author s WHERE s.id = :authorId"),
+    @NamedQuery(name = "Comment.findByIdea", query = "SELECT c FROM Comment c JOIN c.idea s WHERE s.id = :ideaId")})
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -1,70 +1,94 @@
 package servlet;
 
+import client.IdeaClient;
+import entry.CommentEntry;
+import entry.IdeaEntry;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.ClientErrorException;
 
 @WebServlet(name = "IdeaServlet", urlPatterns = {"/ideas"})
 public class IdeaServlet extends HttpServlet {
+    
+    private String ideaId = null;
+    private IdeaClient ideaClient = new IdeaClient();
+    
+    private String ideaCoordinatorName = null;
+    private String ideaLocationName = null;
+    private List<String> photoRefs = null;
+    private List<CommentEntry> comments = new ArrayList<>();
+    private long votesFor = 0;
+    private long votesAgainst = 0;
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet IdeaServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet IdeaServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        
+        // TODO: Получить id из request с предыдущей jsp, где выбираем идею
+        ideaId = "1";
+        
+        if (ideaId != null && !ideaId.trim().isEmpty()) {
+            try {
+                IdeaEntry idea = ideaClient.getIdeaById_JSON(IdeaEntry.class, ideaId);
+                comments = ideaClient.getCommentsByIdeaId_JSON(ideaId);
+                
+                if (idea != null) {
+                    if (idea.getCoordinator() == null) {
+                        // TODO: приделать ссылку
+                        ideaCoordinatorName = "Разыскивается. Стать координатором";
+                    } else {
+                        ideaCoordinatorName = idea.getCoordinator().getName();
+                    }
+                    if (idea.getLocation().getName() != null) {
+                        ideaLocationName = idea.getLocation().getName();
+                    } else {
+                        ideaLocationName = "-";
+                    }
+                    request.setAttribute("idea", idea);
+                    request.setAttribute("ideaCoordinatorName", ideaCoordinatorName);
+                    request.setAttribute("ideaLocationName", ideaLocationName);
+                    // TODO: Подтянуть голоса
+                    request.setAttribute("votesFor", votesFor);
+                    request.setAttribute("votesAgainst", votesAgainst);
+                    // TODO: Подтянуть комментарии
+                    request.setAttribute("comments", comments);
+                    
+                    RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/idea.jsp");
+                    if (requestDispatcher != null) {
+                        requestDispatcher.forward(request, response);
+                    }
+                }
+                
+            } catch (ClientErrorException cee) {
+                // TODO: handle it
+                System.out.println(cee.getStackTrace());
+            }
+        } else {
+            // TODO: handle the situation
+        }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+    
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
 }

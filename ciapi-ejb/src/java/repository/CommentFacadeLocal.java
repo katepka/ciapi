@@ -20,6 +20,8 @@ public interface CommentFacadeLocal {
     List<Comment> findRange(int[] range);
     
     List<Comment> findByAuthor(long authorId);
+    
+    List<Comment> findByIdea(long ideaId);
 
     long count();
     

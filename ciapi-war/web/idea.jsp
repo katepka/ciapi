@@ -4,7 +4,10 @@
     Author     : mi
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="entry.CommentEntry"%>
+<%@page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -23,42 +26,30 @@
             </tr>
             <tr>
                 <td colspan="2" align="left">
-                    <h2>Название идеи</h2>
+                    <h2>${idea.title}</h2>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <div>Название категории</div>
-                    <div>Автор: имя автора</div>
-                    <div>Координатор: если есть - имя, если нет - разыскивается. Стать координатором</div>
+                    <div>${idea.category.title}</div>
+                    <div>Автор: ${idea.author.name}</div>
+                    <div>Координатор: ${ideaCoordinatorName}</div>
                 </td>
                 <td align="right">
-                    <div>Статус идеи</div>
-                    <div>Место | Дата создания: дата создания</div>
+                    <div>${idea.status.title}</div>
+                    <div>${ideaLocationName} | Дата создания: ${idea.created}</div>
                 </td>
             </tr>
             <tr>
                 <td colspan="2" align="left">
                     <div>
-                        <p>Описание идеи.</p>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p> 
-                        <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p> 
-                        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        ${idea.description}
                     </div>
                 </td>
             </tr>
             <tr>
                 <td>Фотографии</td>
-                <td>За идею: "за" | Против идеи: "против"</td>
+                <td>За идею: ${votesFor} | Против идеи: ${votesAgainst}</td>
             </tr>
             <tr>
                 <td colspan="2" align="left">
@@ -68,11 +59,11 @@
                         <input type="submit" name="comment" value="Прокомментировать">
                         <br><br>
                         <div>Список комментариев:</div><br>
-                        <div>Имя автора | Дата</div>
-                        <div>Текст комментария</div>
-                        <br>
-                        <div>Имя автора | Дата</div>
-                        <div>Текст комментария</div>
+                        <c:forEach var="comment" items="${comments}">
+                            <div>${comment.author.name} | ${comment.created}</div>
+                            <div>${comment.text}</div>
+                            <br>
+                        </c:forEach>
                     </form>
                 </td>
             </tr>
