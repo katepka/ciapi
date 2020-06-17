@@ -19,6 +19,6 @@ public interface StatusFacadeLocal {
 
     List<Status> findRange(int[] range);
 
-    int count();
+    long count();
     
 }

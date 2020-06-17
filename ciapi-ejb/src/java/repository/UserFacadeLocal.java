@@ -21,6 +21,6 @@ public interface UserFacadeLocal {
 
     List<User> findRange(int[] range);
 
-    int count();
+    long count();
     
 }

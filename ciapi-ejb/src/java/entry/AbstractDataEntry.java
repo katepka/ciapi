@@ -1,8 +1,9 @@
 package entry;
 
+import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 
-public abstract class AbstractDataEntry {
+public abstract class AbstractDataEntry implements Serializable {
 //    @NotNull
     private Long id;
 

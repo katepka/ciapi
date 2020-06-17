@@ -19,6 +19,6 @@ public interface VotesUsersFacadeLocal {
 
     List<VotesUsers> findRange(int[] range);
 
-    int count();
+    long count();
     
 }

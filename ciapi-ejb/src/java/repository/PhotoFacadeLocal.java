@@ -19,6 +19,6 @@ public interface PhotoFacadeLocal {
 
     List<Photo> findRange(int[] range);
 
-    int count();
+    long count();
     
 }

@@ -21,6 +21,9 @@ public class ImplementationInfoMapper {
     
     public ImplementationInfoEntry mapImplementationInfoToImplementationInfoEntry(ImplementationInfo entity) {
         ImplementationInfoEntry entry = new ImplementationInfoEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getDescription() != null) {
             entry.setDescription(entity.getDescription());
         }

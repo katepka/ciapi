@@ -31,6 +31,6 @@ public interface IdeaFacadeLocal {
 
     List<Idea> findRange(int[] range);
 
-    int count();
+    long count();
     
 }

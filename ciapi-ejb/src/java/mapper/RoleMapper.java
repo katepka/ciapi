@@ -21,6 +21,9 @@ public class RoleMapper {
     
     public RoleEntry mapRoleToRoleEntry(Role entity) {
         RoleEntry entry = new RoleEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getTitle() != null) {
             entry.setTitle(entity.getTitle());
         }

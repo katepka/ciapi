@@ -1,10 +1,13 @@
 package client;
 
+import entry.IdeaEntry;
 import java.text.MessageFormat;
+import java.util.List;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -64,16 +67,16 @@ public class IdeaClient {
         return resource.request(MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T getAllIdeas_XML(Class<T> responseType) throws ClientErrorException {
+    public List<IdeaEntry> getAllIdeas_XML() throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("");
-        return resource.request(MediaType.APPLICATION_XML).get(responseType);
+        return resource.request(MediaType.APPLICATION_XML).get(new GenericType<List<IdeaEntry>>() {});
     }
 
-    public <T> T getAllIdeas_JSON(Class<T> responseType) throws ClientErrorException {
+    public List<IdeaEntry> getAllIdeas_JSON() throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("");
-        return resource.request(MediaType.APPLICATION_JSON).get(responseType);
+        return resource.request(MediaType.APPLICATION_JSON).get(new GenericType<List<IdeaEntry>>() {});
     }
 
     public void close() {

@@ -50,6 +50,9 @@ public class CommentMapper {
     
     public CommentEntry mapCommentToCommentEntry(Comment entity) {
         CommentEntry entry = new CommentEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getText() != null) {
             entry.setText(entity.getText());
         }

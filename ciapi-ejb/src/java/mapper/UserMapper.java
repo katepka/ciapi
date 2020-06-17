@@ -42,6 +42,9 @@ public class UserMapper {
     
     public UserEntry mapUserToUserEntry(User entity) {
         UserEntry entry = new UserEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getEmail() != null) {
             entry.setEmail(entity.getEmail());
         }

@@ -24,6 +24,9 @@ public class StatusMapper {
     
     public StatusEntry mapStatusToStatusEntry(Status entity) {
         StatusEntry entry = new StatusEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getTitle() != null) {
             entry.setTitle(entity.getTitle());    
         }

@@ -47,6 +47,9 @@ public class PhotoMapper {
     
     public PhotoEntry mapPhotoToPhotoEntry(Photo entity) {
         PhotoEntry entry = new PhotoEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getPhotoRef() != null) {
             entry.setPhotoRef(entity.getPhotoRef());
         }

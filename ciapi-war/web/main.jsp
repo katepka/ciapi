@@ -4,6 +4,9 @@
     Author     : mi
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="entry.CategoryEntry"%>
+<%@page import="java.util.List"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -31,8 +34,8 @@
                 </td>
                 <td>
                     
-                    Всего идей: <%= 234 %> <br>
-                    Реализовано идей: <%= 15 %> <br>
+                    Всего идей: ${numIdeas} <br>
+                    Реализовано идей: ${numImplementedIdeas} <br>
                     <a href="http://localhost:8080/ciapi-war/rating">Посмотреть статистику</a>
                 </td>
             </tr>
@@ -41,36 +44,25 @@
                 <table border="1" width="100%">
                     <tr>
                         <td width="33%"></td>
-                        <td>
+                        <td align="center">
                             <form action="ideas" method="GET">
                                 <input type="submit" value="Предложить идею">
                             </form>
                                 
                         </td>
-                        <td width="33%"></td>
+                        <td width="33%">${id}</td>
                     </tr>
+                    
+                    <c:forEach var="category" items="${categories}" >
                     <tr>
                         <td>
-                            <h2>Категория 1</h2>
-                        </td>
-                        <td>
-                            <h2>Категория 2</h2>
-                        </td>
-                        <td>
-                            <h2>Категория 3</h2>
+                            <br>${category.id}
+                            <br>${category.title}
+                            <br>${category.description}
+                            <br>${category.iconRef}
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <h2>Категория 4</h2>
-                        </td>
-                        <td>
-                            <h2>Категория 5</h2>
-                        </td>
-                        <td>
-                            <h2>Категория 6</h2>
-                        </td>
-                    </tr>
+                    </c:forEach>
                 </table>
             </td>
             <tr>
@@ -82,4 +74,5 @@
         
         
     </body>
+    
 </html>

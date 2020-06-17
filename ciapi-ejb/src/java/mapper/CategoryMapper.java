@@ -27,6 +27,9 @@ public class CategoryMapper {
     
     public CategoryEntry mapCategoryToCategoryEntry(Category entity) {
         CategoryEntry entry = new CategoryEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getTitle() != null) {
             entry.setTitle(entity.getTitle());
         }

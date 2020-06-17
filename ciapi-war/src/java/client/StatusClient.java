@@ -1,10 +1,14 @@
 package client;
 
+import entry.IdeaEntry;
+import entry.StatusEntry;
 import java.text.MessageFormat;
+import java.util.List;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -42,32 +46,32 @@ public class StatusClient {
                 .put(Entity.entity(requestEntity, MediaType.APPLICATION_JSON), Response.class);
     }
 
-    public <T> T getIdeasByStatusId_XML(Class<T> responseType, String id) throws ClientErrorException {
+    public List<IdeaEntry> getIdeasByStatusId_XML(String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(MessageFormat.format("{0}/ideas", new Object[]{id}));
         return resource.request(MediaType.APPLICATION_XML)
-                       .get(responseType);
+                       .get(new GenericType<List<IdeaEntry>>() {});
     }
 
-    public <T> T getIdeasByStatusId_JSON(Class<T> responseType, String id) throws ClientErrorException {
+    public List<IdeaEntry> getIdeasByStatusId_JSON(String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(MessageFormat.format("{0}/ideas", new Object[]{id}));
         return resource.request(MediaType.APPLICATION_JSON)
-                       .get(responseType);
+                       .get(new GenericType<List<IdeaEntry>>() {});
     }
 
-    public <T> T getAllStatuses_XML(Class<T> responseType) throws ClientErrorException {
+    public List<StatusEntry> getAllStatuses_XML() throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("");
         return resource.request(MediaType.APPLICATION_XML)
-                       .get(responseType);
+                       .get(new GenericType<List<StatusEntry>>() {});
     }
 
-    public <T> T getAllStatuses_JSON(Class<T> responseType) throws ClientErrorException {
+    public List<StatusEntry> getAllStatuses_JSON() throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("");
         return resource.request(MediaType.APPLICATION_JSON)
-                .get(responseType);
+                .get(new GenericType<List<StatusEntry>>() {});
     }
 
     public <T> T getStatus_XML(Class<T> responseType, String id) throws ClientErrorException {

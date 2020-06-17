@@ -137,7 +137,7 @@ public class StatusController {
         List<IdeaEntry> ideas = null;
         try {
             long statusId = Long.parseLong(id);
-            ideas = ideaActivity.findByCategory(statusId);
+            ideas = ideaActivity.findByStatus(statusId);
             if (ideas != null && !ideas.isEmpty()) {
                 GenericEntity<List<IdeaEntry>> entities = new GenericEntity<List<IdeaEntry>>(ideas){};
                 return Response.ok().entity(entities).build();

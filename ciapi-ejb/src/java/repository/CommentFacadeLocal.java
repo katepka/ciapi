@@ -21,6 +21,6 @@ public interface CommentFacadeLocal {
     
     List<Comment> findByAuthor(long authorId);
 
-    int count();
+    long count();
     
 }

@@ -19,6 +19,6 @@ public interface ImplementationInfoFacadeLocal {
 
     List<ImplementationInfo> findRange(int[] range);
 
-    int count();
+    long count();
     
 }

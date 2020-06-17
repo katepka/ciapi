@@ -30,6 +30,9 @@ public class LocationMapper {
     
     public LocationEntry mapLocationToLocationEntry(Location entity) {
         LocationEntry entry = new LocationEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getLat() != null) {
             entry.setLat(entity.getLat());
         }

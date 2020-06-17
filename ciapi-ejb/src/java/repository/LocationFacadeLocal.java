@@ -21,6 +21,6 @@ public interface LocationFacadeLocal {
 
     List<Location> findRange(int[] range);
 
-    int count();
+    long count();
     
 }

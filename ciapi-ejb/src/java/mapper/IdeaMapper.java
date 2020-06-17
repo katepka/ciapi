@@ -98,6 +98,10 @@ public class IdeaMapper {
     public IdeaEntry mapIdeaToIdeaEntry(Idea entity) {
         IdeaEntry entry = new IdeaEntry();
         
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
+        
         if (entity.getTitle() != null) {
             entry.setTitle(entity.getTitle());
         } 
