@@ -37,22 +37,20 @@
                     <td>
                         <p>Выберите категорию:</p>
                         <p>
-                            <select name="categorySelected">
+                            <select name="categoryId">
                                 <c:forEach var="category" items="${categories}">
-                                    <option>${category.title}</option>
-                                    <!--<input type="hidden" name="categoryId" value="${category.id}">-->
-                                </c:forEach>
+                                    <option value="${category.id}">${category.title}</option>
+                                </c:forEach> 
                             </select>
                         </p>
                     </td>
                     <td>
                         <p>Выберите город или отметьте место на карте:</p>
                         <p>
-                            <select name="locationNameSelected">
+                            <select name="locationId">
                                 <c:forEach var="location" items="${locations}">
                                     <c:if test="${location.name != null}">
-                                        <option>${location.name}</option>
-<!--                                        <input type="hidden" name="locationId" value="${location.id}">-->
+                                        <option value="${location.id}">${location.name}</option>
                                     </c:if>
                                 </c:forEach>
                             </select>

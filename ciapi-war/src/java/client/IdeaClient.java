@@ -6,6 +6,7 @@ import java.text.MessageFormat;
 import java.util.List;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -18,7 +19,7 @@ public class IdeaClient {
     private Client client;
 
     public IdeaClient() {
-        client = javax.ws.rs.client.ClientBuilder.newClient();
+        client = ClientBuilder.newClient();
         webTarget = client.target(ClientConstants.BASE_URI).path("ideas");
     }
 
@@ -27,7 +28,7 @@ public class IdeaClient {
                         .post(Entity.entity(requestEntity, MediaType.APPLICATION_XML), Response.class);
     }
 
-    public Response createIdea_JSON(Object requestEntity) throws ClientErrorException {
+    public Response createIdea_JSON(IdeaEntry requestEntity) throws ClientErrorException {
         return webTarget.path("").request(MediaType.APPLICATION_JSON)
                         .post(Entity.entity(requestEntity, MediaType.APPLICATION_JSON), Response.class);
     }

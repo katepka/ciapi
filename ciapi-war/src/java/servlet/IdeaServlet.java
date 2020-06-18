@@ -12,8 +12,9 @@ import entry.StatusEntry;
 import entry.UserEntry;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -63,14 +64,20 @@ public class IdeaServlet extends HttpServlet {
             try {
                 categories = categoryClient.getAllCategories_JSON();
             } catch (ClientErrorException cee) {
-                // TODO: handle it
-                System.out.println(Arrays.toString(cee.getStackTrace()));
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
+                if (requestDispatcher != null) {
+                    requestDispatcher.forward(request, response);
+                }
             }
             try {
                 locations = locationClient.getAllLocations_JSON();
             } catch (ClientErrorException cee) {
-                // TODO: handle it
-                System.out.println(Arrays.toString(cee.getStackTrace()));
+                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
+                if (requestDispatcher != null) {
+                    requestDispatcher.forward(request, response);
+                }
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
             }
             request.setAttribute("categories", categories);
             request.setAttribute("locations", locations);
@@ -88,11 +95,10 @@ public class IdeaServlet extends HttpServlet {
         if (ideaId != null && !ideaId.trim().isEmpty()) {
             try {
                 IdeaEntry idea = ideaClient.getIdeaById_JSON(IdeaEntry.class, ideaId);
-                
-                
+
                 if (idea != null) {
                     if (idea.getCoordinator() == null) {
-                        // TODO: приделать ссылку
+                        // TODO: add ref
                         ideaCoordinatorName = "Разыскивается. Стать координатором";
                     } else {
                         ideaCoordinatorName = idea.getCoordinator().getName();
@@ -105,22 +111,28 @@ public class IdeaServlet extends HttpServlet {
                     request.setAttribute("idea", idea);
                     request.setAttribute("ideaCoordinatorName", ideaCoordinatorName);
                     request.setAttribute("ideaLocationName", ideaLocationName);
-                    // TODO: Подтянуть голоса
+                    // TODO: get votes from database:
                     request.setAttribute("votesFor", votesFor);
                     request.setAttribute("votesAgainst", votesAgainst);
                                       
                 }
                 
             } catch (ClientErrorException cee) {
-                // TODO: handle it
-                System.out.println(Arrays.toString(cee.getStackTrace()));
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
+                if (requestDispatcher != null) {
+                    requestDispatcher.forward(request, response);
+                }
             }
             try {
                 comments = ideaClient.getCommentsByIdeaId_JSON(ideaId);
                 request.setAttribute("comments", comments);
             } catch (ClientErrorException cee) {
-                // TODO: handle it
-                System.out.println(Arrays.toString(cee.getStackTrace()));
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
+                if (requestDispatcher != null) {
+                    requestDispatcher.forward(request, response);
+                }
             }
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/idea.jsp");
             if (requestDispatcher != null) {
@@ -147,13 +159,13 @@ public class IdeaServlet extends HttpServlet {
         String categoryId = request.getParameter("categoryId");
         String locationName = request.getParameter("locationNameSelected");
         String locationId = request.getParameter("locationId");
-        // TODO: получить координаты с карты
+        // TODO: get coordinates from map
         String lat = "34.9";
         String lon = "67.0";
         String radius = "99";
-        // TODO: photo
+        // TODO: get photos from form
         
-        // TODO: определять автора по сессии:
+        // TODO: identify the author by session:
         UserEntry author = userClient.getUserById_JSON(UserEntry.class, "1");
         newIdea.setAuthor(author);
         
@@ -169,31 +181,67 @@ public class IdeaServlet extends HttpServlet {
         }
         if (categoryId != null) {
             CategoryEntry category = categoryClient.getCategoryById_JSON(CategoryEntry.class, categoryId);
-            newIdea.setCategory(category);
+            if (category != null) {
+                newIdea.setCategory(category);
+            } else {
+                // TODO: handle the situation when category isn't found
+            }
         } else {
-            // TODO: убрать этот костыль
-            CategoryEntry category = categoryClient.getCategoryById_JSON(CategoryEntry.class, "1");
-            newIdea.setCategory(category);
+            // TODO: handle the situation when categoryId is null    
         }
+        LocationEntry location = new LocationEntry();
         if (locationId != null) {
-            // TODO: поиск местоположения по id в базе
+            location.setId(Long.parseLong(locationId));
         } else {
-            LocationEntry location = new LocationEntry();
             location.setLat(Float.parseFloat(lat));
             location.setLon(Float.parseFloat(lon));
             location.setName(locationName);
             location.setRadius(Float.parseFloat(radius));
-            newIdea.setLocation(location);
         }
-        
-        System.out.println(newIdea.toString() + newIdea.getLocation().getLat() + newIdea.getLocation().getLon() 
-                + newIdea.getLocation().getName());
-        
+        newIdea.setLocation(location);        
         try {
-            System.out.println(ideaClient.createIdea_JSON(newIdea).getStatus());
+            int statusCode = ideaClient.createIdea_JSON(newIdea).getStatus();
+            switch (statusCode) {
+                case 200:
+                case 201:
+                case 202:
+                    {
+                        // TODO: if idea was created where should i forward to?
+                        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/main.jsp");
+                        if (requestDispatcher != null) {
+                            requestDispatcher.forward(request, response);
+                        }       break;
+                    }
+                case 404:
+                    {
+                        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/notfound.jsp");
+                        if (requestDispatcher != null) {
+                            requestDispatcher.forward(request, response);
+                        }       break;
+                    }
+                case 500:
+                case 501:
+                case 502:
+                case 503:
+                case 504:
+                case 505:
+                    {
+                        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
+                        if (requestDispatcher != null) {
+                            requestDispatcher.forward(request, response);
+                        }       break;
+                    }
+                default:
+                    break;
+            }
+            
         } catch (ClientErrorException cee) {
-            // TODO: handle it
-            System.out.println(Arrays.toString(cee.getStackTrace()));
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
+            if (requestDispatcher != null) {
+                requestDispatcher.forward(request, response);
+            }
+            
         }
         
     }

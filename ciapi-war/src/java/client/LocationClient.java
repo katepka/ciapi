@@ -4,9 +4,11 @@ import entry.LocationEntry;
 import java.util.List;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+
 
 public class LocationClient {
 
@@ -14,7 +16,7 @@ public class LocationClient {
     private Client client;
 
     public LocationClient() {
-        client = javax.ws.rs.client.ClientBuilder.newClient();
+        client = ClientBuilder.newClient();
         webTarget = client.target(ClientConstants.BASE_URI).path("locations");
     }
 

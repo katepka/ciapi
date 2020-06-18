@@ -61,7 +61,6 @@ public class Idea implements Serializable {
     private String description;
     
     @Basic(optional = false)
-    @NotNull
     @Column(name = "created")
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
@@ -75,15 +74,15 @@ public class Idea implements Serializable {
     private Category category;
     
     @JoinColumn(name = "coordinator_id", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(optional = true)
     private User coordinator;
     
     @JoinColumn(name = "impl_info_id", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(optional = true, cascade = CascadeType.PERSIST)
     private ImplementationInfo implInfo;
     
     @JoinColumn(name = "location_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
     private Location location;
     
     @JoinColumn(name = "status_id", referencedColumnName = "id")
