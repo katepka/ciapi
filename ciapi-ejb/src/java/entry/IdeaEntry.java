@@ -16,13 +16,11 @@ public class IdeaEntry extends AbstractDataEntry {
     @NotNull(message = "category cannot be null")
     private CategoryEntry category;
     
-    @NotNull(message = "location cannot be null")
     private LocationEntry location;
     
     @NotNull(message = "author cannot be null")
     private UserEntry author;
-    
-    @NotNull(message = "created cannot be null")
+
     private Date created;
     
     private UserEntry coordinator;

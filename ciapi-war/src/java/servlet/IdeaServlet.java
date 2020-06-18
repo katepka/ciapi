@@ -150,13 +150,17 @@ public class IdeaServlet extends HttpServlet {
         // TODO: получить координаты с карты
         String lat = "34.9";
         String lon = "67.0";
+        String radius = "99";
         // TODO: photo
         
+        // TODO: определять автора по сессии:
         UserEntry author = userClient.getUserById_JSON(UserEntry.class, "1");
         newIdea.setAuthor(author);
+        
         StatusEntry status = new StatusEntry();
         status.setId(1L);
         newIdea.setStatus(status);
+        
         if (title != null) {
             newIdea.setTitle(title);
         }
@@ -177,10 +181,14 @@ public class IdeaServlet extends HttpServlet {
             LocationEntry location = new LocationEntry();
             location.setLat(Float.parseFloat(lat));
             location.setLon(Float.parseFloat(lon));
+            location.setName(locationName);
+            location.setRadius(Float.parseFloat(radius));
             newIdea.setLocation(location);
         }
         
-        System.out.println(newIdea.toString());
+        System.out.println(newIdea.toString() + newIdea.getLocation().getLat() + newIdea.getLocation().getLon() 
+                + newIdea.getLocation().getName());
+        
         try {
             System.out.println(ideaClient.createIdea_JSON(newIdea).getStatus());
         } catch (ClientErrorException cee) {

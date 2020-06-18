@@ -7,7 +7,6 @@ public class CommentEntry extends AbstractDataEntry {
     @NotNull(message = "text cannot be null")
     private String text;
     
-    @NotNull(message = "created cannot be null")
     private Date created;
     
     @NotNull(message = "author cannot be null")

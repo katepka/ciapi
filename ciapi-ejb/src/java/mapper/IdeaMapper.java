@@ -75,21 +75,46 @@ public class IdeaMapper {
         }
         
         Long locationId = entry.getLocation().getId();
-        Location location = locationFacade.find(locationId);
-        if (location != null) {
-            entity.setLocation(location);
+        if (locationId != null) {
+            Location location = locationFacade.find(locationId);
+            if (location != null) {
+                entity.setLocation(location);
+            }
+        } else {
+            Location location = new Location();
+            if (entry.getLocation().getLat() != null && entry.getLocation().getLon() != null) {
+                location.setLat(entry.getLocation().getLat());
+                location.setLon(entry.getLocation().getLon());
+                if (entry.getLocation().getName() != null) {
+                    location.setName(entry.getLocation().getName());
+                }
+                if (entry.getLocation().getRadius() != null) {
+                    location.setRadius(entry.getLocation().getRadius());
+                }
+                entity.setLocation(location);
+            } else {
+                // TODO: handle the situation when entry doesn't contain a correct location data
+            }
         }
         
-        Long coordinatorId = entry.getCoordinator().getId();
-        User coordinator = userFacade.find(coordinatorId);
-        if (coordinator != null) {
-            entity.setCoordinator(coordinator);
+        if (entry.getCoordinator() != null) {
+            Long coordinatorId = entry.getCoordinator().getId();
+            if (coordinatorId != null) {
+                User coordinator = userFacade.find(coordinatorId);
+                if (coordinator != null) {
+                    entity.setCoordinator(coordinator);
+                }
+            }
         }
-        
-        Long implInfoId = entry.getImplementationInfo().getId();
-        ImplementationInfo implInfo = implementationInfoFacade.find(implInfoId);
-        if (implInfo != null) {
-            entity.setImplInfo(implInfo);
+
+        if (entry.getImplementationInfo() != null) {
+            Long implInfoId = entry.getImplementationInfo().getId();
+            if (implInfoId != null) {
+                ImplementationInfo implInfo = implementationInfoFacade.find(implInfoId);
+                if (implInfo != null) {
+                    entity.setImplInfo(implInfo);
+                }
+            }
         }
         
         return entity;

@@ -40,7 +40,7 @@
                             <select name="categorySelected">
                                 <c:forEach var="category" items="${categories}">
                                     <option>${category.title}</option>
-                                    <input type="hidden" name="categoryId" value="${category.id}">
+                                    <!--<input type="hidden" name="categoryId" value="${category.id}">-->
                                 </c:forEach>
                             </select>
                         </p>
@@ -52,7 +52,7 @@
                                 <c:forEach var="location" items="${locations}">
                                     <c:if test="${location.name != null}">
                                         <option>${location.name}</option>
-                                        <input type="hidden" name="locationId" value="${location.id}">
+<!--                                        <input type="hidden" name="locationId" value="${location.id}">-->
                                     </c:if>
                                 </c:forEach>
                             </select>

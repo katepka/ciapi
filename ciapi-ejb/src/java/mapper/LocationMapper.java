@@ -11,7 +11,7 @@ import javax.ejb.LocalBean;
 @LocalBean
 public class LocationMapper {
 
-        public Location mapLocationEntryToLocation(LocationEntry entry) {
+    public Location mapLocationEntryToLocation(LocationEntry entry) {
         Location entity = new Location();
         if (entry.getLat() != null) {
             entity.setLat(entry.getLat());
@@ -23,7 +23,7 @@ public class LocationMapper {
             entity.setRadius(entry.getRadius());
         }
         if (entry.getName() != null) {
-           entity.setName(entry.getName()); 
+            entity.setName(entry.getName());
         }
         return entity;
     }
