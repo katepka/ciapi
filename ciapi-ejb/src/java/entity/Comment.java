@@ -3,6 +3,7 @@ package entity;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -46,17 +47,16 @@ public class Comment implements Serializable {
     private String text;
     
     @Basic(optional = false)
-    @NotNull
     @Column(name = "created")
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
     
     @JoinColumn(name = "idea_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.REMOVE)
     private Idea idea;
     
     @JoinColumn(name = "author_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.REMOVE)
     private User author;
 
     public Comment() {
@@ -100,16 +100,16 @@ public class Comment implements Serializable {
         return idea;
     }
 
-    public void setIdea(Idea ideaId) {
-        this.idea = ideaId;
+    public void setIdea(Idea idea) {
+        this.idea = idea;
     }
 
     public User getAuthor() {
         return author;
     }
 
-    public void setAuthor(User authorId) {
-        this.author = authorId;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     @Override

@@ -1,9 +1,12 @@
 package servlet;
 
+import activity.CommentActivity;
 import client.CategoryClient;
 import client.IdeaClient;
 import client.LocationClient;
 import client.UserClient;
+import entity.Comment;
+import entity.User;
 import entry.CategoryEntry;
 import entry.CommentEntry;
 import entry.IdeaEntry;
@@ -15,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,13 +29,13 @@ import javax.ws.rs.ClientErrorException;
 
 @WebServlet(name = "IdeaServlet", urlPatterns = {"/ideas"})
 public class IdeaServlet extends HttpServlet {
-    
+   
     private String ideaId = null;
     private IdeaClient ideaClient;
     private CategoryClient categoryClient;
     private LocationClient locationClient;
     private UserClient userClient; 
-    
+    private Long currentUserId = -1L;
     private String ideaCoordinatorName = null;
     private String ideaLocationName = null;
     private List<String> photoRefs = null;
@@ -43,12 +47,17 @@ public class IdeaServlet extends HttpServlet {
     
     private IdeaEntry newIdea = null;
     
+    @EJB
+    private CommentActivity commentActivity;
+    
     @Override
     public void init() {
         ideaClient = new IdeaClient();
         categoryClient = new CategoryClient();
         locationClient = new LocationClient();
         userClient = new UserClient();
+        // TODO: identify currentUserId:
+        currentUserId = 1L;
     }
 
     @Override
@@ -146,98 +155,143 @@ public class IdeaServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         
-        // ======= Отправка данных со страницы newidea.jsp на сервере ==========
-        
-        newIdea = new IdeaEntry();
-        String title = request.getParameter("title");
-        String description = request.getParameter("description");
-        String categoryName = request.getParameter("categorySelected");
-        String categoryId = request.getParameter("categoryId");
-        String locationName = request.getParameter("locationNameSelected");
-        String locationId = request.getParameter("locationId");
-        // TODO: get coordinates from map
-        String lat = "34.9";
-        String lon = "67.0";
-        String radius = "99";
-        // TODO: get photos from form
-        
-        // TODO: identify the author by session:
-        UserEntry author = userClient.getUserById_JSON(UserEntry.class, "1");
-        newIdea.setAuthor(author);
-        
-        StatusEntry status = new StatusEntry();
-        status.setId(1L);
-        newIdea.setStatus(status);
-        
-        if (title != null) {
-            newIdea.setTitle(title);
-        }
-        if (description != null) {
-            newIdea.setDescription(description);
-        }
-        if (categoryId != null) {
-            CategoryEntry category = categoryClient.getCategoryById_JSON(CategoryEntry.class, categoryId);
-            if (category != null) {
-                newIdea.setCategory(category);
-            } else {
-                // TODO: handle the situation when category isn't found
+        // ======= Отправка данных со страницы newidea.jsp на сервер ==========
+        if (request.getParameter("create") != null) {
+            newIdea = new IdeaEntry();
+            String title = request.getParameter("title");
+            String description = request.getParameter("description");
+            String categoryName = request.getParameter("categorySelected");
+            String categoryId = request.getParameter("categoryId");
+            String locationName = request.getParameter("locationNameSelected");
+            String locationId = request.getParameter("locationId");
+            // TODO: get coordinates from map
+            String lat = "34.9";
+            String lon = "67.0";
+            String radius = "99";
+            // TODO: get photos from form
+
+            UserEntry author = userClient.getUserById_JSON(UserEntry.class, currentUserId.toString());
+            newIdea.setAuthor(author);
+
+            StatusEntry status = new StatusEntry();
+            status.setId(1L);
+            newIdea.setStatus(status);
+
+            if (title != null) {
+                newIdea.setTitle(title);
             }
-        } else {
-            // TODO: handle the situation when categoryId is null    
-        }
-        LocationEntry location = new LocationEntry();
-        if (locationId != null) {
-            location.setId(Long.parseLong(locationId));
-        } else {
-            location.setLat(Float.parseFloat(lat));
-            location.setLon(Float.parseFloat(lon));
-            location.setName(locationName);
-            location.setRadius(Float.parseFloat(radius));
-        }
-        newIdea.setLocation(location);        
-        try {
-            int statusCode = ideaClient.createIdea_JSON(newIdea).getStatus();
-            switch (statusCode) {
-                case 200:
-                case 201:
-                case 202:
-                    {
+            if (description != null) {
+                newIdea.setDescription(description);
+            }
+            if (categoryId != null) {
+                CategoryEntry category = categoryClient.getCategoryById_JSON(CategoryEntry.class, categoryId);
+                if (category != null) {
+                    newIdea.setCategory(category);
+                } else {
+                    // TODO: handle the situation when category isn't found
+                }
+            } else {
+                // TODO: handle the situation when categoryId is null    
+            }
+            LocationEntry location = new LocationEntry();
+            if (locationId != null) {
+                location.setId(Long.parseLong(locationId));
+            } else {
+                location.setLat(Float.parseFloat(lat));
+                location.setLon(Float.parseFloat(lon));
+                location.setName(locationName);
+                location.setRadius(Float.parseFloat(radius));
+            }
+            newIdea.setLocation(location);
+            try {
+                int statusCode = ideaClient.createIdea_JSON(newIdea).getStatus();
+                switch (statusCode) {
+                    case 200:
+                    case 201:
+                    case 202: {
                         // TODO: if idea was created where should i forward to?
                         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/main.jsp");
                         if (requestDispatcher != null) {
                             requestDispatcher.forward(request, response);
-                        }       break;
+                        }
+                        break;
                     }
-                case 404:
-                    {
+                    case 404: {
                         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/notfound.jsp");
                         if (requestDispatcher != null) {
                             requestDispatcher.forward(request, response);
-                        }       break;
+                        }
+                        break;
                     }
-                case 500:
-                case 501:
-                case 502:
-                case 503:
-                case 504:
-                case 505:
-                    {
+                    case 500:
+                    case 501:
+                    case 502:
+                    case 503:
+                    case 504:
+                    case 505: {
                         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
                         if (requestDispatcher != null) {
                             requestDispatcher.forward(request, response);
-                        }       break;
+                        }
+                        break;
                     }
-                default:
-                    break;
+                    default:
+                        break;
+                }
+
+            } catch (ClientErrorException cee) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
+                if (requestDispatcher != null) {
+                    requestDispatcher.forward(request, response);
+                }
             }
+        }
+        
+        // ================== Отмена создания новой идеи =======================
+        if (request.getParameter("cancel") != null) {
+            // TODO: forward some page - back?
+        }
+
+        // =============== Добавление нового комментария к идее ================
+        String commentText = request.getParameter("commentText");
+        
+        if (request.getParameter("comment") != null
+                && commentText != null 
+                && !commentText.trim().isEmpty()) {
             
-        } catch (ClientErrorException cee) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
-            if (requestDispatcher != null) {
-                requestDispatcher.forward(request, response);
+            ideaId = request.getParameter("ideaId");
+            System.out.println(ideaId);
+            
+            if (currentUserId == -1) {
+                // TODO: forward to authorization page
+            } else {
+                CommentEntry comment = new CommentEntry();
+                comment.setText(commentText);
+                try {
+                    UserEntry currentUser = userClient.getUserById_JSON(UserEntry.class, currentUserId.toString());
+                    comment.setAuthor(currentUser);
+                    System.out.println(currentUser.getName());
+                    IdeaEntry idea = ideaClient.getIdeaById_JSON(IdeaEntry.class, ideaId);
+                    System.out.println(idea.getTitle());
+                    comment.setIdea(idea);
+                    commentActivity.createComment(comment);
+                    
+                    response.sendRedirect(request.getContextPath() + "/ideas?ideaId=" + ideaId);
+//                    RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/ideas");
+//                    if (requestDispatcher != null) {
+//                        requestDispatcher.forward(request, response);
+//                    }
+                    
+                } catch (ClientErrorException cee) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+                    RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
+                    if (requestDispatcher != null) {
+                        requestDispatcher.forward(request, response);
+                    }
+                }
+                
             }
-            
         }
         
     }

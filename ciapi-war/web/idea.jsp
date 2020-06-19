@@ -18,7 +18,7 @@
         <table border="1" width="100%">
             <tr>
                 <td><h1>Идеи для города</h1></td>
-                <td>
+                <td width="33%" align="right">
                     <form action="authorization" method="GET">
                         <input type="submit" value="ВОЙТИ">
                     </form>
@@ -53,9 +53,10 @@
             </tr>
             <tr>
                 <td colspan="2" align="left">
-                    <form action="comment" method="POST">
+                    <form action="ideas" method="POST">
                         <div>Обсуждение идеи</div>
-                        <input type="text" value="Что Вы думаете об этой идее? Поделитесь своим мнением">
+                        <input type="text" name="commentText" value="Что Вы думаете об этой идее? Поделитесь своим мнением">
+                        <input type="hidden" name="ideaId" value="${idea.id}">
                         <input type="submit" name="comment" value="Прокомментировать">
                         <br><br>
                         <div>Список комментариев:</div><br>
