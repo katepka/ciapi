@@ -62,5 +62,20 @@ public class IdeaFacade extends AbstractFacade<Idea> implements IdeaFacadeLocal 
                 .setParameter("title", title)
                 .getResultList();
     }
-
+    
+    @Override
+    public long countByStatus(long statusId) {
+        return (Long) em.createNamedQuery("Idea.countByStatus")
+                .setParameter("statusId", statusId)
+                .getSingleResult();
+    }
+    
+    @Override
+    public long countByCategory(long categoryId) {
+        return (Long) em.createNamedQuery("Idea.countByCategory")
+                .setParameter("categoryId", categoryId)
+                .getSingleResult();
+    }
+    
 }
+

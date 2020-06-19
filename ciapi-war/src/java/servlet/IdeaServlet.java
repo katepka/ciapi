@@ -129,10 +129,6 @@ public class IdeaServlet extends HttpServlet {
                 request.setAttribute("comments", comments);
             } catch (ClientErrorException cee) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
-                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
-                if (requestDispatcher != null) {
-                    requestDispatcher.forward(request, response);
-                }
             }
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/idea.jsp");
             if (requestDispatcher != null) {

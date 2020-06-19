@@ -37,7 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Idea.findByLocation", query = "SELECT i FROM Idea i JOIN i.location s WHERE s.id = :locationId"),
     @NamedQuery(name = "Idea.findByAuthor", query = "SELECT i FROM Idea i JOIN i.author s WHERE s.id = :authorId"),
     @NamedQuery(name = "Idea.findByCoordinator", query = "SELECT i FROM Idea i JOIN i.coordinator s WHERE s.id = :coordinatorId"),
-    @NamedQuery(name = "Idea.findByStatus", query = "SELECT i FROM Idea i JOIN i.status s WHERE s.id = :statusId")})
+    @NamedQuery(name = "Idea.findByStatus", query = "SELECT i FROM Idea i JOIN i.status s WHERE s.id = :statusId"),
+    @NamedQuery(name = "Idea.countByStatus", query = "SELECT COUNT(i) FROM Idea i JOIN i.status s WHERE s.id = :statusId"),
+    @NamedQuery(name = "Idea.countByCategory", query = "SELECT COUNT(i) FROM Idea i JOIN i.category c WHERE c.id = :categoryId")})
 public class Idea implements Serializable {
 
     private static final long serialVersionUID = 1L;

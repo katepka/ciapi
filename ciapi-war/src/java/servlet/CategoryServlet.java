@@ -7,6 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,14 +17,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ClientErrorException;
+import repository.IdeaFacadeLocal;
 
 @WebServlet(name = "CategoryServlet", urlPatterns = {"/category"})
 public class CategoryServlet extends HttpServlet {
+
+    @EJB
+    private IdeaFacadeLocal ideaFacade;
     
     private String categoryId = null;
     private CategoryEntry category = null;
     private CategoryClient categoryClient;
     private List<IdeaEntry> ideas = new ArrayList<>();
+    private long numImplementedIdeas = 0;
     
     @Override
     public void init() {
@@ -34,13 +42,15 @@ public class CategoryServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         
-        int numImplementedIdeas = 0;
         categoryId = request.getParameter("categoryId"); // тоже может быть null
-        
+        System.out.println(categoryId); 
         try {
-            
             category = categoryClient.getCategoryById_JSON(CategoryEntry.class, categoryId);
-            ideas = categoryClient.getIdeasByCategoryId_JSON(categoryId);
+            try {
+                ideas = categoryClient.getIdeasByCategoryId_JSON(categoryId);
+            } catch (ClientErrorException cee) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+            }
             
             if (ideas != null) {
                 for (IdeaEntry idea : ideas) {
@@ -64,10 +74,8 @@ public class CategoryServlet extends HttpServlet {
             }
 
         } catch (ClientErrorException cee) {
-            // TODO: handle it!!!
-            System.out.println("404 | " + Arrays.toString(cee.getStackTrace()));
-            
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/category.jsp");
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
             if (requestDispatcher != null) {
                 requestDispatcher.forward(request, response);
             }

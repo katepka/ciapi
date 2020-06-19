@@ -33,4 +33,8 @@ public interface IdeaFacadeLocal {
 
     long count();
     
+    long countByStatus(long statusId);
+    
+    long countByCategory(long categoryId);
+    
 }
