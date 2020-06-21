@@ -7,6 +7,7 @@ import client.LocationClient;
 import client.UserClient;
 import entity.Comment;
 import entity.User;
+import entity.VotesIdeas;
 import entry.CategoryEntry;
 import entry.CommentEntry;
 import entry.IdeaEntry;
@@ -16,6 +17,7 @@ import entry.UserEntry;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -26,10 +28,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ClientErrorException;
+import repository.VotesIdeasFacadeLocal;
 
 @WebServlet(name = "IdeaServlet", urlPatterns = {"/ideas"})
 public class IdeaServlet extends HttpServlet {
-   
+  
     private String ideaId = null;
     private IdeaClient ideaClient;
     private CategoryClient categoryClient;
@@ -42,13 +45,15 @@ public class IdeaServlet extends HttpServlet {
     private List<CommentEntry> comments = new ArrayList<>();
     private List<CategoryEntry> categories = new ArrayList<>();
     private List<LocationEntry> locations = new ArrayList<>();
-    private long votesFor = 0;
-    private long votesAgainst = 0;
+    private List<VotesIdeas> votes = new ArrayList<>();
     
     private IdeaEntry newIdea = null;
     
     @EJB
     private CommentActivity commentActivity;
+    
+    @EJB
+    private VotesIdeasFacadeLocal votesIdeasFacade;
     
     @Override
     public void init() {
@@ -120,10 +125,24 @@ public class IdeaServlet extends HttpServlet {
                     request.setAttribute("idea", idea);
                     request.setAttribute("ideaCoordinatorName", ideaCoordinatorName);
                     request.setAttribute("ideaLocationName", ideaLocationName);
-                    // TODO: get votes from database:
-                    request.setAttribute("votesFor", votesFor);
-                    request.setAttribute("votesAgainst", votesAgainst);
-                                      
+                    
+                    /* ================== Вывод оценок к идее ========================*/
+            
+                    votes = votesIdeasFacade.findAll();
+                    for (VotesIdeas vote : votes) {
+                        if (Objects.equals(vote.getIdea().getId(), idea.getId())) {
+                            switch (vote.getVote()) {
+                                case 1:
+                                    idea.incrementVotesFor();
+                                    break;
+                                case -1:
+                                    idea.incrementVotesAgainst();
+                                    break;
+                            }
+                        }
+                    }
+                    request.setAttribute("votesFor", idea.getVotesFor());
+                    request.setAttribute("votesAgainst", idea.getVotesAgainst());
                 }
                 
             } catch (ClientErrorException cee) {
@@ -133,6 +152,9 @@ public class IdeaServlet extends HttpServlet {
                     requestDispatcher.forward(request, response);
                 }
             }
+            
+            /* ================ Вывод комментариев к идее =====================*/
+            
             try {
                 comments = ideaClient.getCommentsByIdeaId_JSON(ideaId);
                 request.setAttribute("comments", comments);
@@ -278,10 +300,6 @@ public class IdeaServlet extends HttpServlet {
                     commentActivity.createComment(comment);
                     
                     response.sendRedirect(request.getContextPath() + "/ideas?ideaId=" + ideaId);
-//                    RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/ideas");
-//                    if (requestDispatcher != null) {
-//                        requestDispatcher.forward(request, response);
-//                    }
                     
                 } catch (ClientErrorException cee) {
                     Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
