@@ -1,12 +1,14 @@
 package servlet;
 
 import client.CategoryClient;
+import entity.VotesIdeas;
 import entry.CategoryEntry;
 import entry.IdeaEntry;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ClientErrorException;
 import repository.IdeaFacadeLocal;
+import repository.VotesIdeasFacadeLocal;
 
 @WebServlet(name = "CategoryServlet", urlPatterns = {"/category"})
 public class CategoryServlet extends HttpServlet {
@@ -25,6 +28,10 @@ public class CategoryServlet extends HttpServlet {
     @EJB
     private IdeaFacadeLocal ideaFacade;
     
+    @EJB
+    private VotesIdeasFacadeLocal votesIdeasFacade;
+    
+    private List<VotesIdeas> votes = new ArrayList<>();
     private String categoryId = null;
     private CategoryEntry category = null;
     private CategoryClient categoryClient;
@@ -48,6 +55,7 @@ public class CategoryServlet extends HttpServlet {
             category = categoryClient.getCategoryById_JSON(CategoryEntry.class, categoryId);
             try {
                 ideas = categoryClient.getIdeasByCategoryId_JSON(categoryId);
+                votes = votesIdeasFacade.findAll();
             } catch (ClientErrorException cee) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
             }
@@ -58,6 +66,24 @@ public class CategoryServlet extends HttpServlet {
                     if (idea.getStatus().getId() == 3) {
                         numImplementedIdeas++;
                     }
+                    /*============= Сопоставление голосов и идей ==============*/
+                    idea.setVotesFor(0);
+                    idea.setVotesAgainst(0);
+                    if (votes != null) {
+                        for (VotesIdeas vote : votes) {
+                            if (Objects.equals(vote.getIdea().getId(), idea.getId())) {
+                                switch (vote.getVote()) {
+                                    case 1:
+                                        idea.incrementVotesFor();
+                                        break;
+                                    case -1:
+                                        idea.incrementVotesAgainst();
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                    idea.countScore();
                 }
                 
                 /* =========== Обработка фильтации идей по статусу ============ */
@@ -108,10 +134,9 @@ public class CategoryServlet extends HttpServlet {
                 
                 String sortType = request.getParameter("sortBy");
                 if ("new".equalsIgnoreCase(sortType)) {
-                    // TODO
                     Collections.sort(shownIdeas, IdeaEntry.COMPARE_BY_CREATED);
                 } else if ("popular".equalsIgnoreCase(sortType)) {
-                    // TODO
+                    Collections.sort(ideas, IdeaEntry.COMPARE_BY_SCORE); 
                 }
 
                 /* ========================================================== */

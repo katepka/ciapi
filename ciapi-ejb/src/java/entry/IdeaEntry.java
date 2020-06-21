@@ -31,7 +31,14 @@ public class IdeaEntry extends AbstractDataEntry {
     
     private ImplementationInfoEntry implementationInfo;
     
-    public IdeaEntry() {}
+    private int score;
+    
+    private int votesFor;
+    
+    private int votesAgainst;
+    
+    public IdeaEntry() {
+    }
 
     public String getTitle() {
         return title;
@@ -105,6 +112,46 @@ public class IdeaEntry extends AbstractDataEntry {
         this.implementationInfo = implementationInfo;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getVotesFor() {
+        return votesFor;
+    }
+
+    public void setVotesFor(int votesFor) {
+        this.votesFor = votesFor;
+    }
+
+    public int getVotesAgainst() {
+        return votesAgainst;
+    }
+
+    public void setVotesAgainst(int votesAgainst) {
+        this.votesAgainst = votesAgainst;
+    }
+    
+    public void countScore() {
+        score = votesFor - votesAgainst;
+        if (score < 0) {
+            score = 0;
+        }
+    }
+    
+    public void incrementVotesFor() {
+        votesFor++;
+    }
+    
+    public void incrementVotesAgainst() {
+        votesAgainst++;
+    }
+    
+
     @Override
     public String toString() {
         return "IdeaEntry{" + "title=" + title 
@@ -122,6 +169,13 @@ public class IdeaEntry extends AbstractDataEntry {
         @Override
         public int compare(IdeaEntry idea1, IdeaEntry idea2) {
             return idea2.created.compareTo(idea1.created);
+        }
+    };
+    
+    public static final Comparator<IdeaEntry> COMPARE_BY_SCORE = new Comparator<IdeaEntry>() {
+        @Override
+        public int compare(IdeaEntry idea1, IdeaEntry idea2) {
+            return idea2.score - idea1.score;
         }
     };
     

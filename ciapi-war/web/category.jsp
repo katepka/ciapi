@@ -75,6 +75,7 @@
                                             <c:if test="${idea.location.name != null}">
                                                 ${idea.location.name}
                                             </c:if>
+                                            <br>"За": ${idea.votesFor} | "Против": ${idea.votesAgainst}<br>
                                             <input type="hidden" name="ideaId" value="${idea.id}">
                                             <input type="submit" name="go" value="${idea.title}">
                                         </form>
