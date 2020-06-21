@@ -7,6 +7,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="entry.IdeaEntry"%>
+<%@page import="entry.CategoryEntry"%>
 <%@page import="entry.StatusEntry"%>
 <%@page import="entry.LocationEntry"%>
 <%@page import="java.util.List"%>
@@ -28,11 +29,10 @@
             </tr>
             <tr>
                 <td>
-                    <h1>${categoryTitle}</h1>
-                    <h3>${categoryDescription}</h3>
+                    <h1>${category.title}</h1>
+                    <h3>${category.description}</h3>
                 </td>
                 <td width="33%">
-                    
                     Идей в категории: ${numIdeas} <br>
                     Реализовано идей: ${numImplementedIdeas} <br>
                     <a href="http://localhost:8080/ciapi-war/rating">Посмотреть статистику</a>
@@ -47,14 +47,24 @@
                                 <input type="submit" name="createIdea" value="Предложить идею">
                             </form>
                         </td>
+                        <form action="category" method="GET">
                         <td>
                             Сортировка по:
                             <br> новым
                             <br> популярным
                         </td>
                         <td width="33%">
-                            Фильтр по статусу
+                            <select name="status" selected="${selectedStatus}">
+                                <option value="all">Все</option>
+                                <option value="1">Новая</option>
+                                <option value="2">На голосовании</option>
+                                <option value="3">Реализована</option>
+                                <option value="4">Закрыта</option>
+                            </select>
+                            <input type="hidden" name="categoryId" value="${category.id}">
+                            <input type="submit" name="filter" value="Отфильтровать">
                         </td>
+                        </form>
                     </tr>
                             <c:forEach var="idea" items="${ideas}">
                                 <tr>

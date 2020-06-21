@@ -5,7 +5,6 @@ import entry.CategoryEntry;
 import entry.IdeaEntry;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,6 +28,7 @@ public class CategoryServlet extends HttpServlet {
     private CategoryEntry category = null;
     private CategoryClient categoryClient;
     private List<IdeaEntry> ideas = new ArrayList<>();
+    private List<IdeaEntry> shownIdeas = new ArrayList<>();
     private long numImplementedIdeas = 0;
     
     @Override
@@ -53,19 +53,72 @@ public class CategoryServlet extends HttpServlet {
             }
             
             if (ideas != null) {
+                numImplementedIdeas = 0;
                 for (IdeaEntry idea : ideas) {
                     if (idea.getStatus().getId() == 3) {
                         numImplementedIdeas++;
                     }
                 }
-                request.setAttribute("ideas", ideas);
+                
+                /* =========== Обработка фильтации идей по статусу ============ */
+
+                String filteredStatus = request.getParameter("status");
+                String selectedStatus = "1";
+                if (request.getParameter("filter") != null) {
+                    shownIdeas.clear();
+                    switch (filteredStatus) {
+                        case "all":
+                            shownIdeas = ideas;
+                            break;
+                        case "1":
+                            for (IdeaEntry idea : ideas) {
+                                if (idea.getStatus().getId() == 1L) {
+                                    shownIdeas.add(idea);
+                                    System.out.println("1 " + idea.getStatus().getId() + ": yes");
+                                }
+                            }
+                            break;
+                        case "2":
+                            for (IdeaEntry idea : ideas) {
+                                if (idea.getStatus().getId() == 2L) {
+                                    shownIdeas.add(idea);
+                                    System.out.println("2 " + idea.getStatus().getId() + ": yes");
+                                }
+                            }
+                            break;
+                        case "3":
+                            for (IdeaEntry idea : ideas) {
+                                if (idea.getStatus().getId() == 3L) {
+                                    shownIdeas.add(idea);
+                                    System.out.println("3 " + idea.getStatus().getId() + ": yes");
+                                }
+                            }
+                            break;
+                        case "4":
+                            for (IdeaEntry idea : ideas) {
+                                if (idea.getStatus().getId() == 4L) {
+                                    shownIdeas.add(idea);
+                                    System.out.println("4 " + idea.getStatus().getId() + ": yes");
+                                }
+                            }
+                            break;
+                        default:
+                            shownIdeas = ideas;
+                            System.out.println("Угу");
+                    }
+                } else {
+                    shownIdeas = ideas;
+                }
+                
+                /* ============================================================= */
+               
+                request.setAttribute("ideas", shownIdeas);
                 request.setAttribute("numIdeas", ideas.size());
             } else {
                 request.setAttribute("numIdeas", 0);
             }
             if (category != null) {
-                request.setAttribute("categoryTitle", category.getTitle());
-                request.setAttribute("categoryDescription", category.getDescription());
+                request.setAttribute("category", category);
             }
             request.setAttribute("numImplementedIdeas", numImplementedIdeas);
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/category.jsp");
