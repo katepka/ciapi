@@ -1,5 +1,6 @@
 package entry;
 
+import java.util.Comparator;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -117,6 +118,11 @@ public class IdeaEntry extends AbstractDataEntry {
                 + ", implementationInfo=" + implementationInfo + '}';
     }
     
-    
+    public static final Comparator<IdeaEntry> COMPARE_BY_CREATED = new Comparator<IdeaEntry>() {
+        @Override
+        public int compare(IdeaEntry idea1, IdeaEntry idea2) {
+            return idea2.created.compareTo(idea1.created);
+        }
+    };
     
 }

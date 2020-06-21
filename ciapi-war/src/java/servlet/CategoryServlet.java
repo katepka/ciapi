@@ -5,6 +5,7 @@ import entry.CategoryEntry;
 import entry.IdeaEntry;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,7 +44,6 @@ public class CategoryServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         
         categoryId = request.getParameter("categoryId"); // тоже может быть null
-        System.out.println(categoryId); 
         try {
             category = categoryClient.getCategoryById_JSON(CategoryEntry.class, categoryId);
             try {
@@ -63,7 +63,6 @@ public class CategoryServlet extends HttpServlet {
                 /* =========== Обработка фильтации идей по статусу ============ */
 
                 String filteredStatus = request.getParameter("status");
-                String selectedStatus = "1";
                 if (request.getParameter("filter") != null) {
                     shownIdeas.clear();
                     switch (filteredStatus) {
@@ -74,7 +73,6 @@ public class CategoryServlet extends HttpServlet {
                             for (IdeaEntry idea : ideas) {
                                 if (idea.getStatus().getId() == 1L) {
                                     shownIdeas.add(idea);
-                                    System.out.println("1 " + idea.getStatus().getId() + ": yes");
                                 }
                             }
                             break;
@@ -82,7 +80,6 @@ public class CategoryServlet extends HttpServlet {
                             for (IdeaEntry idea : ideas) {
                                 if (idea.getStatus().getId() == 2L) {
                                     shownIdeas.add(idea);
-                                    System.out.println("2 " + idea.getStatus().getId() + ": yes");
                                 }
                             }
                             break;
@@ -90,7 +87,6 @@ public class CategoryServlet extends HttpServlet {
                             for (IdeaEntry idea : ideas) {
                                 if (idea.getStatus().getId() == 3L) {
                                     shownIdeas.add(idea);
-                                    System.out.println("3 " + idea.getStatus().getId() + ": yes");
                                 }
                             }
                             break;
@@ -98,19 +94,27 @@ public class CategoryServlet extends HttpServlet {
                             for (IdeaEntry idea : ideas) {
                                 if (idea.getStatus().getId() == 4L) {
                                     shownIdeas.add(idea);
-                                    System.out.println("4 " + idea.getStatus().getId() + ": yes");
                                 }
                             }
                             break;
                         default:
                             shownIdeas = ideas;
-                            System.out.println("Угу");
                     }
                 } else {
                     shownIdeas = ideas;
                 }
                 
-                /* ============================================================= */
+                /* =========== Обработка сортировки идей по дате ============ */
+                
+                String sortType = request.getParameter("sortBy");
+                if ("new".equalsIgnoreCase(sortType)) {
+                    // TODO
+                    Collections.sort(shownIdeas, IdeaEntry.COMPARE_BY_CREATED);
+                } else if ("popular".equalsIgnoreCase(sortType)) {
+                    // TODO
+                }
+
+                /* ========================================================== */
                
                 request.setAttribute("ideas", shownIdeas);
                 request.setAttribute("numIdeas", ideas.size());

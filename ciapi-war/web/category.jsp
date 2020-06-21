@@ -49,9 +49,9 @@
                         </td>
                         <form action="category" method="GET">
                         <td>
-                            Сортировка по:
-                            <br> новым
-                            <br> популярным
+                            <p><input type="radio" name="sortBy" value="new" checked>сначала новые<br>
+                            <input type="radio" name="sortBy" value="popular">сначала популярные</p>
+                            <p><input type="submit" name="sort" value="Отсортировать">
                         </td>
                         <td width="33%">
                             <select name="status" selected="${selectedStatus}">
