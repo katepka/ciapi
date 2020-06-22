@@ -74,11 +74,11 @@ public class User implements Serializable {
     private Collection<VotesUsers> votesUsersCollection1;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Collection<VotesIdeas> votesIdeasCollection;
+    private Collection<VoteIdeas> votesIdeasCollection;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
     private Collection<Comment> commentCollection;
-
+    
     public User() {
     }
 
@@ -170,11 +170,11 @@ public class User implements Serializable {
     }
 
     @XmlTransient
-    public Collection<VotesIdeas> getVotesIdeasCollection() {
+    public Collection<VoteIdeas> getVotesIdeasCollection() {
         return votesIdeasCollection;
     }
 
-    public void setVotesIdeasCollection(Collection<VotesIdeas> votesIdeasCollection) {
+    public void setVotesIdeasCollection(Collection<VoteIdeas> votesIdeasCollection) {
         this.votesIdeasCollection = votesIdeasCollection;
     }
 

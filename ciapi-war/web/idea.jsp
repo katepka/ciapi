@@ -49,7 +49,13 @@
             </tr>
             <tr>
                 <td>Фотографии</td>
-                <td>За идею: ${votesFor} | Против идеи: ${votesAgainst}</td>
+                <td>
+                    <form action="ideas" method="GET">
+                        <input type="hidden" name="ideaId" value="${idea.id}">
+                        <input type="submit" name="voteFor" value="За идею:"> ${votesFor} | 
+                        <input type="submit" name="voteAgainst" value="Против идеи:"> ${votesAgainst}
+                    </form>
+                </td>
             </tr>
             <tr>
                 <td colspan="2" align="left">

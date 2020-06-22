@@ -1,7 +1,7 @@
 package servlet;
 
 import client.CategoryClient;
-import entity.VotesIdeas;
+import entity.VoteIdeas;
 import entry.CategoryEntry;
 import entry.IdeaEntry;
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class CategoryServlet extends HttpServlet {
     @EJB
     private VotesIdeasFacadeLocal votesIdeasFacade;
     
-    private List<VotesIdeas> votes = new ArrayList<>();
+    private List<VoteIdeas> votes = new ArrayList<>();
     private String categoryId = null;
     private CategoryEntry category = null;
     private CategoryClient categoryClient;
@@ -70,7 +70,7 @@ public class CategoryServlet extends HttpServlet {
                     idea.setVotesFor(0);
                     idea.setVotesAgainst(0);
                     if (votes != null) {
-                        for (VotesIdeas vote : votes) {
+                        for (VoteIdeas vote : votes) {
                             if (Objects.equals(vote.getIdea().getId(), idea.getId())) {
                                 switch (vote.getVote()) {
                                     case 1:

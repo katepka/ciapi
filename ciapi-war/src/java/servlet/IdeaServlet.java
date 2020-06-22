@@ -5,9 +5,9 @@ import client.CategoryClient;
 import client.IdeaClient;
 import client.LocationClient;
 import client.UserClient;
-import entity.Comment;
+import entity.Idea;
 import entity.User;
-import entity.VotesIdeas;
+import entity.VoteIdeas;
 import entry.CategoryEntry;
 import entry.CommentEntry;
 import entry.IdeaEntry;
@@ -28,11 +28,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ClientErrorException;
+import mapper.IdeaMapper;
+import repository.UserFacadeLocal;
 import repository.VotesIdeasFacadeLocal;
 
 @WebServlet(name = "IdeaServlet", urlPatterns = {"/ideas"})
 public class IdeaServlet extends HttpServlet {
-  
+ 
     private String ideaId = null;
     private IdeaClient ideaClient;
     private CategoryClient categoryClient;
@@ -45,7 +47,7 @@ public class IdeaServlet extends HttpServlet {
     private List<CommentEntry> comments = new ArrayList<>();
     private List<CategoryEntry> categories = new ArrayList<>();
     private List<LocationEntry> locations = new ArrayList<>();
-    private List<VotesIdeas> votes = new ArrayList<>();
+    private List<VoteIdeas> votes = new ArrayList<>();
     
     private IdeaEntry newIdea = null;
     
@@ -54,6 +56,12 @@ public class IdeaServlet extends HttpServlet {
     
     @EJB
     private VotesIdeasFacadeLocal votesIdeasFacade;
+    
+    @EJB
+    private IdeaMapper ideaMapper;
+    
+    @EJB
+    private UserFacadeLocal userFacade;
     
     @Override
     public void init() {
@@ -105,7 +113,6 @@ public class IdeaServlet extends HttpServlet {
         // ================= Формирование страницы idea.jsp ======================
         
         ideaId = request.getParameter("ideaId");
-        
         if (ideaId != null && !ideaId.trim().isEmpty()) {
             try {
                 IdeaEntry idea = ideaClient.getIdeaById_JSON(IdeaEntry.class, ideaId);
@@ -125,11 +132,10 @@ public class IdeaServlet extends HttpServlet {
                     request.setAttribute("idea", idea);
                     request.setAttribute("ideaCoordinatorName", ideaCoordinatorName);
                     request.setAttribute("ideaLocationName", ideaLocationName);
-                    
+
                     /* ================== Вывод оценок к идее ========================*/
-            
                     votes = votesIdeasFacade.findAll();
-                    for (VotesIdeas vote : votes) {
+                    for (VoteIdeas vote : votes) {
                         if (Objects.equals(vote.getIdea().getId(), idea.getId())) {
                             switch (vote.getVote()) {
                                 case 1:
@@ -145,6 +151,51 @@ public class IdeaServlet extends HttpServlet {
                     request.setAttribute("votesAgainst", idea.getVotesAgainst());
                 }
                 
+                /* =================== Обработка голосов ======================== */
+                if (request.getParameter("voteFor") != null) {
+                    List<VoteIdeas> castVotes = votesIdeasFacade.findVote(currentUserId, Long.parseLong(ideaId));
+                    
+                    if (castVotes.size() > 0) {
+                        
+                        for (VoteIdeas vote : castVotes) {
+                            if (vote.getVote() == 1) {
+                                removeVote(vote.getId());
+                            } else {
+                                addVote(1, idea, currentUserId);  
+                            }
+                        }
+                    } else {
+                        addVote(1, idea, currentUserId);
+                    }
+                }
+                
+                if (request.getParameter("voteAgainst") != null) {
+                    List<VoteIdeas> castVotes = votesIdeasFacade.findVote(currentUserId, Long.parseLong(ideaId));
+                    if (castVotes.size() > 0) {
+                        for (VoteIdeas vote : castVotes) {
+                            if (vote.getVote() == -1) {
+                                removeVote(vote.getId());
+                            } else {
+                                addVote(-1, idea, currentUserId);  
+                            }
+                        }
+                    } else {
+                        addVote(-1, idea, currentUserId);
+                    }
+                }
+
+                /* ================ Вывод комментариев к идее =====================*/
+                try {
+                    comments = ideaClient.getCommentsByIdeaId_JSON(ideaId);
+                    request.setAttribute("comments", comments);
+                } catch (ClientErrorException cee) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+                }                
+                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/idea.jsp");
+                if (requestDispatcher != null) {
+                    requestDispatcher.forward(request, response);
+                }
+
             } catch (ClientErrorException cee) {
                 Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
                 RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
@@ -152,20 +203,10 @@ public class IdeaServlet extends HttpServlet {
                     requestDispatcher.forward(request, response);
                 }
             }
+
             
-            /* ================ Вывод комментариев к идее =====================*/
-            
-            try {
-                comments = ideaClient.getCommentsByIdeaId_JSON(ideaId);
-                request.setAttribute("comments", comments);
-            } catch (ClientErrorException cee) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
-            }
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/idea.jsp");
-            if (requestDispatcher != null) {
-                requestDispatcher.forward(request, response);
-            }
         } else {
+            System.out.println("handle the situation when there isn't ideaId");
             // TODO: handle the situation when there isn't ideaId
         }
     }
@@ -283,7 +324,6 @@ public class IdeaServlet extends HttpServlet {
                 && !commentText.trim().isEmpty()) {
             
             ideaId = request.getParameter("ideaId");
-            System.out.println(ideaId);
             
             if (currentUserId == -1) {
                 // TODO: forward to authorization page
@@ -293,9 +333,7 @@ public class IdeaServlet extends HttpServlet {
                 try {
                     UserEntry currentUser = userClient.getUserById_JSON(UserEntry.class, currentUserId.toString());
                     comment.setAuthor(currentUser);
-                    System.out.println(currentUser.getName());
                     IdeaEntry idea = ideaClient.getIdeaById_JSON(IdeaEntry.class, ideaId);
-                    System.out.println(idea.getTitle());
                     comment.setIdea(idea);
                     commentActivity.createComment(comment);
                     
@@ -334,5 +372,22 @@ public class IdeaServlet extends HttpServlet {
         if (userClient != null) {
             userClient.close();
         }
+    }
+
+    private void removeVote(Long id) {
+        votesIdeasFacade.remove(id);
+    }
+
+    private void addVote(int i, IdeaEntry idea, Long currentUserId) {
+        VoteIdeas newVote = new VoteIdeas();
+        short voteFor = (short) ((i == 1) ? 1 : -1);
+        newVote.setVote(voteFor);
+        Idea ratedIdea = ideaMapper.mapIdeaEntryToIdea(idea);
+        ratedIdea.setId(Long.parseLong(ideaId));
+        newVote.setIdea(ratedIdea);
+        User currentUser = userFacade.find(currentUserId);
+        newVote.setUser(currentUser);   
+        votesIdeasFacade.create(newVote);
+       
     }
 }

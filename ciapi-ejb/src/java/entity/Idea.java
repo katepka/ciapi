@@ -95,7 +95,7 @@ public class Idea implements Serializable {
     private Collection<Photo> photoCollection;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idea")
-    private Collection<VotesIdeas> votesIdeasCollection;
+    private Collection<VoteIdeas> votesIdeasCollection;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idea")
     private Collection<Comment> commentCollection;
@@ -204,11 +204,11 @@ public class Idea implements Serializable {
     }
 
     @XmlTransient
-    public Collection<VotesIdeas> getVotesIdeasCollection() {
+    public Collection<VoteIdeas> getVotesIdeasCollection() {
         return votesIdeasCollection;
     }
 
-    public void setVotesIdeasCollection(Collection<VotesIdeas> votesIdeasCollection) {
+    public void setVotesIdeasCollection(Collection<VoteIdeas> votesIdeasCollection) {
         this.votesIdeasCollection = votesIdeasCollection;
     }
 

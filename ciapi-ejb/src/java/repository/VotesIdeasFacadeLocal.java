@@ -1,24 +1,26 @@
 package repository;
 
-import entity.VotesIdeas;
+import entity.VoteIdeas;
 import java.util.List;
 import javax.ejb.Local;
 
 @Local
 public interface VotesIdeasFacadeLocal {
 
-    void create(VotesIdeas votesIdeas);
+    void create(VoteIdeas votesIdeas);
 
-    void edit(VotesIdeas votesIdeas);
+    void edit(VoteIdeas votesIdeas);
 
-    VotesIdeas remove(Object id);
+    VoteIdeas remove(Object id);
 
-    VotesIdeas find(Object id);
+    VoteIdeas find(Object id);
 
-    List<VotesIdeas> findAll();
+    List<VoteIdeas> findAll();
 
-    List<VotesIdeas> findRange(int[] range);
+    List<VoteIdeas> findRange(int[] range);
 
     long count();
+    
+    List<VoteIdeas> findVote(Long userId, Long ideaId);
     
 }
