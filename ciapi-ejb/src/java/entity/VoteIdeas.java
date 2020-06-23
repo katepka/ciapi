@@ -20,12 +20,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "ci_vote_ideas")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "VotesIdeas.findAll", query = "SELECT v FROM VotesIdeas v"),
-    @NamedQuery(name = "VotesIdeas.findByVote", query = "SELECT v FROM VotesIdeas v WHERE v.vote = :vote"),
-    @NamedQuery(name = "VotesIdeas.findByUserIdAndRatedIdeaId", query = "SELECT v FROM VotesIdeas v "
+    @NamedQuery(name = "VoteIdeas.findAll", query = "SELECT v FROM VoteIdeas v"),
+    @NamedQuery(name = "VoteIdeas.findByVote", query = "SELECT v FROM VoteIdeas v WHERE v.vote = :vote"),
+    @NamedQuery(name = "VoteIdeas.findByUserIdAndRatedIdeaId", query = "SELECT v FROM VoteIdeas v "
             + "JOIN v.user u JOIN v.idea i WHERE u.id = :userId"
             + " and i.id = :ratedIdeaId"),
-    @NamedQuery(name = "VotesIdeas.findById", query = "SELECT v FROM VotesIdeas v WHERE v.id = :id")})
+    @NamedQuery(name = "VoteIdeas.findById", query = "SELECT v FROM VoteIdeas v WHERE v.id = :id")})
 public class VoteIdeas implements Serializable {
 
     private static final long serialVersionUID = 1L;

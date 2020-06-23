@@ -22,7 +22,7 @@ public class VotesIdeasFacade extends AbstractFacade<VoteIdeas> implements Votes
     }
     
     public List<VoteIdeas> findVote(Long userId, Long ideaId) {
-        return em.createNamedQuery("VotesIdeas.findByUserIdAndRatedIdeaId")
+        return em.createNamedQuery("VoteIdeas.findByUserIdAndRatedIdeaId")
                 .setParameter("userId", userId)
                 .setParameter("ratedIdeaId", ideaId)
                 .getResultList();

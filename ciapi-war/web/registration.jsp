@@ -28,7 +28,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <input type="text" name="email" value="Введите email">
+                                    <input type="text" name="email" value="${emailMustBeValid}">
                                 </td>
                             </tr>
                             <tr>
@@ -36,7 +36,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <input type="text" name="name" value="Введите Ваше имя">
+                                    <input type="text" name="name" value="${nameMustBeValid}">
                                 </td>
                             </tr>
                             <tr>
@@ -52,14 +52,9 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <input type="password" name="password">
+                                    <input type="password" name="passwordRepeat">
                                 </td>
                             </tr>
-                            <tr>
-                                <td>Нажимая на кнопку, Вы соглашаетесь с 
-                                    <a href="http://localhost:8080/ciapi-war/registration.jsp">условиями пользования</a></td>
-                            </tr>
-                            
                             <tr>
                                 <td>
                                     <input type="submit" value="ЗАРЕГИСТРИРОВАТЬСЯ" name="registrate">

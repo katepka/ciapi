@@ -19,7 +19,7 @@
             <tr>
                 <td><h1>Идеи для города</h1></td>
                 <td width="33%" align="right">
-                    <form action="authorization" method="GET">
+                    <form action="login" method="GET">
                         <input type="submit" value="ВОЙТИ">
                     </form>
                 </td>
