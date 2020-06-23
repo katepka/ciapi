@@ -5,6 +5,7 @@ import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import util.AppConstants;
 
 public class RoleClient {
 
@@ -13,7 +14,7 @@ public class RoleClient {
 
     public RoleClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(ClientConstants.BASE_URI).path("roles");
+        webTarget = client.target(AppConstants.BASE_URI).path("roles");
     }
 
     public <T> T getRole_XML(Class<T> responseType, String id) throws ClientErrorException {

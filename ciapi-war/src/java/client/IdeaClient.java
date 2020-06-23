@@ -12,6 +12,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import util.AppConstants;
 
 public class IdeaClient {
 
@@ -20,7 +21,7 @@ public class IdeaClient {
 
     public IdeaClient() {
         client = ClientBuilder.newClient();
-        webTarget = client.target(ClientConstants.BASE_URI).path("ideas");
+        webTarget = client.target(AppConstants.BASE_URI).path("ideas");
     }
 
     public Response createIdea_XML(Object requestEntity) throws ClientErrorException {

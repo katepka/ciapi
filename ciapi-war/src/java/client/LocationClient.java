@@ -8,6 +8,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
+import util.AppConstants;
 
 
 public class LocationClient {
@@ -17,7 +18,7 @@ public class LocationClient {
 
     public LocationClient() {
         client = ClientBuilder.newClient();
-        webTarget = client.target(ClientConstants.BASE_URI).path("locations");
+        webTarget = client.target(AppConstants.BASE_URI).path("locations");
     }
 
     public List<LocationEntry> getAllLocations_XML() throws ClientErrorException {

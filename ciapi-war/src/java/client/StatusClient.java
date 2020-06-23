@@ -11,6 +11,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import util.AppConstants;
 
 public class StatusClient {
 
@@ -19,7 +20,7 @@ public class StatusClient {
 
     public StatusClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(ClientConstants.BASE_URI).path("statuses");
+        webTarget = client.target(AppConstants.BASE_URI).path("statuses");
     }
 
     public Response deleteStatus_XML(Object requestEntity, String id) throws ClientErrorException {

@@ -12,6 +12,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import util.AppConstants;
 
 public class CategoryClient {
 
@@ -20,7 +21,7 @@ public class CategoryClient {
 
     public CategoryClient() {
         client = ClientBuilder.newClient();
-        webTarget = client.target(ClientConstants.BASE_URI).path("categories");
+        webTarget = client.target(AppConstants.BASE_URI).path("categories");
     }
     
     public List<CategoryEntry> getAllCategories_JSON() {

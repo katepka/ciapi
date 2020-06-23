@@ -24,7 +24,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import repository.StatusFacadeLocal;
-import security.Secured;
+import security.arch.Secured;
 import validation.EntryValidator;
 
 @Path("statuses")

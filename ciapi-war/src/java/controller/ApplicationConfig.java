@@ -28,8 +28,8 @@ public class ApplicationConfig extends Application {
         resources.add(controller.RoleController.class);
         resources.add(controller.StatusController.class);
         resources.add(controller.UserController.class);
-        resources.add(security.AuthenticationController.class);
-        resources.add(security.AuthenticationFilter.class);
+        resources.add(security.arch.AuthenticationController.class);
+        resources.add(security.arch.AuthenticationFilter.class);
     }
     
 }

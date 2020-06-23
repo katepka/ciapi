@@ -2,6 +2,7 @@ package servlet;
 
 import client.CategoryClient;
 import entry.CategoryEntry;
+import entry.UserEntry;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ClientErrorException;
 import repository.IdeaFacadeLocal;
+import util.AppUtils;
 
 @WebServlet(name = "Start", urlPatterns = {"/start"})
 public class MainServlet extends HttpServlet {
@@ -25,8 +27,9 @@ public class MainServlet extends HttpServlet {
     private CategoryClient categoryClient;
     
     private List<CategoryEntry> categories = null;
-    long numIdeas = 0; // TODO: Оптимизировать запросы с подсчетом
+    long numIdeas = 0;
     long numImplementedIdeas = 0;
+    UserEntry loginedUser;
     
     @Override
     public void init() {
@@ -38,6 +41,10 @@ public class MainServlet extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
+        request.removeAttribute("loginedUser");
+        
+        loginedUser = AppUtils.getLoginedUser(request.getSession());
+        request.setAttribute("loginedUser", loginedUser);
         
         numIdeas = ideaFacade.count();
         numImplementedIdeas = ideaFacade.countByStatus(3L);
@@ -68,7 +75,7 @@ public class MainServlet extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-        
+
     }
     
 

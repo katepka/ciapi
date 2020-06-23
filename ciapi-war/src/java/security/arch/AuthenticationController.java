@@ -1,4 +1,4 @@
-package security;
+package security.arch;
 
 import entry.Credentials;
 import java.math.BigInteger;

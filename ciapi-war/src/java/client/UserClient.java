@@ -11,6 +11,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import util.AppConstants;
 
 public class UserClient {
 
@@ -19,7 +20,7 @@ public class UserClient {
 
     public UserClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(ClientConstants.BASE_URI).path("users");
+        webTarget = client.target(AppConstants.BASE_URI).path("users");
     }
 
     public List<UserEntry> getAllUsers_XML() throws ClientErrorException {

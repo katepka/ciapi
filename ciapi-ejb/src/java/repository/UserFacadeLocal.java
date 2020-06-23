@@ -15,6 +15,8 @@ public interface UserFacadeLocal {
 
     User find(Object id);
     
+    User findUser(String email, String password);
+    
     List<User> findByRole(long roleId);
 
     List<User> findAll();

@@ -18,7 +18,8 @@
             </tr>
             <tr >
                 <td>
-                    <form action="authorization" method="POST">
+                    <form action="login" method="POST">
+                        <div align="center">${errorMessage}</div>
                         <table border="1" align="center">
                             <tr>
                                 <td>ВХОД НА ПЛАТФОРМУ</td>
@@ -28,7 +29,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <input type="text" name="login" value="Email">
+                                    <input type="text" name="userName" value="${emailMustBeValid}">
                                 </td>
                             </tr>
                             <tr>
@@ -36,7 +37,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <input type="password" name="password" value="Пароль">
+                                    <input type="password" name="password" value="${passwordMustBeValid}">
                                 </td>
                             </tr>
                             <tr>

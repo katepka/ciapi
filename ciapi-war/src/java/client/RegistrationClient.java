@@ -6,6 +6,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import util.AppConstants;
 
 public class RegistrationClient {
 
@@ -14,7 +15,7 @@ public class RegistrationClient {
 
     public RegistrationClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(ClientConstants.BASE_URI).path("registration");
+        webTarget = client.target(AppConstants.BASE_URI).path("registration");
     }
 
     public Response registrateUser_XML(Object requestEntity) throws ClientErrorException {

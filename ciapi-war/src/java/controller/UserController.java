@@ -134,7 +134,7 @@ public class UserController {
         }
     }
     
-
+    
     private UserActivity lookupUserActivityBean() {
         try {
             javax.naming.Context c = new InitialContext();

@@ -7,6 +7,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="entry.CommentEntry"%>
+<%@page import="entry.UserEntry"%>
 <%@page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
@@ -19,9 +20,17 @@
             <tr>
                 <td><h1>Идеи для города</h1></td>
                 <td width="33%" align="right">
-                    <form action="login" method="GET">
-                        <input type="submit" value="ВОЙТИ">
-                    </form>
+                    <c:if test="${loginedUser == null}">
+                        <form action="login" method="GET">
+                            <input type="submit" name="login" value="ВОЙТИ">
+                        </form>
+                    </c:if>
+                    <c:if test="${loginedUser != null}">
+                        <input type="submit" name="loginedUser" value="${loginedUser.name}">
+                        <form action="logout" method="GET">
+                            <input type="submit" name="logout" value="ВЫЙТИ">
+                        </form>
+                    </c:if>
                 </td>
             </tr>
             <tr>

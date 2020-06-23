@@ -1,4 +1,4 @@
-package security;
+package security.arch;
 
 import java.io.IOException;
 import javax.annotation.Priority;
