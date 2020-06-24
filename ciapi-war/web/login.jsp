@@ -19,7 +19,8 @@
             <tr >
                 <td>
                     <form action="login" method="POST">
-                        <div align="center">${errorMessage}</div>
+                        <div align="center" style="color: crimson">${errorMessage}</div>
+                        <br>
                         <table border="1" align="center">
                             <tr>
                                 <td>ВХОД НА ПЛАТФОРМУ</td>

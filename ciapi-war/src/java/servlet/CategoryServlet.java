@@ -19,14 +19,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ClientErrorException;
-import repository.IdeaFacadeLocal;
 import repository.VotesIdeasFacadeLocal;
 
 @WebServlet(name = "CategoryServlet", urlPatterns = {"/category"})
 public class CategoryServlet extends HttpServlet {
 
-    @EJB
-    private IdeaFacadeLocal ideaFacade;
     
     @EJB
     private VotesIdeasFacadeLocal votesIdeasFacade;
@@ -50,118 +47,120 @@ public class CategoryServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         
-        categoryId = request.getParameter("categoryId"); // тоже может быть null
-        try {
-            category = categoryClient.getCategoryById_JSON(CategoryEntry.class, categoryId);
+        categoryId = request.getParameter("categoryId");
+        if (categoryId != null) {
             try {
-                ideas = categoryClient.getIdeasByCategoryId_JSON(categoryId);
-                votes = votesIdeasFacade.findAll();
-            } catch (ClientErrorException cee) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
-            }
-            
-            if (ideas != null) {
-                numImplementedIdeas = 0;
-                for (IdeaEntry idea : ideas) {
-                    if (idea.getStatus().getId() == 3) {
-                        numImplementedIdeas++;
-                    }
-                    /*============= Сопоставление голосов и идей ==============*/
-                    idea.setVotesFor(0);
-                    idea.setVotesAgainst(0);
-                    if (votes != null) {
-                        for (VoteIdeas vote : votes) {
-                            if (Objects.equals(vote.getIdea().getId(), idea.getId())) {
-                                switch (vote.getVote()) {
-                                    case 1:
-                                        idea.incrementVotesFor();
-                                        break;
-                                    case -1:
-                                        idea.incrementVotesAgainst();
-                                        break;
+                category = categoryClient.getCategoryById_JSON(CategoryEntry.class, categoryId);
+                try {
+                    ideas = categoryClient.getIdeasByCategoryId_JSON(categoryId);
+                    votes = votesIdeasFacade.findAll();
+                } catch (ClientErrorException cee) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+                }
+
+                if (ideas != null) {
+                    numImplementedIdeas = 0;
+                    for (IdeaEntry idea : ideas) {
+                        if (idea.getStatus().getId() == 3) {
+                            numImplementedIdeas++;
+                        }
+                        /*============= Сопоставление голосов и идей ==============*/
+                        idea.setVotesFor(0);
+                        idea.setVotesAgainst(0);
+                        if (votes != null) {
+                            for (VoteIdeas vote : votes) {
+                                if (Objects.equals(vote.getIdea().getId(), idea.getId())) {
+                                    switch (vote.getVote()) {
+                                        case 1:
+                                            idea.incrementVotesFor();
+                                            break;
+                                        case -1:
+                                            idea.incrementVotesAgainst();
+                                            break;
+                                    }
                                 }
                             }
                         }
+                        idea.countScore();
                     }
-                    idea.countScore();
-                }
-                
-                /* =========== Обработка фильтации идей по статусу ============ */
 
-                String filteredStatus = request.getParameter("status");
-                if (request.getParameter("filter") != null) {
-                    shownIdeas.clear();
-                    switch (filteredStatus) {
-                        case "all":
-                            shownIdeas = ideas;
-                            break;
-                        case "1":
-                            for (IdeaEntry idea : ideas) {
-                                if (idea.getStatus().getId() == 1L) {
-                                    shownIdeas.add(idea);
+                    /* =========== Обработка фильтации идей по статусу ============ */
+                    String filteredStatus = request.getParameter("status");
+                    if (request.getParameter("filter") != null) {
+                        shownIdeas.clear();
+                        switch (filteredStatus) {
+                            case "all":
+                                shownIdeas = ideas;
+                                break;
+                            case "1":
+                                for (IdeaEntry idea : ideas) {
+                                    if (idea.getStatus().getId() == 1L) {
+                                        shownIdeas.add(idea);
+                                    }
                                 }
-                            }
-                            break;
-                        case "2":
-                            for (IdeaEntry idea : ideas) {
-                                if (idea.getStatus().getId() == 2L) {
-                                    shownIdeas.add(idea);
+                                break;
+                            case "2":
+                                for (IdeaEntry idea : ideas) {
+                                    if (idea.getStatus().getId() == 2L) {
+                                        shownIdeas.add(idea);
+                                    }
                                 }
-                            }
-                            break;
-                        case "3":
-                            for (IdeaEntry idea : ideas) {
-                                if (idea.getStatus().getId() == 3L) {
-                                    shownIdeas.add(idea);
+                                break;
+                            case "3":
+                                for (IdeaEntry idea : ideas) {
+                                    if (idea.getStatus().getId() == 3L) {
+                                        shownIdeas.add(idea);
+                                    }
                                 }
-                            }
-                            break;
-                        case "4":
-                            for (IdeaEntry idea : ideas) {
-                                if (idea.getStatus().getId() == 4L) {
-                                    shownIdeas.add(idea);
+                                break;
+                            case "4":
+                                for (IdeaEntry idea : ideas) {
+                                    if (idea.getStatus().getId() == 4L) {
+                                        shownIdeas.add(idea);
+                                    }
                                 }
-                            }
-                            break;
-                        default:
-                            shownIdeas = ideas;
+                                break;
+                            default:
+                                shownIdeas = ideas;
+                        }
+                    } else {
+                        shownIdeas = ideas;
                     }
+
+                    /* =========== Обработка сортировки идей по дате ============ */
+                    String sortType = request.getParameter("sortBy");
+                    if ("new".equalsIgnoreCase(sortType)) {
+                        Collections.sort(shownIdeas, IdeaEntry.COMPARE_BY_CREATED);
+                    } else if ("popular".equalsIgnoreCase(sortType)) {
+                        Collections.sort(ideas, IdeaEntry.COMPARE_BY_SCORE);
+                    }
+
+                    /* ========================================================== */
+                    request.setAttribute("ideas", shownIdeas);
+                    request.setAttribute("numIdeas", ideas.size());
                 } else {
-                    shownIdeas = ideas;
+                    request.setAttribute("numIdeas", 0);
                 }
-                
-                /* =========== Обработка сортировки идей по дате ============ */
-                
-                String sortType = request.getParameter("sortBy");
-                if ("new".equalsIgnoreCase(sortType)) {
-                    Collections.sort(shownIdeas, IdeaEntry.COMPARE_BY_CREATED);
-                } else if ("popular".equalsIgnoreCase(sortType)) {
-                    Collections.sort(ideas, IdeaEntry.COMPARE_BY_SCORE); 
+                if (category != null) {
+                    request.setAttribute("category", category);
+                }
+                request.setAttribute("numImplementedIdeas", numImplementedIdeas);
+                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/category.jsp");
+                if (requestDispatcher != null) {
+                    requestDispatcher.forward(request, response);
                 }
 
-                /* ========================================================== */
-               
-                request.setAttribute("ideas", shownIdeas);
-                request.setAttribute("numIdeas", ideas.size());
-            } else {
-                request.setAttribute("numIdeas", 0);
+            } catch (ClientErrorException cee) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
+                if (requestDispatcher != null) {
+                    requestDispatcher.forward(request, response);
+                }
             }
-            if (category != null) {
-                request.setAttribute("category", category);
-            }
-            request.setAttribute("numImplementedIdeas", numImplementedIdeas);
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/category.jsp");
-            if (requestDispatcher != null) {
-                requestDispatcher.forward(request, response);
-            }
-
-        } catch (ClientErrorException cee) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
-            if (requestDispatcher != null) {
-                requestDispatcher.forward(request, response);
-            }
+        } else {
+            // TODO: handle the situation when categoryId is null
         }
+        
         
     }
 

@@ -19,7 +19,6 @@ import util.AppUtils;
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
     
-    // TODO: set the attribute errorMessage on jsp
     private String errorMessage;
 
     @EJB
@@ -37,6 +36,9 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
+        
+        request.removeAttribute("errorMessage");
+        
         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
         if (requestDispatcher != null) {
             requestDispatcher.forward(request, response);
@@ -75,7 +77,6 @@ public class LoginServlet extends HttpServlet {
         if (entity != null) {
             user = userMapper.mapUserToUserEntry(entity);
         } else {
-            // TODO: set the error message on jsp:
             errorMessage = "Неверный логин или пароль";
             request.setAttribute("errorMessage", errorMessage);
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
@@ -89,10 +90,8 @@ public class LoginServlet extends HttpServlet {
         int redirectId = -1;
         try {
             redirectId = Integer.parseInt(request.getParameter("redirectId"));
-        } catch (NullPointerException npe) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", npe);
-        } catch (NumberFormatException nfe) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", nfe);
+        } catch (NullPointerException | NumberFormatException ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
         } 
         String requestUri = AppUtils.getRedirectAfterLoginUrl(request.getSession(), redirectId);
         if (requestUri != null) {

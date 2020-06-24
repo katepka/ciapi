@@ -1,6 +1,5 @@
 package servlet;
 
-import activity.CommentActivity;
 import client.CategoryClient;
 import client.IdeaClient;
 import client.LocationClient;
@@ -26,8 +25,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ClientErrorException;
-import mapper.IdeaMapper;
-import repository.UserFacadeLocal;
 import repository.VotesIdeasFacadeLocal;
 
 @WebServlet(name = "IdeaServlet", urlPatterns = {"/ideas"})
@@ -271,7 +268,10 @@ public class IdeaServlet extends HttpServlet {
         
         // ================== Отмена создания новой идеи =======================
         if (request.getParameter("cancel") != null) {
-            // TODO: forward some page - back?
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/start");
+            if (requestDispatcher != null) {
+                requestDispatcher.forward(request, response);
+            }
         }
       
     }

@@ -75,7 +75,7 @@ public class MainServlet extends HttpServlet {
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-
+        doGet(request, response);
     }
     
 

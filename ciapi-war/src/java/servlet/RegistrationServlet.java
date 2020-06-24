@@ -52,6 +52,8 @@ public class RegistrationServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         
+        request.removeAttribute("errorMessage");
+        
         String email = request.getParameter("email").trim();
         String name = request.getParameter("email").trim();
         String password = request.getParameter("password").trim();
@@ -136,7 +138,7 @@ public class RegistrationServlet extends HttpServlet {
                     }
                 } catch (ClientErrorException cee) {
                     Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
-                    // TODO: handle the situation when registration is failed
+                    request.setAttribute("errorMessage", "Ошибка регистрации. Попробуйте снова");
                     RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/registration.jsp");
                     if (requestDispatcher != null) {
                         requestDispatcher.forward(request, response);

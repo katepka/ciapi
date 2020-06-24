@@ -21,6 +21,8 @@
                     <form action="registrate" method="POST">
                         <table border="1" align="center">
                             <tr>
+                                <div align="center" style="color: crimson">${errorMessage}</div>
+                                <br>
                                 <td>РЕГИСТРАЦИЯ</td>
                             </tr>
                             <tr>
