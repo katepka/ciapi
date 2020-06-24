@@ -183,7 +183,6 @@ public class IdeaServlet extends HttpServlet {
                         addVote(-1, idea, currentUserId);
                     }
                 }
-
                 /* ================ Вывод комментариев к идее =====================*/
                 try {
                     comments = ideaClient.getCommentsByIdeaId_JSON(ideaId);
@@ -315,41 +314,7 @@ public class IdeaServlet extends HttpServlet {
         if (request.getParameter("cancel") != null) {
             // TODO: forward some page - back?
         }
-
-        // =============== Добавление нового комментария к идее ================
-        String commentText = request.getParameter("commentText");
-        
-        if (request.getParameter("comment") != null
-                && commentText != null 
-                && !commentText.trim().isEmpty()) {
-            
-            ideaId = request.getParameter("ideaId");
-            
-            if (currentUserId == -1) {
-                // TODO: forward to authorization page
-            } else {
-                CommentEntry comment = new CommentEntry();
-                comment.setText(commentText);
-                try {
-                    UserEntry currentUser = userClient.getUserById_JSON(UserEntry.class, currentUserId.toString());
-                    comment.setAuthor(currentUser);
-                    IdeaEntry idea = ideaClient.getIdeaById_JSON(IdeaEntry.class, ideaId);
-                    comment.setIdea(idea);
-                    commentActivity.createComment(comment);
-                    
-                    response.sendRedirect(request.getContextPath() + "/ideas?ideaId=" + ideaId);
-                    
-                } catch (ClientErrorException cee) {
-                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
-                    RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
-                    if (requestDispatcher != null) {
-                        requestDispatcher.forward(request, response);
-                    }
-                }
-                
-            }
-        }
-        
+      
     }
 
     

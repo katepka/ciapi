@@ -68,19 +68,24 @@
             </tr>
             <tr>
                 <td colspan="2" align="left">
-                    <form action="ideas" method="POST">
-                        <div>Обсуждение идеи</div>
-                        <input type="text" name="commentText" value="Что Вы думаете об этой идее? Поделитесь своим мнением">
+                    <form action="comment" method="POST">
+                        <div>
+                            <p>Обсуждение идеи</p>
+                        </div>
+                        <div>
+                            Что Вы думаете об этой идее? Поделитесь своим мнением
+                        </div>
+                        <input type="text" name="commentText">
                         <input type="hidden" name="ideaId" value="${idea.id}">
                         <input type="submit" name="comment" value="Прокомментировать">
                         <br><br>
+                    </form>
                         <div>Список комментариев:</div><br>
                         <c:forEach var="comment" items="${comments}">
                             <div>${comment.author.name} | ${comment.created}</div>
                             <div>${comment.text}</div>
                             <br>
                         </c:forEach>
-                    </form>
                 </td>
             </tr>
             <tr>
