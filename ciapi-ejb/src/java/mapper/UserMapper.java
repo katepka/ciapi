@@ -24,7 +24,9 @@ public class UserMapper {
         User entity = new User();
         Long roleId = entry.getRole().getId();
         Role role = roleFacade.find(roleId);
-        
+        if (entry.getId() != null) {
+            entity.setId(entry.getId());
+        }
         if (entry.getEmail() != null) {
             entity.setEmail(entry.getEmail());
         }

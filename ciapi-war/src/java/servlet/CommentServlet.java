@@ -56,7 +56,6 @@ public class CommentServlet extends HttpServlet {
                 && !commentText.trim().isEmpty()) {
 
             ideaId = request.getParameter("ideaId");
-            System.out.println(ideaId);
             if (ideaId != null) {
                 CommentEntry comment = new CommentEntry();
                 comment.setText(commentText);
@@ -64,7 +63,6 @@ public class CommentServlet extends HttpServlet {
                 comment.setAuthor(loginedUser);
                 try {
                     IdeaEntry idea = ideaClient.getIdeaById_JSON(IdeaEntry.class, ideaId);
-                    
                     comment.setIdea(idea);
                     commentActivity.createComment(comment);
                     response.sendRedirect(request.getContextPath() + "/ideas?ideaId=" + ideaId);

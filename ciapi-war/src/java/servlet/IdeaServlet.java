@@ -5,8 +5,6 @@ import client.CategoryClient;
 import client.IdeaClient;
 import client.LocationClient;
 import client.UserClient;
-import entity.Idea;
-import entity.User;
 import entity.VoteIdeas;
 import entry.CategoryEntry;
 import entry.CommentEntry;
@@ -48,20 +46,10 @@ public class IdeaServlet extends HttpServlet {
     private List<CategoryEntry> categories = new ArrayList<>();
     private List<LocationEntry> locations = new ArrayList<>();
     private List<VoteIdeas> votes = new ArrayList<>();
-    
     private IdeaEntry newIdea = null;
-    
-    @EJB
-    private CommentActivity commentActivity;
-    
+   
     @EJB
     private VotesIdeasFacadeLocal votesIdeasFacade;
-    
-    @EJB
-    private IdeaMapper ideaMapper;
-    
-    @EJB
-    private UserFacadeLocal userFacade;
     
     @Override
     public void init() {
@@ -114,6 +102,8 @@ public class IdeaServlet extends HttpServlet {
         
         ideaId = request.getParameter("ideaId");
         if (ideaId != null && !ideaId.trim().isEmpty()) {
+            request.removeAttribute("votesFor");
+            request.removeAttribute("votesAgainst");
             try {
                 IdeaEntry idea = ideaClient.getIdeaById_JSON(IdeaEntry.class, ideaId);
 
@@ -151,38 +141,7 @@ public class IdeaServlet extends HttpServlet {
                     request.setAttribute("votesAgainst", idea.getVotesAgainst());
                 }
                 
-                /* =================== Обработка голосов ======================== */
-                if (request.getParameter("voteFor") != null) {
-                    List<VoteIdeas> castVotes = votesIdeasFacade.findVote(currentUserId, Long.parseLong(ideaId));
-                    
-                    if (castVotes.size() > 0) {
-                        
-                        for (VoteIdeas vote : castVotes) {
-                            if (vote.getVote() == 1) {
-                                removeVote(vote.getId());
-                            } else {
-                                addVote(1, idea, currentUserId);  
-                            }
-                        }
-                    } else {
-                        addVote(1, idea, currentUserId);
-                    }
-                }
                 
-                if (request.getParameter("voteAgainst") != null) {
-                    List<VoteIdeas> castVotes = votesIdeasFacade.findVote(currentUserId, Long.parseLong(ideaId));
-                    if (castVotes.size() > 0) {
-                        for (VoteIdeas vote : castVotes) {
-                            if (vote.getVote() == -1) {
-                                removeVote(vote.getId());
-                            } else {
-                                addVote(-1, idea, currentUserId);  
-                            }
-                        }
-                    } else {
-                        addVote(-1, idea, currentUserId);
-                    }
-                }
                 /* ================ Вывод комментариев к идее =====================*/
                 try {
                     comments = ideaClient.getCommentsByIdeaId_JSON(ideaId);
@@ -337,22 +296,5 @@ public class IdeaServlet extends HttpServlet {
         if (userClient != null) {
             userClient.close();
         }
-    }
-
-    private void removeVote(Long id) {
-        votesIdeasFacade.remove(id);
-    }
-
-    private void addVote(int i, IdeaEntry idea, Long currentUserId) {
-        VoteIdeas newVote = new VoteIdeas();
-        short voteFor = (short) ((i == 1) ? 1 : -1);
-        newVote.setVote(voteFor);
-        Idea ratedIdea = ideaMapper.mapIdeaEntryToIdea(idea);
-        ratedIdea.setId(Long.parseLong(ideaId));
-        newVote.setIdea(ratedIdea);
-        User currentUser = userFacade.find(currentUserId);
-        newVote.setUser(currentUser);   
-        votesIdeasFacade.create(newVote);
-       
     }
 }

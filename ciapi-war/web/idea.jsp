@@ -59,7 +59,7 @@
             <tr>
                 <td>Фотографии</td>
                 <td>
-                    <form action="ideas" method="GET">
+                    <form action="vote" method="POST">
                         <input type="hidden" name="ideaId" value="${idea.id}">
                         <input type="submit" name="voteFor" value="За идею:"> ${votesFor} | 
                         <input type="submit" name="voteAgainst" value="Против идеи:"> ${votesAgainst}

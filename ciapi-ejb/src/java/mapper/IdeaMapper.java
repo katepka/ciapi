@@ -46,6 +46,9 @@ public class IdeaMapper {
 
     public Idea mapIdeaEntryToIdea(IdeaEntry entry) {
         Idea entity = new Idea();
+        if (entry.getId() != null) {
+            entity.setId(entry.getId());
+        }
         if (entry.getTitle() != null) {
             entity.setTitle(entry.getTitle());
         }
