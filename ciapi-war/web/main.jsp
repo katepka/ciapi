@@ -54,7 +54,7 @@
                     <tr>
                         <td width="33%"></td>
                         <td align="center">
-                            <form action="ideas" method="GET">
+                            <form action="createidea" method="GET">
                                 <input type="submit" name="createIdea" value="Предложить идею">
                             </form>
                                 

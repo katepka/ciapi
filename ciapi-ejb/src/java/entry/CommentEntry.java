@@ -1,5 +1,6 @@
 package entry;
 
+import java.util.Comparator;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 
@@ -47,5 +48,11 @@ public class CommentEntry extends AbstractDataEntry {
         this.idea = idea;
     }
     
+    public static final Comparator<CommentEntry> COMPARE_BY_CREATED = new Comparator<CommentEntry>() {
+        @Override
+        public int compare(CommentEntry comment1, CommentEntry comment2) {
+            return comment2.created.compareTo(comment1.created);
+        }
+    };
     
 }

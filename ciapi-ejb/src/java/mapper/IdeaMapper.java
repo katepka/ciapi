@@ -58,6 +58,9 @@ public class IdeaMapper {
         if (entry.getCreated() != null) {
             entity.setCreated(entry.getCreated());
         }
+        if (entry.getPhotoRef()!= null) {
+            entity.setPhotoRef(entry.getPhotoRef());
+        }
         
         Long statusId = entry.getStatus().getId();
         Status status = statusFacade.find(statusId);
@@ -139,7 +142,10 @@ public class IdeaMapper {
         if (entity.getCreated() != null) {
             entry.setCreated(entity.getCreated());
         }
-        
+        if (entity.getPhotoRef()!= null) {
+            entry.setPhotoRef(entity.getPhotoRef());
+        }
+
         Status status = entity.getStatus();
         if (status != null) {
             entry.setStatus(statusMapper.mapStatusToStatusEntry(status));

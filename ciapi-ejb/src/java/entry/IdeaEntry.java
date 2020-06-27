@@ -29,6 +29,8 @@ public class IdeaEntry extends AbstractDataEntry {
     @NotNull(message = "status cannot be null")
     private StatusEntry status;
     
+    private String photoRef;
+    
     private ImplementationInfoEntry implementationInfo;
     
     private int score;
@@ -102,6 +104,14 @@ public class IdeaEntry extends AbstractDataEntry {
 
     public void setStatus(StatusEntry status) {
         this.status = status;
+    }
+
+    public String getPhotoRef() {
+        return photoRef;
+    }
+
+    public void setPhotoRef(String photoRef) {
+        this.photoRef = photoRef;
     }
 
     public ImplementationInfoEntry getImplementationInfo() {

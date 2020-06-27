@@ -35,14 +35,15 @@
                         </c:if>
                     </td>
                 </tr>
-                <form action="ideas" method="POST">
+                
                     <table border="1" width="100%">
                 <tr>
                     <td colspan="2" align="left">
                         <h2>Есть идея, как сделать жизнь города лучше?</h2>
                     </td>
                 </tr>
-                <tr>
+                <form action="createidea" method="POST">
+                <tr> 
                     <td>
                         <p>Выберите категорию:</p>
                         <p>
@@ -87,23 +88,33 @@
                     </td>
                     
                 </tr>
-                <tr>
+                <tr> 
                     <td>
-                        <p>Прикрепите фотографии:</p>
-                        <p>
-                            Иконки фоток
-                        </p>
-                        <p>
-                            <input type="file" name="foto" multiple draggable="true" accept="image/*,image/jpeg,image/png">
-                        </p>
-                    </td>
-                    <td>
+                        <input type="hidden" name="filename" value="${filename}">
                         <input type="submit" value="ПРЕДЛОЖИТЬ ИДЕЮ" name="create">
                         <input type="submit" value="ОТМЕНА" name="cancel">
                     </td>
-                </tr>
-                    </table>
                 </form>
+
+                    <td>
+                        <div>
+                            <c:if test="${filename == null}">
+                                <p>Загрузите фотографию:</p>
+                            </c:if>
+                            <c:if test="${filename != null}">
+                                <p style="color: teal">Загружено фото: ${filename}</p>
+                            </c:if>
+                        </div>
+                        <p>
+                            <!--<input type="file" name="foto" multiple draggable="true" accept="image/*,image/jpeg,image/png">-->
+                                <form action="upload" method="POST" enctype="multipart/form-data">
+                                    <input type="file" name="fileToUpload"  size="30" /></BR></BR>
+                                    <input type="submit" value="Отправить" />
+                                </form>
+                        </p>
+                    </td>
+                </tr>
+            </table>
 
                 <tr>
                     <td colspan="2">

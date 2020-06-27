@@ -65,6 +65,7 @@ public class CommentServlet extends HttpServlet {
                     IdeaEntry idea = ideaClient.getIdeaById_JSON(IdeaEntry.class, ideaId);
                     comment.setIdea(idea);
                     commentActivity.createComment(comment);
+                    
                     response.sendRedirect(request.getContextPath() + "/ideas?ideaId=" + ideaId);
                 } catch (ClientErrorException cee) {
                     Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);

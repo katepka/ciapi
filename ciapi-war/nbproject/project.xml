@@ -28,6 +28,10 @@
                 <library dirs="200">
                     <file>${libs.GlassFish Server Jersey.classpath}</file>
                 </library>
+                <library dirs="200">
+                    <file>${file.reference.UploadFilesLib.jar}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
             </web-module-libraries>
             <web-module-additional-libraries/>
             <source-roots>

@@ -9,10 +9,9 @@ import entry.CategoryEntry;
 import entry.CommentEntry;
 import entry.IdeaEntry;
 import entry.LocationEntry;
-import entry.StatusEntry;
-import entry.UserEntry;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -35,15 +34,12 @@ public class IdeaServlet extends HttpServlet {
     private CategoryClient categoryClient;
     private LocationClient locationClient;
     private UserClient userClient; 
-    private Long currentUserId = -1L;
     private String ideaCoordinatorName = null;
     private String ideaLocationName = null;
     private List<String> photoRefs = null;
     private List<CommentEntry> comments = new ArrayList<>();
-    private List<CategoryEntry> categories = new ArrayList<>();
-    private List<LocationEntry> locations = new ArrayList<>();
     private List<VoteIdeas> votes = new ArrayList<>();
-    private IdeaEntry newIdea = null;
+    
    
     @EJB
     private VotesIdeasFacadeLocal votesIdeasFacade;
@@ -54,8 +50,6 @@ public class IdeaServlet extends HttpServlet {
         categoryClient = new CategoryClient();
         locationClient = new LocationClient();
         userClient = new UserClient();
-        // TODO: identify currentUserId:
-        currentUserId = 1L;
     }
 
     @Override
@@ -63,37 +57,6 @@ public class IdeaServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        
-        // ================= Формирование страницы newidea.jsp ======================
-        
-        String createIdea = request.getParameter("createIdea");
-        if (createIdea != null && !createIdea.isEmpty()) {
-            try {
-                categories = categoryClient.getAllCategories_JSON();
-            } catch (ClientErrorException cee) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
-                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
-                if (requestDispatcher != null) {
-                    requestDispatcher.forward(request, response);
-                }
-            }
-            try {
-                locations = locationClient.getAllLocations_JSON();
-            } catch (ClientErrorException cee) {
-                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
-                if (requestDispatcher != null) {
-                    requestDispatcher.forward(request, response);
-                }
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
-            }
-            request.setAttribute("categories", categories);
-            request.setAttribute("locations", locations);
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/newidea.jsp");
-            if (requestDispatcher != null) {
-                requestDispatcher.forward(request, response);
-            }
-        }
-        
         
         // ================= Формирование страницы idea.jsp ======================
         
@@ -142,10 +105,11 @@ public class IdeaServlet extends HttpServlet {
                 /* ================ Вывод комментариев к идее =====================*/
                 try {
                     comments = ideaClient.getCommentsByIdeaId_JSON(ideaId);
+//                    Collections.sort(comments, CommentEntry.COMPARE_BY_CREATED);
                     request.setAttribute("comments", comments);
                 } catch (ClientErrorException cee) {
                     Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
-                }                
+                }
                 RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/idea.jsp");
                 if (requestDispatcher != null) {
                     requestDispatcher.forward(request, response);
@@ -173,107 +137,6 @@ public class IdeaServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         
-        // ======= Отправка данных со страницы newidea.jsp на сервер ==========
-        if (request.getParameter("create") != null) {
-            newIdea = new IdeaEntry();
-            String title = request.getParameter("title");
-            String description = request.getParameter("description");
-            String categoryName = request.getParameter("categorySelected");
-            String categoryId = request.getParameter("categoryId");
-            String locationName = request.getParameter("locationNameSelected");
-            String locationId = request.getParameter("locationId");
-            // TODO: get coordinates from map
-            String lat = "34.9";
-            String lon = "67.0";
-            String radius = "99";
-            // TODO: get photos from form
-
-            UserEntry author = userClient.getUserById_JSON(UserEntry.class, currentUserId.toString());
-            newIdea.setAuthor(author);
-
-            StatusEntry status = new StatusEntry();
-            status.setId(1L);
-            newIdea.setStatus(status);
-
-            if (title != null) {
-                newIdea.setTitle(title);
-            }
-            if (description != null) {
-                newIdea.setDescription(description);
-            }
-            if (categoryId != null) {
-                CategoryEntry category = categoryClient.getCategoryById_JSON(CategoryEntry.class, categoryId);
-                if (category != null) {
-                    newIdea.setCategory(category);
-                } else {
-                    // TODO: handle the situation when category isn't found
-                }
-            } else {
-                // TODO: handle the situation when categoryId is null    
-            }
-            LocationEntry location = new LocationEntry();
-            if (locationId != null) {
-                location.setId(Long.parseLong(locationId));
-            } else {
-                location.setLat(Float.parseFloat(lat));
-                location.setLon(Float.parseFloat(lon));
-                location.setName(locationName);
-                location.setRadius(Float.parseFloat(radius));
-            }
-            newIdea.setLocation(location);
-            try {
-                int statusCode = ideaClient.createIdea_JSON(newIdea).getStatus();
-                switch (statusCode) {
-                    case 200:
-                    case 201:
-                    case 202: {
-                        // TODO: if idea was created where should i forward to?
-                        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/main.jsp");
-                        if (requestDispatcher != null) {
-                            requestDispatcher.forward(request, response);
-                        }
-                        break;
-                    }
-                    case 404: {
-                        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/notfound.jsp");
-                        if (requestDispatcher != null) {
-                            requestDispatcher.forward(request, response);
-                        }
-                        break;
-                    }
-                    case 500:
-                    case 501:
-                    case 502:
-                    case 503:
-                    case 504:
-                    case 505: {
-                        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
-                        if (requestDispatcher != null) {
-                            requestDispatcher.forward(request, response);
-                        }
-                        break;
-                    }
-                    default:
-                        break;
-                }
-
-            } catch (ClientErrorException cee) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
-                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
-                if (requestDispatcher != null) {
-                    requestDispatcher.forward(request, response);
-                }
-            }
-        }
-        
-        // ================== Отмена создания новой идеи =======================
-        if (request.getParameter("cancel") != null) {
-            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/start");
-            if (requestDispatcher != null) {
-                requestDispatcher.forward(request, response);
-            }
-        }
-      
     }
 
     

@@ -91,6 +91,11 @@ public class Idea implements Serializable {
     @ManyToOne(optional = false)
     private Status status;
     
+    @Basic(optional = true)
+    @Size(min = 1, max = 255)
+    @Column(name = "photoRef")
+    private String photoRef;
+    
     @OneToMany(mappedBy = "idea")
     private Collection<Photo> photoCollection;
     
@@ -192,6 +197,14 @@ public class Idea implements Serializable {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public String getPhotoRef() {
+        return photoRef;
+    }
+
+    public void setPhotoRef(String photoRef) {
+        this.photoRef = photoRef;
     }
 
     @XmlTransient
