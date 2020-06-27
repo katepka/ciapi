@@ -2,7 +2,7 @@ package util;
 
 public interface AppConstants {
     String BASE_URI = "http://localhost:8080/ciapi-war/webresources";
-    String PATH_TO_PHOTO_STORAGE = "C:\\java_dev\\java_study\\images\\ideas";
+    String PATH_TO_PHOTO_STORAGE = "C:\\java_dev\\java_study\\ciapi\\ciapi-war\\web\\images";
     
     String URL_PATTERN_LOGIN = "/login";
     String URL_PATTERN = "/registrate";

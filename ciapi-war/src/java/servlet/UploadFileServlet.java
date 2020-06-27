@@ -1,9 +1,7 @@
 package servlet;
 
 import client.CategoryClient;
-import client.IdeaClient;
 import client.LocationClient;
-import client.UserClient;
 import com.ibm.useful.http.FileData;
 import com.ibm.useful.http.PostData;
 import entry.CategoryEntry;
@@ -108,7 +106,7 @@ public class UploadFileServlet extends HttpServlet {
             try {
                 fos.write(tempFile.getByteData());
                 fos.close();
-                return filename;
+                return "images/" + tempFile.getFileName();
             } catch (IOException ex) {
                 Logger.getLogger(NewIdeaServlet.class.getName()).log(Level.SEVERE, null, ex);
             }

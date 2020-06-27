@@ -57,7 +57,9 @@
                 </td>
             </tr>
             <tr>
-                <td>Фотографии</td>
+                <td>
+                    <img src="${pageContext.request.contextPath}/${idea.photoRef}" alt="photo" height="220">
+                </td>
                 <td>
                     <form action="vote" method="POST">
                         <input type="hidden" name="ideaId" value="${idea.id}">
