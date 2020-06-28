@@ -15,8 +15,60 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>City Ideas - Идеи для города</title>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <script type="text/javascript"
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkdGj98GKwKdu_x85bhv21r49C55Ro_gk">
+    </script>
+    <script type="text/javascript">
+        var map;
+        var marker;
+        
+        function get_click_position(event){
+            var location = event.latLng;
+            var lat = location.lat();
+            var lng = location.lng();
+            setMarkerPosition(lat, lng);
+            app.handle(lat, lng);
+        }
+
+        function setMarkerPosition(lat, lng) {
+            var clickLatLng = new google.maps.LatLng(lat, lng);
+            marker.setPosition(clickLatLng);
+        }
+
+        function startJumping(){
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+
+        function stopJumping(){
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+        }
+
+        function setMapCenter(lat, lng) {
+            var latlng = new google.maps.LatLng(lat, lng);
+            map.setCenter(latlng);
+        }
+
+        function initialize() {
+            var defLatLng = new google.maps.LatLng(59.93863, 30.31413);
+            var mapOptions = {
+                center: defLatLng, 
+                zoom: 7,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                disableDefaultUI: true,
+                panControl: false
+            };
+            map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+
+            marker = new google.maps.Marker({
+                position: defLatLng,
+                map: map,
+                icon: "img/Pin.png"
+            });
+        }
+    </script>
     </head>
-    <body>
+    <body onload="initialize()">
         
             <table border="1" width="100%">
                 <tr>
@@ -76,7 +128,7 @@
                         </p>
                     </td>
                     <td rowspan="2">
-                        Место под карту
+                        <div id="map_canvas" style="width:500px; height:200px"></div>
                     </td>
                 </tr>
                 <tr>
@@ -102,19 +154,18 @@
                                 <p>Загрузите фотографию:</p>
                             </c:if>
                             <c:if test="${filename != null}">
-                                <p style="color: teal">Загружено фото: ${filename}</p>
+                                <p style="color: teal">Загружено фото</p>
                             </c:if>
                         </div>
                         <p>
-                            <!--<input type="file" name="foto" multiple draggable="true" accept="image/*,image/jpeg,image/png">-->
-                                <form action="upload" method="POST" enctype="multipart/form-data">
-                                    <input type="file" name="fileToUpload"  size="30" /></BR></BR>
-                                    <input type="submit" value="Отправить" />
-                                </form>
+                        <form action="upload" method="POST" enctype="multipart/form-data">
+                            <input type="file" name="fileToUpload"  size="30" /></BR></BR>
+                            <input type="submit" value="Отправить" />
+                        </form>
                         </p>
                     </td>
-                </tr>
-            </table>
+                    </tr>
+                    </table>
 
                 <tr>
                     <td colspan="2">

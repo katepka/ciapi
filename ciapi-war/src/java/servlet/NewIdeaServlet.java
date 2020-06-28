@@ -4,15 +4,11 @@ import client.CategoryClient;
 import client.IdeaClient;
 import client.LocationClient;
 import client.UserClient;
-import com.ibm.useful.http.*;
 import entry.CategoryEntry;
 import entry.IdeaEntry;
 import entry.LocationEntry;
 import entry.StatusEntry;
 import entry.UserEntry;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -141,7 +137,7 @@ public class NewIdeaServlet extends HttpServlet {
             if (photoRef != null) {
                newIdea.setPhotoRef(photoRef);
             }
-
+            
             newIdea.setLocation(location);
             try {
                 int statusCode = ideaClient.createIdea_JSON(newIdea).getStatus();
