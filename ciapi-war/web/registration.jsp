@@ -10,20 +10,23 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>City Ideas - Идеи для города</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <table border="1" width="100%">
+        <table border="0" width="100%">
             <tr>
                 <td><h1>Идеи для города</h1></td>
             </tr>
             <tr >
                 <td>
                     <form action="registrate" method="POST">
-                        <table border="1" align="center">
+                        <table border="0" align="center">
                             <tr>
-                                <div align="center" style="color: crimson">${errorMessage}</div>
-                                <br>
-                                <td>РЕГИСТРАЦИЯ</td>
+                            <div align="center" style="color: crimson">${errorMessage}</div>
+                            <br>
+                            <td align="center">
+                                <h4>РЕГИСТРАЦИЯ</h4>
+                            </td>
                             </tr>
                             <tr>
                                 <td>Ваш email:</td>
@@ -67,7 +70,8 @@
                 </td>
             </tr>
             <tr>
-                <td>
+                <td align="center">
+                    <hr>
                     Футер со всякой полезной и не очень полезной информацией о сайте. All rights 2020 (c)
                 </td>
             </tr>

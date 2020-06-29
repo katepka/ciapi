@@ -18,9 +18,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>City Ideas - Идеи для города</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <table border="1" width="100%">
+        <table border="0" width="100%">
             <tr>
                 <td>
                     <h3>Добрый день, ${user.name}!</h3>
@@ -31,42 +32,32 @@
                     <p>Роль в системе: ${user.role.title}</p>
                     <hr>
                     <h3>Ваши идеи:</h3>
-                    <ul>
-                        <c:forEach var="idea" items="${ideas}">
-                            <li><p>
-                                <form action="ideas" method="GET">
-                                    <input type="hidden" name="ideaId" value="${idea.id}">
-                                    <input type="submit" name="go" value="${idea.title}">
-                                
-                                    ${idea.status.title} | ${idea.created}
-                                </form>
-                                </p>
-                            </li>
-                        </c:forEach>    
-                    </ul>
+                    <c:forEach var="idea" items="${ideas}"><p>
+                        <form action="ideas" method="GET">
+                            ${idea.status.title} | ${idea.created}
+                            <input type="hidden" name="ideaId" value="${idea.id}">
+                            <input type="submit" name="go" value="${idea.title}">
+                        </form>
+                        </p>
+                    </c:forEach>    
                     <hr>
                     <h3>Идеи, которые Вы координируете:</h3>
-                    <ul>
-                        <c:forEach var="ideaImpl" items="${ideasImpl}">
-                            <li>
-                                <p>
-                                <form action="ideas" method="GET">
-                                    <input type="hidden" name="ideaId" value="${ideaImpl.id}">
-                                    <input type="submit" name="go" value="${ideaImpl.title}">
-                                    ${ideaImpl.status.title} | ${ideaImpl.created}
-                                </form>
-                                <p> Добавить информацию о реализации:
-                                    <form action="ideas" method="POST">
-                                        <input type="hidden" name="ideaId" value="${ideaImpl.id}">
-                                        <input type="text" name="implInfo">
-                                        <input type="submit" name="setImplInfo" value="Опубликовать">
-                                    </form>
-                                </p>
-                                </p>
-                            </li>
-                        </c:forEach>
-                    </ul>
-                                        
+                    <c:forEach var="ideaImpl" items="${ideasImpl}">
+                        <p>
+                        <form action="ideas" method="GET">
+                            ${ideaImpl.status.title} | ${ideaImpl.created}
+                            <input type="hidden" name="ideaId" value="${ideaImpl.id}">
+                            <input type="submit" name="go" value="${ideaImpl.title}">
+                        </form>
+                        <p> Добавить информацию о реализации:
+                        <form action="ideas" method="POST">
+                            <input type="hidden" name="ideaId" value="${ideaImpl.id}">
+                            <input type="text" name="implInfo">
+                            <input type="submit" name="setImplInfo" value="Опубликовать">
+                        </form>
+                        </p>
+                    </c:forEach>
+
                 </td>
             </tr>
             <tr>

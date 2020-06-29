@@ -49,8 +49,8 @@ public class CategoryServlet extends HttpServlet {
         
         categoryId = request.getParameter("categoryId");
         
-        ideas = null;
-        shownIdeas = null;
+        ideas.clear();
+        shownIdeas.clear();
         request.removeAttribute("ideas");
         
         if (categoryId != null) {

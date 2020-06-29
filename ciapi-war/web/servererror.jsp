@@ -10,6 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>City Ideas - Идеи для города</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <h1>500</h1>

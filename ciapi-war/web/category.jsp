@@ -17,9 +17,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>City Ideas - Идеи для города</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <table border="1" width="100%">
+        <table border="0" width="100%">
             <tr>
                 <td><h1>Идеи для города</h1></td>
                 <td>
@@ -40,28 +41,30 @@
             </tr>
             <tr>
                 <td>
-                    <h1>${category.title}</h1>
+                    <h2>${category.title}</h2>
                     <h3>${category.description}</h3>
+
                 </td>
+
                 <td width="33%">
                     Идей в категории: ${numIdeas} <br>
                     Реализовано идей: ${numImplementedIdeas} <br>
                     <a href="http://localhost:8080/ciapi-war/rating">Посмотреть статистику</a>
-                </td>
-            </tr>
-            </tr>
+                </td>    
+            </tr> 
             <td colspan="2">
-                <table border="1" width="100%">
+                <hr>
+                <table border="0" width="100%">
                     <tr>
                         <td width="33%">
                             <form action="createidea" method="GET">
                                 <input type="submit" name="createIdea" value="Предложить идею">
                             </form>
                         </td>
-                        <form action="category" method="GET">
+                    <form action="category" method="GET">
                         <td>
                             <p><input type="radio" name="sortBy" value="new" checked>сначала новые<br>
-                            <input type="radio" name="sortBy" value="popular">сначала популярные</p>
+                                <input type="radio" name="sortBy" value="popular">сначала популярные</p>
                             <p><input type="submit" name="sort" value="Отсортировать">
                         </td>
                         <td width="33%">
@@ -75,48 +78,34 @@
                             <input type="hidden" name="categoryId" value="${category.id}">
                             <input type="submit" name="filter" value="Отфильтровать">
                         </td>
-                        </form>
-                    </tr>
-                            <c:forEach var="idea" items="${ideas}">
-                                <tr>
-                                    <td>
-                                        <form action="ideas" method="GET">
-                                            <br>${idea.status.title}
-                                            <br>${idea.created} | 
-                                            <c:if test="${idea.location.name != null}">
-                                                ${idea.location.name}
-                                            </c:if>
-                                            <br>"За": ${idea.votesFor} | "Против": ${idea.votesAgainst}<br>
-                                            <input type="hidden" name="ideaId" value="${idea.id}">
-                                            <input type="submit" name="go" value="${idea.title}">
-                                        </form>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                            
-                        
-                        <td>
-                            <h2>Идея 2</h2>
-                        </td>
-                        <td>
-                            <h2>Идея 3</h2>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <h2>Идея 4</h2>
-                        </td>
-                        <td>
-                            <h2>Идея 5</h2>
-                        </td>
-                        <td>
-                            <h2>Идея 6</h2>
-                        </td>
+                    </form>
                     </tr>
                 </table>
-            </td>
+            <tr>  
+                <td colspan="2" align="center">
+                    <div class="row">
+                        <hr>
+                        <c:forEach var="idea" items="${ideas}">
+
+                            <div class="column">
+                                <form action="ideas" method="GET">
+                                    <br>${idea.status.title}
+                                    <br>${idea.created} | 
+                                    <c:if test="${idea.location.name != null}">
+                                        ${idea.location.name}
+                                    </c:if>
+                                    <br>"За": ${idea.votesFor} | "Против": ${idea.votesAgainst}<br>
+                                    <input type="hidden" name="ideaId" value="${idea.id}">
+                                    <input type="submit" name="go" value="${idea.title}">
+                                </form>
+                            </div>
+                        </c:forEach>
+                    </div>
+                </td>
+            </tr>      
             <tr>
                 <td colspan="2" align="center">
+                    <hr>
                     Футер со всякой полезной и не очень полезной информацией о сайте. All rights 2020 (c)
                 </td>
             </tr>

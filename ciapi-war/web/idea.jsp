@@ -14,9 +14,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>City Ideas - Идеи для города</title>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <table border="1" width="100%">
+        <table border="0" width="100%" height="100%">
             <tr>
                 <td><h1>Идеи для города</h1></td>
                 <td width="33%" align="right">
@@ -37,6 +38,7 @@
             </tr>
             <tr>
                 <td colspan="2" align="left">
+                    <hr>
                     <h2>${idea.title}</h2>
                 </td>
             </tr>
@@ -61,9 +63,11 @@
             </tr>
             <tr>
                 <td colspan="2" align="left">
+                    <hr>
                     <div>
                         ${idea.description}
                     </div>
+                    <hr>
                 </td>
             </tr>
             <tr>
@@ -94,16 +98,17 @@
                         <input type="submit" name="comment" value="Прокомментировать">
                         <br><br>
                     </form>
-                        <div>Список комментариев:</div><br>
-                        <c:forEach var="comment" items="${comments}">
-                            <div>${comment.author.name} | ${comment.created}</div>
-                            <div>${comment.text}</div>
-                            <br>
-                        </c:forEach>
+                    <div>Список комментариев:</div><br>
+                    <c:forEach var="comment" items="${comments}">
+                        <div>${comment.author.name} | ${comment.created}</div>
+                        <div>${comment.text}</div>
+                        <br>
+                    </c:forEach>
                 </td>
             </tr>
             <tr>
                 <td colspan="2" align="center">
+                    <hr>
                     Футер со всякой полезной и не очень полезной информацией о сайте. All rights 2020 (c)
                 </td>
             </tr>
