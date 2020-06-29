@@ -110,6 +110,7 @@
                         <p>Выберите город или отметьте место на карте:</p>
                         <p>
                             <select name="locationId">
+                                <option value="noPlace">Без места</option>
                                 <c:forEach var="location" items="${locations}">
                                     <c:if test="${location.name != null}">
                                         <option value="${location.id}">${location.name}</option>

@@ -58,7 +58,9 @@
             </tr>
             <tr>
                 <td>
-                    <img src="${pageContext.request.contextPath}/${idea.photoRef}" alt="photo" height="220">
+                    <c:if test="${idea.photoRef != null}">
+                        <img src="${pageContext.request.contextPath}/${idea.photoRef}" alt="photo" height="220">
+                    </c:if>
                 </td>
                 <td>
                     <form action="vote" method="POST">

@@ -74,8 +74,11 @@ public class IdeaServlet extends HttpServlet {
                     } else {
                         ideaCoordinatorName = idea.getCoordinator().getName();
                     }
-                    if (idea.getLocation().getName() != null) {
-                        ideaLocationName = idea.getLocation().getName();
+                    if (idea.getLocation() != null) {
+                        if (idea.getLocation().getName() != null) {
+                            ideaLocationName = idea.getLocation().getName();
+                        }
+                    
                     } else {
                         ideaLocationName = "-";
                     }

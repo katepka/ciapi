@@ -84,7 +84,7 @@ public class Idea implements Serializable {
     private ImplementationInfo implInfo;
     
     @JoinColumn(name = "location_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = true, cascade = CascadeType.PERSIST)
     private Location location;
     
     @JoinColumn(name = "status_id", referencedColumnName = "id")
@@ -92,7 +92,6 @@ public class Idea implements Serializable {
     private Status status;
     
     @Basic(optional = true)
-    @Size(min = 1, max = 255)
     @Column(name = "photoRef")
     private String photoRef;
     
@@ -256,7 +255,17 @@ public class Idea implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Idea[ id=" + id + " ]";
+        return "Idea{" + "id=" + id 
+                + ", title=" + title 
+                + ", description=" + description 
+                + ", created=" + created 
+                + ", author=" + author 
+                + ", category=" + category 
+                + ", coordinator=" + coordinator 
+                + ", implInfo=" + implInfo 
+                + ", location=" + location 
+                + ", status=" + status 
+                + ", photoRef=" + photoRef + '}';
     }
-    
+
 }

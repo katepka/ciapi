@@ -92,7 +92,6 @@ public class NewIdeaServlet extends HttpServlet {
             String description = request.getParameter("description");
             String categoryName = request.getParameter("categorySelected");
             String categoryId = request.getParameter("categoryId");
-            String locationName = request.getParameter("locationNameSelected");
             String locationId = request.getParameter("locationId");
             // TODO: get coordinates from map
             String lat = "34.9";
@@ -122,14 +121,16 @@ public class NewIdeaServlet extends HttpServlet {
             } else {
                 // TODO: handle the situation when categoryId is null    
             }
-            LocationEntry location = new LocationEntry();
-            if (locationId != null) {
-                location.setId(Long.parseLong(locationId));
-            } else {
-                location.setLat(Float.parseFloat(lat));
-                location.setLon(Float.parseFloat(lon));
-                location.setName(locationName);
-                location.setRadius(Float.parseFloat(radius));
+            if (!"noPlace".equals(locationId)) {
+                LocationEntry location = new LocationEntry();
+                if (locationId != null) {
+                    location.setId(Long.parseLong(locationId));
+                } else {
+                    location.setLat(Float.parseFloat(lat));
+                    location.setLon(Float.parseFloat(lon));
+                    location.setRadius(Float.parseFloat(radius));
+                }
+                newIdea.setLocation(location);
             }
 
             //======== Сохранение ссылки на фото ==========
@@ -137,11 +138,8 @@ public class NewIdeaServlet extends HttpServlet {
             if (photoRef != null) {
                newIdea.setPhotoRef(photoRef);
             }
-            
-            newIdea.setLocation(location);
             try {
                 int statusCode = ideaClient.createIdea_JSON(newIdea).getStatus();
-                System.out.println(statusCode);
                 switch (statusCode) {
                     case 200:
                     case 201:

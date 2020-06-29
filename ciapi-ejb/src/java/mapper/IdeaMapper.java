@@ -80,28 +80,37 @@ public class IdeaMapper {
             entity.setCategory(category);
         }
         
-        Long locationId = entry.getLocation().getId();
-        if (locationId != null) {
-            Location location = locationFacade.find(locationId);
-            if (location != null) {
-                entity.setLocation(location);
-            }
-        } else {
-            Location location = new Location();
-            if (entry.getLocation().getLat() != null && entry.getLocation().getLon() != null) {
-                location.setLat(entry.getLocation().getLat());
-                location.setLon(entry.getLocation().getLon());
-                if (entry.getLocation().getName() != null) {
-                    location.setName(entry.getLocation().getName());
+        if (entry.getPhotoRef() != null) {
+            entity.setPhotoRef(entry.getPhotoRef());
+        }
+        
+        if (entry.getLocation() != null) {
+
+            Long locationId = entry.getLocation().getId();
+            if (locationId != null) {
+                Location location = locationFacade.find(locationId);
+                if (location != null) {
+                    entity.setLocation(location);
                 }
-                if (entry.getLocation().getRadius() != null) {
-                    location.setRadius(entry.getLocation().getRadius());
-                }
-                entity.setLocation(location);
             } else {
-                // TODO: handle the situation when entry doesn't contain a correct location data
+                Location location = new Location();
+                if (entry.getLocation().getLat() != null && entry.getLocation().getLon() != null) {
+                    location.setLat(entry.getLocation().getLat());
+                    location.setLon(entry.getLocation().getLon());
+                    if (entry.getLocation().getName() != null) {
+                        location.setName(entry.getLocation().getName());
+                    }
+                    if (entry.getLocation().getRadius() != null) {
+                        location.setRadius(entry.getLocation().getRadius());
+                    }
+                    entity.setLocation(location);
+                } else {
+                    // TODO: handle the situation when entry doesn't contain a correct location data
+                }
+
             }
         }
+        
         
         if (entry.getCoordinator() != null) {
             Long coordinatorId = entry.getCoordinator().getId();
