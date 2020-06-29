@@ -1,5 +1,6 @@
 package servlet;
 
+import activity.IdeaActivity;
 import client.CategoryClient;
 import client.IdeaClient;
 import client.LocationClient;
@@ -8,6 +9,7 @@ import entity.VoteIdeas;
 import entry.CategoryEntry;
 import entry.CommentEntry;
 import entry.IdeaEntry;
+import entry.ImplementationInfoEntry;
 import entry.LocationEntry;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,7 +30,9 @@ import repository.VotesIdeasFacadeLocal;
 
 @WebServlet(name = "IdeaServlet", urlPatterns = {"/ideas"})
 public class IdeaServlet extends HttpServlet {
- 
+
+    @EJB
+    private IdeaActivity ideaActivity;
     private String ideaId = null;
     private IdeaClient ideaClient;
     private CategoryClient categoryClient;
@@ -138,6 +142,23 @@ public class IdeaServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         
+        /* ============== Добавление информации о реализации ===================*/  
+        ideaId = request.getParameter("ideaId");
+        String implInfo = request.getParameter("implInfo").trim();
+        if (ideaId != null && implInfo != null) {
+            try {
+                IdeaEntry idea = ideaClient.getIdeaById_JSON(IdeaEntry.class, ideaId);
+                if (idea != null) {
+                    ImplementationInfoEntry implInfoEntry = new ImplementationInfoEntry();
+                    implInfoEntry.setDescription(implInfo);
+                    idea.setImplementationInfo(implInfoEntry);
+                    ideaActivity.updateIdea(Long.parseLong(ideaId), idea);
+                }
+            } catch (ClientErrorException cee) {
+                    Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+            }
+        }
+        response.sendRedirect(request.getContextPath() + "/ideas?ideaId=" + ideaId);
     }
 
     

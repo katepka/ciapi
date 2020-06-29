@@ -29,7 +29,9 @@
                         </form>
                     </c:if>
                     <c:if test="${loginedUser != null}">
-                        <input type="submit" name="loginedUser" value="${loginedUser.name}">
+                        <form action="account" method="GET">
+                            <input type="submit" name="loginedUser" value="${loginedUser.name}">
+                        </form>
                         <form action="logout" method="GET">
                             <input type="submit" name="logout" value="ВЫЙТИ">
                         </form>
