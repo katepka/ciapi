@@ -24,40 +24,44 @@
             <tr>
                 <td>
                     <h3>Добрый день, ${user.name}!</h3>
+                    <hr>
                     <h3>Ваша личная информация:</h3>
                     <p>Email: ${user.email}</p>
                     <p>Имя пользователя: ${user.name}</p>
                     <p>Роль в системе: ${user.role.title}</p>
+                    <hr>
                     <h3>Ваши идеи:</h3>
                     <ul>
                         <c:forEach var="idea" items="${ideas}">
-                            <li>
+                            <li><p>
                                 <form action="ideas" method="GET">
                                     <input type="hidden" name="ideaId" value="${idea.id}">
                                     <input type="submit" name="go" value="${idea.title}">
+                                
+                                    ${idea.status.title} | ${idea.created}
                                 </form>
-                                    <br>${idea.status.title}
-                                    <br>${idea.created}
+                                </p>
                             </li>
                         </c:forEach>    
                     </ul>
-
+                    <hr>
                     <h3>Идеи, которые Вы координируете:</h3>
                     <ul>
                         <c:forEach var="ideaImpl" items="${ideasImpl}">
                             <li>
+                                <p>
                                 <form action="ideas" method="GET">
                                     <input type="hidden" name="ideaId" value="${ideaImpl.id}">
                                     <input type="submit" name="go" value="${ideaImpl.title}">
+                                    ${ideaImpl.status.title} | ${ideaImpl.created}
                                 </form>
-                                    <br>${ideaImpl.status.title}
-                                    <br>${ideaImpl.created}
                                 <p> Добавить информацию о реализации:
                                     <form action="ideas" method="POST">
                                         <input type="hidden" name="ideaId" value="${ideaImpl.id}">
                                         <input type="text" name="implInfo">
                                         <input type="submit" name="setImplInfo" value="Опубликовать">
                                     </form>
+                                </p>
                                 </p>
                             </li>
                         </c:forEach>

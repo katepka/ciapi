@@ -71,7 +71,9 @@
                                 <input type="submit" name="go" value="${category.title}">
                                 <input type="hidden" name="categoryId" value="${category.id}">
                                 <br>${category.description}
-                                <br>${category.iconRef}
+                                <c:if test="${category.iconRef != null}">
+                                    <br>${category.iconRef}
+                                </c:if>
                             </form>
                         </td>
                     </tr>

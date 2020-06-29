@@ -45,6 +45,9 @@ public class AccountServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         
+        request.removeAttribute("ideas");
+        request.removeAttribute("ideasImpl");
+        
         loginedUser = AppUtils.getLoginedUser(request.getSession());
         request.setAttribute("user", loginedUser);
         

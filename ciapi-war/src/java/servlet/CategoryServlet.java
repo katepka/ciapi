@@ -48,6 +48,11 @@ public class CategoryServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         
         categoryId = request.getParameter("categoryId");
+        
+        ideas = null;
+        shownIdeas = null;
+        request.removeAttribute("ideas");
+        
         if (categoryId != null) {
             try {
                 category = categoryClient.getCategoryById_JSON(CategoryEntry.class, categoryId);
