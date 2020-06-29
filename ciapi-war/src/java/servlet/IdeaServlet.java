@@ -59,7 +59,8 @@ public class IdeaServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         
         // ================= Формирование страницы idea.jsp ======================
-        
+        ideaCoordinatorName = null;
+        ideaLocationName = null;
         ideaId = request.getParameter("ideaId");
         if (ideaId != null && !ideaId.trim().isEmpty()) {
             request.removeAttribute("votesFor");
@@ -68,10 +69,7 @@ public class IdeaServlet extends HttpServlet {
                 IdeaEntry idea = ideaClient.getIdeaById_JSON(IdeaEntry.class, ideaId);
 
                 if (idea != null) {
-                    if (idea.getCoordinator() == null) {
-                        // TODO: add ref
-                        ideaCoordinatorName = "Разыскивается. Стать координатором";
-                    } else {
+                    if (idea.getCoordinator() != null) {
                         ideaCoordinatorName = idea.getCoordinator().getName();
                     }
                     if (idea.getLocation() != null) {

@@ -42,7 +42,15 @@
                 <td>
                     <div>${idea.category.title}</div>
                     <div>Автор: ${idea.author.name}</div>
-                    <div>Координатор: ${ideaCoordinatorName}</div>
+                    <div>
+                        Координатор: ${ideaCoordinatorName}
+                        <c:if test="${ideaCoordinatorName == null}">
+                            <form action="becomeCoordinator" method="GET">
+                                <input type="hidden" name="ideaId" value="${idea.id}">
+                                Разыскивается! <input type="submit" name="becomeACoordinator" value="Стать координатором">
+                            </form>
+                        </c:if>
+                    </div>
                 </td>
                 <td align="right">
                     <div>${idea.status.title}</div>
