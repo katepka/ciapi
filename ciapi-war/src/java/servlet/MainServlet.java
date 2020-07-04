@@ -1,6 +1,6 @@
 package servlet;
 
-import client.CategoryClient;
+import activity.CategoryActivity;
 import entry.CategoryEntry;
 import entry.UserEntry;
 import java.io.IOException;
@@ -14,7 +14,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.ClientErrorException;
 import util.AppUtils;
 import repository.IdeaFacadeLocal;
 
@@ -22,36 +21,30 @@ import repository.IdeaFacadeLocal;
 public class MainServlet extends HttpServlet {
 
     @EJB
+    private CategoryActivity categoryActivity;
+    @EJB
     private IdeaFacadeLocal ideaFacade;
-   
-    private CategoryClient categoryClient;
-    
     private List<CategoryEntry> categories = null;
     long numIdeas = 0;
     long numImplementedIdeas = 0;
     UserEntry loginedUser;
-    
-    @Override
-    public void init() {
-        categoryClient = new CategoryClient();
-    }
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         request.removeAttribute("loginedUser");
-        
+
         loginedUser = AppUtils.getLoginedUser(request.getSession());
         request.setAttribute("loginedUser", loginedUser);
-        
+
         numIdeas = ideaFacade.count();
         numImplementedIdeas = ideaFacade.countByStatus(3L);
         try {
-            categories = categoryClient.getAllCategories_JSON();
-        } catch (ClientErrorException cee) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+            categories = categoryActivity.findAll();
+        } catch (Exception ex) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
             if (requestDispatcher != null) {
                 requestDispatcher.forward(request, response);
@@ -60,7 +53,7 @@ public class MainServlet extends HttpServlet {
 
         request.setAttribute("numIdeas", numIdeas);
         request.setAttribute("numImplementedIdeas", numImplementedIdeas);
-        
+
         request.setAttribute("categories", categories);
         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/main.jsp");
         if (requestDispatcher != null) {
@@ -69,7 +62,6 @@ public class MainServlet extends HttpServlet {
 
     }
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -77,18 +69,10 @@ public class MainServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         doGet(request, response);
     }
-    
 
     @Override
     public String getServletInfo() {
         return "Short description";
-    }
-    
-    @Override
-    public void destroy() {
-        if (categoryClient != null) {
-            categoryClient.close();
-        }
     }
 
 }
