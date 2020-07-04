@@ -188,5 +188,5 @@ public class IdeaEntry extends AbstractDataEntry {
             return idea2.score - idea1.score;
         }
     };
-    
+     
 }
