@@ -8,6 +8,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="entry.CommentEntry"%>
 <%@page import="entry.UserEntry"%>
+<%@page import="entry.IdeaEntry"%>
+<%@page import="entry.ImplementationInfoEntry"%>
 <%@page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
@@ -44,7 +46,7 @@
             </tr>
             <tr>
                 <td>
-                    <div>${idea.category.title}</div>
+                    <div><strong>${idea.category.title}</strong></div>
                     <div>Автор: ${idea.author.name}</div>
                     <div>
                         Координатор: ${ideaCoordinatorName}
@@ -61,14 +63,21 @@
                     <div>${ideaLocationName} | Дата создания: ${idea.created}</div>
                 </td>
             </tr>
+            <tr><td colspan="2"><hr></td></tr>
+            
             <tr>
-                <td colspan="2" align="left">
-                    <hr>
+                <td align="left">
+                    
                     <div>
                         ${idea.description}
                     </div>
-                    <hr>
                 </td>
+                <td>
+                    <c:if test="${idea.implementationInfo != null}">
+                        <p><strong>Отчет о реализации:</strong></p>
+                        ${idea.implementationInfo.description}
+                    </c:if>
+                    
             </tr>
             <tr>
                 <td>
@@ -88,7 +97,7 @@
                 <td colspan="2" align="left">
                     <form action="comment" method="POST">
                         <div>
-                            <p>Обсуждение идеи</p>
+                            <p><strong>Обсуждение идеи</strong></p>
                         </div>
                         <div>
                             Что Вы думаете об этой идее? Поделитесь своим мнением
@@ -98,7 +107,7 @@
                         <input type="submit" name="comment" value="Прокомментировать">
                         <br><br>
                     </form>
-                    <div>Список комментариев:</div><br>
+                        <div><strong>Список комментариев:</strong></div><br>
                     <c:forEach var="comment" items="${comments}">
                         <div>${comment.author.name} | ${comment.created}</div>
                         <div>${comment.text}</div>
