@@ -97,77 +97,79 @@
                         <h2>Есть идея, как сделать жизнь города лучше?</h2>
                     </td>
                 </tr>
-                <form action="createidea" method="POST">
-                    <tr> 
-                        <td>
-                            <p>Выберите категорию:</p>
-                            <p>
-                                <select name="categoryId">
-                                    <c:forEach var="category" items="${categories}">
-                                        <option value="${category.id}">${category.title}</option>
-                                    </c:forEach> 
-                                </select>
-                            </p>
-                        </td>
-                        <td>
-                            <p>Выберите город или отметьте место на карте:</p>
-                            <p>
-                                <select name="locationId">
-                                    <option value="noPlace">Без места</option>
-                                    <c:forEach var="location" items="${locations}">
-                                        <c:if test="${location.name != null}">
-                                            <option value="${location.id}">${location.name}</option>
-                                        </c:if>
-                                    </c:forEach>
-                                </select>
-                            </p>
 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p>В чем заключается идея? Сформулируйте кратко суть:</p>
-                            <p>
-                                <input type="text" name="title" value="Заголовок идеи">
-                            </p>
-                        </td>
-                        <td rowspan="2">
-                            <div id="map_canvas" style="width:500px; height:200px"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p>Добавьте описание идеи:</p>
-                            <p>
-                                <input type="text" name="description" value="Описание">
-                            </p>
-                        </td>
+                <tr> 
+                    <td>
+                        <div>
+                            <c:if test="${filename == null}">
+                                <p>1. Загрузите фотографию (не обязательно):</p>
+                            </c:if>
+                            <c:if test="${filename != null}">
+                                <p style="color: teal">Загружено фото</p>
+                            </c:if>
+                        </div>
+                        <p>
+                        <form action="upload" method="POST" enctype="multipart/form-data">
+                            <input type="file" name="fileToUpload"  size="30" /></BR></BR>
+                            <input type="submit" value="Отправить" />
+                        </form>
+                        </p>
+                    </td>
+                    <td>
+                        <p>2. Выберите место из списка или отметьте на карте:</p>
+                        <p>
+                            <select name="locationId">
+                                <option value="noPlace">Без места</option>
+                                <c:forEach var="location" items="${locations}">
+                                    <c:if test="${location.name != null}">
+                                        <option value="${location.id}">${location.name}</option>
+                                    </c:if>
+                                </c:forEach>
+                            </select>
+                        </p>
 
-                    </tr>
-                    <tr> 
-                        <td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>3. Выберите категорию:</p>
+                        <p>
+                            <select name="categoryId">
+                                <c:forEach var="category" items="${categories}">
+                                    <option value="${category.id}">${category.title}</option>
+                                </c:forEach> 
+                            </select>
+                        </p>
+                    </td>
+                    <td>
+                        <div id="map_canvas" style="width:500px; height:200px"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>4. В чем заключается идея? Сформулируйте кратко суть:</p>
+                        <p>
+                            <input type="text" name="title" value="Заголовок идеи">
+                        </p>
+                    </td>
+                    <td>
+                        <p>5. Добавьте описание идеи:</p>
+                        <p>
+                            <input type="text" name="description" value="Описание">
+                        </p>
+                    </td>
+
+                </tr>
+                <tr>
+                </tr>
+                <tr> 
+                    <td>
+                        <form action="createidea" method="POST">
                             <input type="hidden" name="filename" value="${filename}">
                             <input type="submit" value="ПРЕДЛОЖИТЬ ИДЕЮ" name="create">
                             <input type="submit" value="ОТМЕНА" name="cancel">
-                        </td>
-                </form>
-
-                <td>
-                    <div>
-                        <c:if test="${filename == null}">
-                            <p>Загрузите фотографию:</p>
-                        </c:if>
-                        <c:if test="${filename != null}">
-                            <p style="color: teal">Загружено фото</p>
-                        </c:if>
-                    </div>
-                    <p>
-                    <form action="upload" method="POST" enctype="multipart/form-data">
-                        <input type="file" name="fileToUpload"  size="30" /></BR></BR>
-                        <input type="submit" value="Отправить" />
-                    </form>
-                    </p>
-                </td>
+                        </form>
+                    </td>
                 </tr>
             </table>
 
