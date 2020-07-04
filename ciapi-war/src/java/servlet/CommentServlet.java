@@ -1,7 +1,7 @@
 package servlet;
 
 import activity.CommentActivity;
-import client.IdeaClient;
+import activity.IdeaActivity;
 import entry.CommentEntry;
 import entry.IdeaEntry;
 import entry.UserEntry;
@@ -20,26 +20,22 @@ import util.AppUtils;
 
 @WebServlet(name = "CommentServlet", urlPatterns = {"/comment"})
 public class CommentServlet extends HttpServlet {
-  
+
+    @EJB
+    private IdeaActivity ideaActivity;
     private String ideaId;
     private UserEntry loginedUser = null;
-    private IdeaClient ideaClient = null;
-    
+    private IdeaEntry idea = null;
+
     @EJB
     private CommentActivity commentActivity;
-    
-    @Override
-    public void init() {
-        ideaClient = new IdeaClient();
-    }
-    
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        
+
     }
 
     @Override
@@ -47,7 +43,7 @@ public class CommentServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        
+
         // =============== Добавление нового комментария к идее ================
         String commentText = request.getParameter("commentText");
 
@@ -62,10 +58,10 @@ public class CommentServlet extends HttpServlet {
                 loginedUser = AppUtils.getLoginedUser(request.getSession());
                 comment.setAuthor(loginedUser);
                 try {
-                    IdeaEntry idea = ideaClient.getIdeaById_JSON(IdeaEntry.class, ideaId);
+                    idea = ideaActivity.findById(Long.parseLong(ideaId));
                     comment.setIdea(idea);
                     commentActivity.createComment(comment);
-                    
+
                     response.sendRedirect(request.getContextPath() + "/ideas?ideaId=" + ideaId);
                 } catch (ClientErrorException cee) {
                     Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
@@ -83,13 +79,6 @@ public class CommentServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }
-    
-    @Override
-    public void destroy() {
-        if (ideaClient != null) {
-            ideaClient.close();
-        }
     }
 
 }
