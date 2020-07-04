@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import mapper.UserMapper;
-import repository.IdeaFacadeLocal;
 import util.AppUtils;
+import repository.IdeaFacadeLocal;
 
 @WebServlet(name = "BecomeACoordinatorServlet", urlPatterns = {"/becomeCoordinator"})
 public class BecomeACoordinatorServlet extends HttpServlet {

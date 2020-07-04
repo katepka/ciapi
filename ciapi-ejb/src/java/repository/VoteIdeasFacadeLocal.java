@@ -5,7 +5,7 @@ import java.util.List;
 import javax.ejb.Local;
 
 @Local
-public interface VotesIdeasFacadeLocal {
+public interface VoteIdeasFacadeLocal {
 
     void create(VoteIdeas votesIdeas);
 

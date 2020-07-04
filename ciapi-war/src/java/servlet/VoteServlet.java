@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ClientErrorException;
 import mapper.IdeaMapper;
 import mapper.UserMapper;
-import repository.VotesIdeasFacadeLocal;
 import util.AppUtils;
+import repository.VoteIdeasFacadeLocal;
 
 @WebServlet(name = "VoteServlet", urlPatterns = {"/vote"})
 public class VoteServlet extends HttpServlet {
@@ -32,7 +32,7 @@ public class VoteServlet extends HttpServlet {
     private IdeaEntry idea = null;
     
     @EJB
-    private VotesIdeasFacadeLocal votesIdeasFacade;
+    private VoteIdeasFacadeLocal votesIdeasFacade;
     @EJB
     private IdeaMapper ideaMapper;
     @EJB

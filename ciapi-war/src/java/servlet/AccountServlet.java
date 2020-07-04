@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ClientErrorException;
 import mapper.IdeaMapper;
-import repository.IdeaFacadeLocal;
 import util.AppUtils;
+import repository.IdeaFacadeLocal;
 
 @WebServlet(name = "AccountServlet", urlPatterns = {"/account"})
 public class AccountServlet extends HttpServlet {

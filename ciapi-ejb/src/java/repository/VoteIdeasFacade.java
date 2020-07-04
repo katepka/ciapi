@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 @Stateless
-public class VotesIdeasFacade extends AbstractFacade<VoteIdeas> implements VotesIdeasFacadeLocal {
+public class VoteIdeasFacade extends AbstractFacade<VoteIdeas> implements VoteIdeasFacadeLocal {
 
     @PersistenceContext(unitName = "ciapi-ejbPU")
     private EntityManager em;
@@ -17,7 +17,7 @@ public class VotesIdeasFacade extends AbstractFacade<VoteIdeas> implements Votes
         return em;
     }
 
-    public VotesIdeasFacade() {
+    public VoteIdeasFacade() {
         super(VoteIdeas.class);
     }
     

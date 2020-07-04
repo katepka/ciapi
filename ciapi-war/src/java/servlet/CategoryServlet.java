@@ -19,14 +19,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ClientErrorException;
-import repository.VotesIdeasFacadeLocal;
+import repository.VoteIdeasFacadeLocal;
 
 @WebServlet(name = "CategoryServlet", urlPatterns = {"/category"})
 public class CategoryServlet extends HttpServlet {
 
     
     @EJB
-    private VotesIdeasFacadeLocal votesIdeasFacade;
+    private VoteIdeasFacadeLocal votesIdeasFacade;
     
     private List<VoteIdeas> votes = new ArrayList<>();
     private String categoryId = null;
