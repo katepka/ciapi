@@ -1,7 +1,7 @@
 package servlet;
 
-import entity.Idea;
-import entity.User;
+import activity.IdeaActivity;
+import entry.IdeaEntry;
 import entry.UserEntry;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -13,20 +13,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import mapper.UserMapper;
 import util.AppUtils;
-import repository.IdeaFacadeLocal;
 
 @WebServlet(name = "BecomeACoordinatorServlet", urlPatterns = {"/becomeCoordinator"})
 public class BecomeACoordinatorServlet extends HttpServlet {
 
     @EJB
-    private UserMapper userMapper;
-    @EJB
-    private IdeaFacadeLocal ideaFacade;
+    private IdeaActivity ideaActivity;
     private String ideaId = null;
     private UserEntry loginedUser = null;
-    private Idea currentIdea;
+    private IdeaEntry currentIdea;
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -39,14 +35,13 @@ public class BecomeACoordinatorServlet extends HttpServlet {
             try {
                 long id = Long.parseLong(ideaId);
                 loginedUser = AppUtils.getLoginedUser(request.getSession());
-                User coordinator = userMapper.mapUserEntryToUser(loginedUser);
-                currentIdea = ideaFacade.find(id);
+                currentIdea = ideaActivity.findById(id);
                 if (currentIdea != null && currentIdea.getCoordinator() == null) {
                     
-                    currentIdea.setCoordinator(coordinator);
-                    ideaFacade.edit(currentIdea);
+                    currentIdea.setCoordinator(loginedUser);
+                    ideaActivity.updateIdea(id, currentIdea);
                     // TODO: notify user about successful subscription
-                    System.out.println("Идее " + id + " назначен координатор " + coordinator.getName());
+                    System.out.println("Идее " + id + " назначен координатор " + loginedUser.getName());
                     RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/ideas?ideaId=" + ideaId);
                     if (requestDispatcher != null) {
                         requestDispatcher.forward(request, response);
