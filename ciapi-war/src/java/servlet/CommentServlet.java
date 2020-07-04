@@ -6,6 +6,10 @@ import entry.CommentEntry;
 import entry.IdeaEntry;
 import entry.UserEntry;
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -60,6 +64,8 @@ public class CommentServlet extends HttpServlet {
                 try {
                     idea = ideaActivity.findById(Long.parseLong(ideaId));
                     comment.setIdea(idea);
+                    comment.setCreated(Date.valueOf(LocalDate.now()));
+                    System.out.println(comment.getCreated());
                     commentActivity.createComment(comment);
 
                     response.sendRedirect(request.getContextPath() + "/ideas?ideaId=" + ideaId);

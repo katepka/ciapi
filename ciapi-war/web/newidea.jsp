@@ -116,6 +116,7 @@
                         </p>
                     </td>
                     <td>
+                        <form action="createidea" method="POST">
                         <p>2. Выберите место из списка или отметьте на карте:</p>
                         <p>
                             <select name="locationId">
@@ -164,12 +165,13 @@
                 </tr>
                 <tr> 
                     <td>
-                        <form action="createidea" method="POST">
+                        
                             <input type="hidden" name="filename" value="${filename}">
                             <input type="submit" value="ПРЕДЛОЖИТЬ ИДЕЮ" name="create">
                             <input type="submit" value="ОТМЕНА" name="cancel">
-                        </form>
+                        
                     </td>
+                    </form>
                 </tr>
             </table>
 

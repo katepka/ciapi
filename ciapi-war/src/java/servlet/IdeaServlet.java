@@ -36,7 +36,7 @@ public class IdeaServlet extends HttpServlet {
     private String ideaLocationName = null;
     private List<CommentEntry> comments = new ArrayList<>();
     private List<VoteIdeas> votes = new ArrayList<>();
-    private final SimpleDateFormat formatForDate = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+    private final SimpleDateFormat formatForDate = new SimpleDateFormat("dd.MM.yyyy");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -92,7 +92,7 @@ public class IdeaServlet extends HttpServlet {
 
             /* ================ Вывод комментариев к идее =====================*/
             comments = commentActivity.findByIdea(Long.parseLong(ideaId));
-//                    Collections.sort(comments, CommentEntry.COMPARE_BY_CREATED);
+            Collections.sort(comments, CommentEntry.COMPARE_BY_CREATED);
             for (CommentEntry comment: comments) {
                 comment.setCreatedFormatted(formatForDate.format(comment.getCreated()));
             }

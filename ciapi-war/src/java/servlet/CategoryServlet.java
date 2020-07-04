@@ -36,7 +36,7 @@ public class CategoryServlet extends HttpServlet {
     private List<IdeaEntry> ideas = new ArrayList<>();
     private List<IdeaEntry> shownIdeas = new ArrayList<>();
     private long numImplementedIdeas = 0;
-    private final SimpleDateFormat formatForDate = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+    private final SimpleDateFormat formatForDate = new SimpleDateFormat("dd.MM.yyyy");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

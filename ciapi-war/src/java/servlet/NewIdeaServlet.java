@@ -9,8 +9,12 @@ import entry.LocationEntry;
 import entry.StatusEntry;
 import entry.UserEntry;
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -130,6 +134,7 @@ public class NewIdeaServlet extends HttpServlet {
             if (photoRef != null) {
                 newIdea.setPhotoRef(photoRef);
             }
+            newIdea.setCreated(Date.valueOf(LocalDate.now()));
             try {
                 ideaActivity.createIdea(newIdea);
                 RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/start");
