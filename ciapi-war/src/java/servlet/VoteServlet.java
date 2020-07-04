@@ -1,6 +1,6 @@
 package servlet;
 
-import client.IdeaClient;
+import activity.IdeaActivity;
 import entity.Idea;
 import entity.User;
 import entity.VoteIdeas;
@@ -17,7 +17,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.ClientErrorException;
 import mapper.IdeaMapper;
 import mapper.UserMapper;
 import util.AppUtils;
@@ -26,22 +25,17 @@ import repository.VoteIdeasFacadeLocal;
 @WebServlet(name = "VoteServlet", urlPatterns = {"/vote"})
 public class VoteServlet extends HttpServlet {
 
-    private String ideaId;
-    private UserEntry loginedUser = null;
-    private IdeaClient ideaClient = null;
-    private IdeaEntry idea = null;
-    
+    @EJB
+    private IdeaActivity ideaActivity;
     @EJB
     private VoteIdeasFacadeLocal votesIdeasFacade;
     @EJB
     private IdeaMapper ideaMapper;
     @EJB
     private UserMapper userMapper;
-    
-    @Override
-    public void init() {
-        ideaClient = new IdeaClient();
-    }
+    private String ideaId;
+    private UserEntry loginedUser = null;
+    private IdeaEntry idea = null;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -55,14 +49,14 @@ public class VoteServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-       
+
         ideaId = request.getParameter("ideaId");
 
         if (ideaId != null) {
             loginedUser = AppUtils.getLoginedUser(request.getSession());
             boolean removed = false;
             try {
-                idea = ideaClient.getIdeaById_JSON(IdeaEntry.class, ideaId);
+                idea = ideaActivity.findById(Long.parseLong(ideaId));
                 if (request.getParameter("voteFor") != null) {
                     List<VoteIdeas> castVotes = votesIdeasFacade
                             .findVote(loginedUser.getId(), Long.parseLong(ideaId));
@@ -99,19 +93,19 @@ public class VoteServlet extends HttpServlet {
                     }
                 }
                 response.sendRedirect(request.getContextPath() + "/ideas?ideaId=" + ideaId);
-                
-            } catch (ClientErrorException cee) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
                 RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
                 if (requestDispatcher != null) {
                     requestDispatcher.forward(request, response);
                 }
-            }    
+            }
         } else {
             // TODO: handle the situation when ideaId is null
         }
     }
-    
+
     private void removeVote(Long id) {
         votesIdeasFacade.remove(id);
     }
@@ -124,20 +118,12 @@ public class VoteServlet extends HttpServlet {
         newVote.setIdea(ratedIdea);
         User author = userMapper.mapUserEntryToUser(loginedUser);
         newVote.setUser(author);
-        System.out.println(newVote.toString());
         votesIdeasFacade.create(newVote);
     }
 
     @Override
     public String getServletInfo() {
         return "Short description";
-    }
-    
-    @Override
-    public void destroy() {
-        if (ideaClient != null) {
-            ideaClient.close();
-        }
     }
 
 }

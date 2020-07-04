@@ -1,7 +1,7 @@
 package servlet;
 
-import client.CategoryClient;
-import client.LocationClient;
+import activity.CategoryActivity;
+import activity.LocationActivity;
 import com.ibm.useful.http.FileData;
 import com.ibm.useful.http.PostData;
 import entry.CategoryEntry;
@@ -14,29 +14,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.ClientErrorException;
 import util.AppConstants;
 
 @WebServlet(name = "UploadFileServlet", urlPatterns = {"/upload"})
 public class UploadFileServlet extends HttpServlet {
-    
-    private CategoryClient categoryClient;
-    private LocationClient locationClient;
+
+    @EJB
+    private LocationActivity locationActivity;
+    @EJB
+    private CategoryActivity categoryActivity;
     private String filename = null;
     private List<CategoryEntry> categories = new ArrayList<>();
     private List<LocationEntry> locations = new ArrayList<>();
-    
-    @Override
-    public void init() {
-        categoryClient = new CategoryClient();
-        locationClient = new LocationClient();
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -50,7 +46,7 @@ public class UploadFileServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        
+
         if (request.getContentType().contains("multipart/form-data")) {
             PostData multidata = new PostData(request);
             FileData tempFile = multidata.getFileData("fileToUpload");
@@ -61,22 +57,22 @@ public class UploadFileServlet extends HttpServlet {
                 request.setAttribute("filename", filename);
             }
             try {
-                categories = categoryClient.getAllCategories_JSON();
-            } catch (ClientErrorException cee) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+                categories = categoryActivity.findAll();
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
                 RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
                 if (requestDispatcher != null) {
                     requestDispatcher.forward(request, response);
                 }
             }
             try {
-                locations = locationClient.getAllLocations_JSON();
-            } catch (ClientErrorException cee) {
+                locations = locationActivity.findAll();
+            } catch (Exception ex) {
                 RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
                 if (requestDispatcher != null) {
                     requestDispatcher.forward(request, response);
                 }
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
             }
             request.setAttribute("categories", categories);
             request.setAttribute("locations", locations);
@@ -91,7 +87,7 @@ public class UploadFileServlet extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }
-    
+
     private String saveFile(FileData tempFile, String path) {
         // TODO: нужно как-то генерировать filename, чтобы повторяющиеся имена сохранялись
         String filename = path + File.separator + tempFile.getFileName();
@@ -112,16 +108,6 @@ public class UploadFileServlet extends HttpServlet {
             }
         }
         return null;
-    }
-    
-    @Override
-    public void destroy() {
-        if (categoryClient != null) {
-            categoryClient.close();
-        }
-        if (locationClient != null) {
-            locationClient.close();
-        }
     }
 
 }
