@@ -1,9 +1,8 @@
 package servlet;
 
-import client.CategoryClient;
-import client.IdeaClient;
-import client.LocationClient;
-import client.UserClient;
+import activity.CategoryActivity;
+import activity.IdeaActivity;
+import activity.LocationActivity;
 import entry.CategoryEntry;
 import entry.IdeaEntry;
 import entry.LocationEntry;
@@ -14,61 +13,54 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.ClientErrorException;
 import util.AppUtils;
 
 @WebServlet(name = "NewIdeaServlet", urlPatterns = {"/createidea"})
 public class NewIdeaServlet extends HttpServlet {
 
+    @EJB
+    private IdeaActivity ideaActivity;
+    @EJB
+    private CategoryActivity categoryActivity;
+    @EJB
+    private LocationActivity locationActivity;
     private IdeaEntry newIdea = null;
-    private IdeaClient ideaClient;
-    private CategoryClient categoryClient;
-    private LocationClient locationClient;
-    private UserClient userClient;
     private List<CategoryEntry> categories = new ArrayList<>();
     private List<LocationEntry> locations = new ArrayList<>();
-
-    @Override
-    public void init() {
-        ideaClient = new IdeaClient();
-        categoryClient = new CategoryClient();
-        locationClient = new LocationClient();
-        userClient = new UserClient();
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        
+
         // ================= Формирование страницы newidea.jsp ======================
-        
         String createIdea = request.getParameter("createIdea");
         if (createIdea != null && !createIdea.isEmpty()) {
             try {
-                categories = categoryClient.getAllCategories_JSON();
-            } catch (ClientErrorException cee) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+                categories = categoryActivity.findAll();
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
                 RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
                 if (requestDispatcher != null) {
                     requestDispatcher.forward(request, response);
                 }
             }
             try {
-                locations = locationClient.getAllLocations_JSON();
-            } catch (ClientErrorException cee) {
+                locations = locationActivity.findAll();
+            } catch (Exception ex) {
                 RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
                 if (requestDispatcher != null) {
                     requestDispatcher.forward(request, response);
                 }
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
             }
             request.setAttribute("categories", categories);
             request.setAttribute("locations", locations);
@@ -112,7 +104,7 @@ public class NewIdeaServlet extends HttpServlet {
                 newIdea.setDescription(description);
             }
             if (categoryId != null) {
-                CategoryEntry category = categoryClient.getCategoryById_JSON(CategoryEntry.class, categoryId);
+                CategoryEntry category = categoryActivity.findById(Long.parseLong(categoryId));
                 if (category != null) {
                     newIdea.setCategory(category);
                 } else {
@@ -136,45 +128,16 @@ public class NewIdeaServlet extends HttpServlet {
             //======== Сохранение ссылки на фото ==========
             String photoRef = request.getParameter("filename");
             if (photoRef != null) {
-               newIdea.setPhotoRef(photoRef);
+                newIdea.setPhotoRef(photoRef);
             }
             try {
-                int statusCode = ideaClient.createIdea_JSON(newIdea).getStatus();
-                switch (statusCode) {
-                    case 200:
-                    case 201:
-                    case 202: {
-                        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/start");
-                        if (requestDispatcher != null) {
-                            requestDispatcher.forward(request, response);
-                        }
-                        break;
-                    }
-                    case 404: {
-                        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/notfound.jsp");
-                        if (requestDispatcher != null) {
-                            requestDispatcher.forward(request, response);
-                        }
-                        break;
-                    }
-                    case 500:
-                    case 501:
-                    case 502:
-                    case 503:
-                    case 504:
-                    case 505: {
-                        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
-                        if (requestDispatcher != null) {
-                            requestDispatcher.forward(request, response);
-                        }
-                        break;
-                    }
-                    default:
-                        break;
+                ideaActivity.createIdea(newIdea);
+                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/start");
+                if (requestDispatcher != null) {
+                    requestDispatcher.forward(request, response);
                 }
-
-            } catch (ClientErrorException cee) {
-                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", cee);
+            } catch (Exception ex) {
+                Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
                 RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/servererror.jsp");
                 if (requestDispatcher != null) {
                     requestDispatcher.forward(request, response);
@@ -194,22 +157,6 @@ public class NewIdeaServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }
-
-    @Override
-    public void destroy() {
-        if (ideaClient != null) {
-            ideaClient.close();
-        }
-        if (categoryClient != null) {
-            categoryClient.close();
-        }
-        if (locationClient != null) {
-            locationClient.close();
-        }
-        if (userClient != null) {
-            userClient.close();
-        }
     }
 
 }
