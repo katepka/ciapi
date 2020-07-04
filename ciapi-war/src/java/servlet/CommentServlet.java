@@ -8,8 +8,6 @@ import entry.UserEntry;
 import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -21,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ClientErrorException;
 import util.AppUtils;
+import validation.EntryValidator;
 
 @WebServlet(name = "CommentServlet", urlPatterns = {"/comment"})
 public class CommentServlet extends HttpServlet {
@@ -65,7 +64,8 @@ public class CommentServlet extends HttpServlet {
                     idea = ideaActivity.findById(Long.parseLong(ideaId));
                     comment.setIdea(idea);
                     comment.setCreated(Date.valueOf(LocalDate.now()));
-                    System.out.println(comment.getCreated());
+                    
+                    EntryValidator.validate(comment);
                     commentActivity.createComment(comment);
 
                     response.sendRedirect(request.getContextPath() + "/ideas?ideaId=" + ideaId);

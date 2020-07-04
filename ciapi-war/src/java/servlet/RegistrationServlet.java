@@ -14,6 +14,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import validation.EntryValidator;
 
 @WebServlet(name = "RegistrationServlet", urlPatterns = {"/registrate"})
 public class RegistrationServlet extends HttpServlet {
@@ -95,6 +96,7 @@ public class RegistrationServlet extends HttpServlet {
                 role.setId(2L);
                 user.setRole(role);
                 try {
+                    EntryValidator.validate(user);
                     User entity = userActivity.createUser(user);
                     if (entity != null) {
                         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/login.jsp");

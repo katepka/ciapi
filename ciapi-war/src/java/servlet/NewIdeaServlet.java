@@ -12,9 +12,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -25,6 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import util.AppUtils;
+import validation.EntryValidator;
 
 @WebServlet(name = "NewIdeaServlet", urlPatterns = {"/createidea"})
 public class NewIdeaServlet extends HttpServlet {
@@ -136,6 +135,7 @@ public class NewIdeaServlet extends HttpServlet {
             }
             newIdea.setCreated(Date.valueOf(LocalDate.now()));
             try {
+                EntryValidator.validate(newIdea);
                 ideaActivity.createIdea(newIdea);
                 RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/start");
                 if (requestDispatcher != null) {

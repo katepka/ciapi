@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import repository.VoteIdeasFacadeLocal;
+import validation.EntryValidator;
 
 @WebServlet(name = "IdeaServlet", urlPatterns = {"/ideas"})
 public class IdeaServlet extends HttpServlet {
@@ -125,6 +126,8 @@ public class IdeaServlet extends HttpServlet {
                 ImplementationInfoEntry implInfoEntry = new ImplementationInfoEntry();
                 implInfoEntry.setDescription(implInfo);
                 idea.setImplementationInfo(implInfoEntry);
+                
+                EntryValidator.validate(idea);
                 ideaActivity.updateIdea(Long.parseLong(ideaId), idea);
             }
         }

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import util.AppUtils;
+import validation.EntryValidator;
 
 @WebServlet(name = "BecomeACoordinatorServlet", urlPatterns = {"/becomeCoordinator"})
 public class BecomeACoordinatorServlet extends HttpServlet {
@@ -39,6 +40,7 @@ public class BecomeACoordinatorServlet extends HttpServlet {
                 if (currentIdea != null && currentIdea.getCoordinator() == null) {
                     
                     currentIdea.setCoordinator(loginedUser);
+                    EntryValidator.validate(currentIdea);
                     ideaActivity.updateIdea(id, currentIdea);
                     // TODO: notify user about successful subscription
                     System.out.println("Идее " + id + " назначен координатор " + loginedUser.getName());
