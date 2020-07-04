@@ -6,7 +6,6 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
-import mapper.RoleMapper;
 import mapper.UserMapper;
 import repository.UserFacadeLocal;
 
@@ -42,6 +41,12 @@ public class UserActivity {
         List<User> userList = userFacade.findByRole(roleId);
         List<UserEntry> entryList = userMapper.mapUserListToUserEntryList(userList);
         return entryList;
+    }
+    
+    public UserEntry findUser(String email, String password) {
+        User user = userFacade.findUser(email, password);
+        UserEntry entry = userMapper.mapUserToUserEntry(user);
+        return entry;
     }
     
     public UserEntry updateUser(long id, UserEntry entry) {

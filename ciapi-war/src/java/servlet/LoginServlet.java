@@ -1,6 +1,6 @@
 package servlet;
 
-import entity.User;
+import activity.UserActivity;
 import entry.UserEntry;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -12,20 +12,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import mapper.UserMapper;
 import util.AppUtils;
-import repository.UserFacadeLocal;
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
-    
-    private String errorMessage;
 
+    private String errorMessage;
     @EJB
-    private UserFacadeLocal userFacade;
-    @EJB
-    private UserMapper userMapper;
-    
+    private UserActivity userActivity;
+    private UserEntry user = null;
+
     @Override
     public void init() {
         errorMessage = null;
@@ -36,9 +32,9 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        
+
         request.removeAttribute("errorMessage");
-        
+
         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
         if (requestDispatcher != null) {
             requestDispatcher.forward(request, response);
@@ -50,13 +46,13 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        
+
         request.removeAttribute("errorMessage");
-        
+
         String userName = request.getParameter("userName").trim();
         String password = request.getParameter("password").trim();
-        
-        if (userName == null || userName.isEmpty() 
+
+        if (userName == null || userName.isEmpty()
                 || password == null || password.isEmpty()) {
             errorMessage = "Для входа введите логин и пароль";
             request.setAttribute("errorMessage", errorMessage);
@@ -65,18 +61,14 @@ public class LoginServlet extends HttpServlet {
                 requestDispatcher.forward(request, response);
             }
         }
-        
-        User entity = null;
-        UserEntry user = null;
+
         try {
-            entity = userFacade.findUser(userName, password);
+            user = userActivity.findUser(userName, password);
         } catch (Exception ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
         }
 
-        if (entity != null) {
-            user = userMapper.mapUserToUserEntry(entity);
-        } else {
+        if (user == null) {
             errorMessage = "Неверный логин или пароль";
             request.setAttribute("errorMessage", errorMessage);
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/login.jsp");
@@ -84,15 +76,15 @@ public class LoginServlet extends HttpServlet {
                 requestDispatcher.forward(request, response);
             }
         }
-        
+
         AppUtils.storeLoginedUser(request.getSession(), user);
-        
+
         int redirectId = -1;
         try {
             redirectId = Integer.parseInt(request.getParameter("redirectId"));
         } catch (NullPointerException | NumberFormatException ex) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ex);
-        } 
+        }
         String requestUri = AppUtils.getRedirectAfterLoginUrl(request.getSession(), redirectId);
         if (requestUri != null) {
             response.sendRedirect(requestUri);
