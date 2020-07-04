@@ -6,6 +6,7 @@ import entity.VoteIdeas;
 import entry.CategoryEntry;
 import entry.IdeaEntry;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +36,7 @@ public class CategoryServlet extends HttpServlet {
     private List<IdeaEntry> ideas = new ArrayList<>();
     private List<IdeaEntry> shownIdeas = new ArrayList<>();
     private long numImplementedIdeas = 0;
+    private final SimpleDateFormat formatForDate = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -59,6 +61,7 @@ public class CategoryServlet extends HttpServlet {
                     if (idea.getStatus().getId() == 3) {
                         numImplementedIdeas++;
                     }
+                    idea.setCreatedFormatted(formatForDate.format(idea.getCreated()));
                     /*============= Сопоставление голосов и идей ==============*/
                     idea.setVotesFor(0);
                     idea.setVotesAgainst(0);
@@ -116,10 +119,10 @@ public class CategoryServlet extends HttpServlet {
                             }
                             break;
                         default:
-                            shownIdeas = ideas;
+                            shownIdeas.addAll(ideas);
                     }
                 } else {
-                    shownIdeas = ideas;
+                    shownIdeas.addAll(ideas);
                 }
 
                 /* =========== Обработка сортировки идей по дате ============ */

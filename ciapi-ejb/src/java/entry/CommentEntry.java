@@ -10,6 +10,8 @@ public class CommentEntry extends AbstractDataEntry {
     
     private Date created;
     
+    private String createdFormatted;
+    
     @NotNull(message = "author cannot be null")
     private UserEntry author;
     
@@ -30,6 +32,14 @@ public class CommentEntry extends AbstractDataEntry {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public String getCreatedFormatted() {
+        return createdFormatted;
+    }
+
+    public void setCreatedFormatted(String createdFormatted) {
+        this.createdFormatted = createdFormatted;
     }
 
     public UserEntry getAuthor() {

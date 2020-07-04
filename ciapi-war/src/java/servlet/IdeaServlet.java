@@ -7,6 +7,7 @@ import entry.CommentEntry;
 import entry.IdeaEntry;
 import entry.ImplementationInfoEntry;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,14 +28,15 @@ public class IdeaServlet extends HttpServlet {
     private IdeaActivity ideaActivity;
     @EJB
     private CommentActivity commentActivity;
+    @EJB
+    private VoteIdeasFacadeLocal votesIdeasFacade;
     private String ideaId = null;
     private IdeaEntry idea = null;
     private String ideaCoordinatorName = null;
     private String ideaLocationName = null;
     private List<CommentEntry> comments = new ArrayList<>();
     private List<VoteIdeas> votes = new ArrayList<>();
-    @EJB
-    private VoteIdeasFacadeLocal votesIdeasFacade;
+    private final SimpleDateFormat formatForDate = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -63,6 +65,9 @@ public class IdeaServlet extends HttpServlet {
                 } else {
                     ideaLocationName = "-";
                 }
+
+                idea.setCreatedFormatted(formatForDate.format(idea.getCreated()));
+                
                 request.setAttribute("idea", idea);
                 request.setAttribute("ideaCoordinatorName", ideaCoordinatorName);
                 request.setAttribute("ideaLocationName", ideaLocationName);
@@ -88,6 +93,9 @@ public class IdeaServlet extends HttpServlet {
             /* ================ Вывод комментариев к идее =====================*/
             comments = commentActivity.findByIdea(Long.parseLong(ideaId));
 //                    Collections.sort(comments, CommentEntry.COMPARE_BY_CREATED);
+            for (CommentEntry comment: comments) {
+                comment.setCreatedFormatted(formatForDate.format(comment.getCreated()));
+            }
             request.setAttribute("comments", comments);
             RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/idea.jsp");
             if (requestDispatcher != null) {
@@ -95,8 +103,10 @@ public class IdeaServlet extends HttpServlet {
             }
 
         } else {
-            System.out.println("handle the situation when there isn't ideaId");
-            // TODO: handle the situation when there isn't ideaId
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/notfound.jsp");
+            if (requestDispatcher != null) {
+                requestDispatcher.forward(request, response);
+            }
         }
     }
 

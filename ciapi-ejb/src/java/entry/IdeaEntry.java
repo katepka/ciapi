@@ -6,7 +6,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class IdeaEntry extends AbstractDataEntry {
-    
+        
     @NotNull(message = "title cannot be null")
     @Size(min = 1, max = 255)
     private String title;
@@ -24,6 +24,8 @@ public class IdeaEntry extends AbstractDataEntry {
 
     private Date created;
     
+    private String createdFormatted;
+    
     private UserEntry coordinator;
     
     @NotNull(message = "status cannot be null")
@@ -38,9 +40,6 @@ public class IdeaEntry extends AbstractDataEntry {
     private int votesFor;
     
     private int votesAgainst;
-    
-    public IdeaEntry() {
-    }
 
     public String getTitle() {
         return title;
@@ -88,6 +87,14 @@ public class IdeaEntry extends AbstractDataEntry {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public String getCreatedFormatted() {
+        return createdFormatted;
+    }
+
+    public void setCreatedFormatted(String createdFormatted) {
+        this.createdFormatted = createdFormatted;
     }
 
     public UserEntry getCoordinator() {

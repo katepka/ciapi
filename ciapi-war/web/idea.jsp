@@ -60,7 +60,7 @@
                 </td>
                 <td align="right">
                     <div>${idea.status.title}</div>
-                    <div>${ideaLocationName} | Дата создания: ${idea.created}</div>
+                    <div>${ideaLocationName} | Дата создания: ${idea.createdFormatted}</div>
                 </td>
             </tr>
             <tr><td colspan="2"><hr></td></tr>
@@ -109,7 +109,7 @@
                     </form>
                         <div><strong>Список комментариев:</strong></div><br>
                     <c:forEach var="comment" items="${comments}">
-                        <div>${comment.author.name} | ${comment.created}</div>
+                        <div>${comment.author.name} | ${comment.createdFormatted}</div>
                         <div>${comment.text}</div>
                         <br>
                     </c:forEach>

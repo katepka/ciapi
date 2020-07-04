@@ -90,7 +90,7 @@
                             <div class="column">
                                 <form action="ideas" method="GET">
                                     <br>${idea.status.title}
-                                    <br>${idea.created} | 
+                                    <br>${idea.createdFormatted} | 
                                     <c:if test="${idea.location.name != null}">
                                         ${idea.location.name}
                                     </c:if>
