@@ -7,6 +7,10 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 
+/**
+ * Сессионный EJB. Служит для преобразования LocationEntry в Location и обратно.
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class LocationMapper {

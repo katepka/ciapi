@@ -22,6 +22,17 @@ import javax.servlet.http.HttpServletResponse;
 import repository.VoteIdeasFacadeLocal;
 import validation.EntryValidator;
 
+/**
+ * Обрабатывает GET-запрос на формирование динамической страницы выбранной идеи.  
+ * Полученные данные о ресурсах системы в виде атрибутов запроса 
+ * перенаправляются на JSP-страницу idea. 
+ * Также IdeaServlet обрабатывает POST-запрос на добавление информации о реализации идеи 
+ * - осуществляется со страницы личного кабинета пользователя, 
+ * прошедшего процедуру идентификации и аутентификации, 
+ * а также являющегося координатором данной идеи, через html-форму.
+
+ * @author Теплякова Е.А.
+ */
 @WebServlet(name = "IdeaServlet", urlPatterns = {"/ideas"})
 public class IdeaServlet extends HttpServlet {
 
@@ -134,8 +145,4 @@ public class IdeaServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/ideas?ideaId=" + ideaId);
     }
 
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }
 }

@@ -9,6 +9,12 @@ import javax.ejb.LocalBean;
 import mapper.RoleMapper;
 import repository.RoleFacadeLocal;
 
+/**
+ * Класс обеспечивает совершение операций создания, поиска по идентификатору 
+ * и выборки всех ролей пользователей.
+ * Методы принимают в качестве параметров и возвращают объекты типа RoleEntry
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class RoleActivity {

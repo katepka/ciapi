@@ -25,6 +25,14 @@ import javax.servlet.http.HttpServletResponse;
 import util.AppUtils;
 import validation.EntryValidator;
 
+/**
+ * Обрабатывает POST-запрос на добавление новой идеи. 
+ * Сервлет обращается к подсистеме взаимодействия с базой данных и отправляет 
+ * переданное через форму пользовательского ввода представление об идее. 
+ * Делается новая запись в базу данных. Осуществляется переход к главной странице.
+ * 
+ * @author Теплякова Е.А.
+ */
 @WebServlet(name = "NewIdeaServlet", urlPatterns = {"/createidea"})
 public class NewIdeaServlet extends HttpServlet {
 
@@ -111,10 +119,16 @@ public class NewIdeaServlet extends HttpServlet {
                 if (category != null) {
                     newIdea.setCategory(category);
                 } else {
-                    // TODO: handle the situation when category isn't found
+                    RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/notfound.jsp");
+                    if (requestDispatcher != null) {
+                        requestDispatcher.forward(request, response);
+                    }
                 }
             } else {
-                // TODO: handle the situation when categoryId is null    
+                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/notfound.jsp");
+                if (requestDispatcher != null) {
+                    requestDispatcher.forward(request, response);
+                }
             }
             if (!"noPlace".equals(locationId)) {
                 LocationEntry location = new LocationEntry();
@@ -157,11 +171,6 @@ public class NewIdeaServlet extends HttpServlet {
                 requestDispatcher.forward(request, response);
             }
         }
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 
 }

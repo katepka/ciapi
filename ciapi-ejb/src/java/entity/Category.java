@@ -35,20 +35,20 @@ public class Category implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Long id;
-    
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "title")
     private String title;
-    
+
     @Size(max = 255)
     @Column(name = "description")
     private String description;
-    
+
     @Size(max = 255)
     @Column(name = "icon_ref")
     private String iconRef;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private Collection<Idea> ideaCollection;
 
@@ -114,7 +114,6 @@ public class Category implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Category)) {
             return false;
         }
@@ -129,5 +128,5 @@ public class Category implements Serializable {
     public String toString() {
         return "entity.Category[ id=" + id + " ]";
     }
-    
+
 }

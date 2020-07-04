@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Обрабатывает GET-запрос на уничтожение текущей сессии
+ * @author Теплякова Е.А.
+ */
 @WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
 public class LogoutServlet extends HttpServlet {
 
@@ -31,11 +35,6 @@ public class LogoutServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         doGet(request, response);
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 
 }

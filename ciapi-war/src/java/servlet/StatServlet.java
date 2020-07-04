@@ -22,6 +22,13 @@ import repository.IdeaFacadeLocal;
 import repository.VoteIdeasFacadeLocal;
 import util.AppUtils;
 
+/**
+ * Обрабатывает GET-запрос на получение списка ТОП-10 популярных идеи. 
+ * Обращается к подсистеме взаимодействия с базой данных для получения 
+ * списка из 10 идей с наибольшим количеством голосов. 
+ * 
+ * @author Теплякова Е.А.
+ */
 @WebServlet(name = "StatServlet", urlPatterns = {"/rating"})
 public class StatServlet extends HttpServlet {
     
@@ -118,11 +125,6 @@ public class StatServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         doGet(request, response);
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 
 }

@@ -1,10 +1,13 @@
 package entry;
 
 import java.io.Serializable;
-import javax.validation.constraints.NotNull;
 
+/**
+ * Класс-абстрактная модель данных.
+ * Содержит ссылку на общий атрибут всех Entry - уникальный идентификатор.
+ * @author Теплякова Е.А.
+ */
 public abstract class AbstractDataEntry implements Serializable {
-//    @NotNull
     private Long id;
 
     public Long getId() {

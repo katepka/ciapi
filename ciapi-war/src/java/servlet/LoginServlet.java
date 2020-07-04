@@ -14,6 +14,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import util.AppUtils;
 
+/**
+ * Обрабатывает POST-запрос на процедуру идентификации пользователя 
+ * по имени пользователя (email) и паролю.
+ * Переход к сервлету осуществляется со всех основных страниц через html-форму, 
+ * доступную пользователю, не прошедшему процедуру идентификации, 
+ * а также через переадресацию с защищенных страниц подсистемой безопасности. 
+ * В случае успешного прохождения идентификации выполняется переход на главную страницу. 
+ * Если в процессе проверки пользовательского ввода или в ходе обращения к подсистеме 
+ * взаимодействия с базой данных возникает ошибка, сервлет возвращает пользователю 
+ * на странице JSP login сведения об ошибке. 
+ * 
+ * @author Теплякова Е.А.
+ */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
 
@@ -92,10 +105,4 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/start");
         }
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }
-
 }

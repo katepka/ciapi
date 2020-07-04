@@ -17,6 +17,15 @@ import javax.servlet.http.HttpServletResponse;
 import util.AppUtils;
 import repository.IdeaFacadeLocal;
 
+/**
+ * обрабатывает GET-запрос на формирование главной страницы приложения. 
+ * Функционально сервлет обращается к подсистеме взаимодействия с базой данных 
+ * для получения списка категорий, общего количества идей и идей реализованных. 
+ * Полученные данные о ресурсах системы в виде атрибутов запроса 
+ * перенаправляются на JSP-страницу main.
+ * 
+ * @author Теплякова Е.А.
+ */
 @WebServlet(name = "Start", urlPatterns = {"/start"})
 public class MainServlet extends HttpServlet {
 
@@ -69,10 +78,4 @@ public class MainServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         doGet(request, response);
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }
-
 }

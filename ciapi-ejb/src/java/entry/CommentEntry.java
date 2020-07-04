@@ -4,6 +4,12 @@ import java.util.Comparator;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Класс-модель комментария.
+ * Содержит атрибуты и методы доступа, а также ограничения, 
+ * которые накладываются на атрибуты.
+ * @author Теплякова Е.А.
+ */
 public class CommentEntry extends AbstractDataEntry {
     @NotNull(message = "text cannot be null")
     private String text;

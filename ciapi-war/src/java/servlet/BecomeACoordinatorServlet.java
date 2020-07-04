@@ -16,6 +16,18 @@ import javax.servlet.http.HttpServletResponse;
 import util.AppUtils;
 import validation.EntryValidator;
 
+/**
+ * Обрабатывает GET-запрос на подписку пользователя на идею в качестве координатора. 
+ * Сервлет получает из http-сессии текущего пользователя, а также идентификатор текущей идеи, 
+ * обращается к подсистеме взаимодействия с базой данных для получения объекта IdeaEntry. 
+ * Далее проводится проверка, действительно ли для идеи не назначен координатор. 
+ * В зависимости от результата делается запись в базу данных о том, 
+ * что текущий пользователь стал координатором данной идеи, 
+ * либо выводится информация о том, что у данной идеи уже есть координатор, 
+ * и идет переадресация на страницу идеи.
+ * 
+ * @author Теплякова Е.А.
+ */
 @WebServlet(name = "BecomeACoordinatorServlet", urlPatterns = {"/becomeCoordinator"})
 public class BecomeACoordinatorServlet extends HttpServlet {
 
@@ -81,11 +93,6 @@ public class BecomeACoordinatorServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
         doGet(request, response);
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 
 }

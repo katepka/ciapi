@@ -5,13 +5,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 /**
- * An extension for the HTTPServletRequest that overrides the getUserPrincipal()
- * and isUserInRole(). We supply these implementations here, where they are not
- * normally populated unless we are going through the facility provided by the
- * container.
- * If he user or roles are null on this wrapper, the parent request is consulted
- * to try to fetch what ever the container has set for us. This is intended to
- * be created and used by the UserRoleFilter.
+ * Класс-оболочка, расширяет HTTPServletRequest, переопределяя методы getUserPrincipal() 
+ * и isUserInRole(). 
+ * Если пользователь или роль в этой оболочке не заданы, выполняется запрос родительского запроса,
+ * чтобы попытаться получить то, что когда-либо было установлено контейнером. 
+ * Класс предназначен для создания и использования UserRoleFilter.
  */
 public class UserRoleRequestWrapper extends HttpServletRequestWrapper {
     

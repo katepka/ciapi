@@ -15,6 +15,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import util.AppUtils;
 
+/**
+ * Обрабатывает GET-запрос на формирование страницы личного кабинета пользователя. 
+ * Получает из http-сессии текущего пользователя, обращается к подсистеме взаимодействия 
+ * с базой данных для получения сведений о пользователе, списка идей, 
+ * созданных данным пользователем, а также списка идей, на которые подписан пользователь 
+ * (является координатором) с формами добавления информации о реализации. 
+ * Полученные данные в виде атрибутов запроса перенаправляются на JSP-страницу account, 
+ * которая динамически выводит представление в веб-браузере.
+ * 
+ * @author Теплякова Е.А.
+ */
 @WebServlet(name = "AccountServlet", urlPatterns = {"/account"})
 public class AccountServlet extends HttpServlet {
 
@@ -60,10 +71,5 @@ public class AccountServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 }

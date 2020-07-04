@@ -36,25 +36,24 @@ public class Location implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Long id;
-    
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "lat")
     private Float lat;
-    
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "lon")
     private Float lon;
-    
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+
     @Column(name = "radius")
     private Float radius;
-    
+
     @Size(max = 255)
     @Column(name = "name")
     private String name;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "location")
     private Collection<Idea> ideaCollection;
 
@@ -129,7 +128,6 @@ public class Location implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Location)) {
             return false;
         }
@@ -144,5 +142,5 @@ public class Location implements Serializable {
     public String toString() {
         return "entity.Location[ id=" + id + " ]";
     }
-    
+
 }

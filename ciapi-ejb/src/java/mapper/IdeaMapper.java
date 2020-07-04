@@ -18,6 +18,10 @@ import repository.LocationFacadeLocal;
 import repository.StatusFacadeLocal;
 import repository.UserFacadeLocal;
 
+/**
+ * Сессионный EJB. Служит для преобразования IdeaEntry в Idea и обратно.
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class IdeaMapper {

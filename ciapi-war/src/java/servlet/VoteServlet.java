@@ -22,6 +22,16 @@ import mapper.UserMapper;
 import util.AppUtils;
 import repository.VoteIdeasFacadeLocal;
 
+/**
+ * Обрабатывает POST-запрос на добавление нового голоса («за» или «против») к идее. 
+ * Сервлет по http-сессии определяет текущего пользователя, обращается к подсистеме взаимодействия с базой данных
+ * и запрашивает сведения о голосах данного пользователя к данной идее. 
+ * Если в базе уже есть такой голос («за» или «против») данного пользователя за эту идею, 
+ * то он аннулируется (удаляется из базы). Если нет – делается новая запись в базу данных. 
+ * Осуществляется переход к странице идеи, за которую отдан голос.
+ * 
+ * @author Теплякова Е.А.
+ */
 @WebServlet(name = "VoteServlet", urlPatterns = {"/vote"})
 public class VoteServlet extends HttpServlet {
 
@@ -102,7 +112,10 @@ public class VoteServlet extends HttpServlet {
                 }
             }
         } else {
-            // TODO: handle the situation when ideaId is null
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/notfound.jsp");
+            if (requestDispatcher != null) {
+                requestDispatcher.forward(request, response);
+            }
         }
     }
 
@@ -119,11 +132,6 @@ public class VoteServlet extends HttpServlet {
         User author = userMapper.mapUserEntryToUser(loginedUser);
         newVote.setUser(author);
         votesIdeasFacade.create(newVote);
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 
 }

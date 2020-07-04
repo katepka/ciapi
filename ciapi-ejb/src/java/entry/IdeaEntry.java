@@ -5,6 +5,12 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * Класс-модель идеи.
+ * Содержит атрибуты и методы доступа, а также ограничения, 
+ * которые накладываются на атрибуты.
+ * @author Теплякова Е.А.
+ */
 public class IdeaEntry extends AbstractDataEntry {
         
     @NotNull(message = "title cannot be null")

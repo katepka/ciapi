@@ -1,12 +1,16 @@
 package repository;
 
 import entity.Comment;
-import entity.User;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+/**
+ * Сессионный EJB. Определяет CRUD-операции над объектами типа Comment.
+ * Расширяет AbstractFacade<T>
+ * @author Теплякова Е.А.
+ */
 @Stateless
 public class CommentFacade extends AbstractFacade<Comment> implements CommentFacadeLocal {
 

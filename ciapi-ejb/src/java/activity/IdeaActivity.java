@@ -24,6 +24,12 @@ import repository.LocationFacadeLocal;
 import repository.StatusFacadeLocal;
 import repository.UserFacadeLocal;
 
+/**
+ * Класс обеспечивает совершение операций создания, сохранения, 
+ * поиска по различным атрибутам и выборки всех идей.
+ * Методы принимают в качестве параметров и возвращают объекты типа IdeaEntry
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class IdeaActivity {

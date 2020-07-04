@@ -9,6 +9,12 @@ import javax.ejb.LocalBean;
 import mapper.UserMapper;
 import repository.UserFacadeLocal;
 
+/**
+ * Класс обеспечивает совершение операций создания, сохранения, 
+ * поиска по различным атрибутам и выборки всех пользователей.
+ * Методы принимают в качестве параметров и возвращают объекты типа UserEntry
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class UserActivity {

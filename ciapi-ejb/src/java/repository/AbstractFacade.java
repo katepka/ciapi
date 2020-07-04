@@ -8,6 +8,13 @@ import javax.validation.ConstraintViolation;
 import javax.validation.*;
 import javax.validation.Validator;
 
+/**
+ * Абстрактный класс, обеспечивающий взаимодействие с базой данных и
+ * наболее общие операции над объектами-Entity - создание, редактирование,
+ * удаление, поиск по первичному ключу, выборка всех сущностей.
+ * @author Теплякова Е.А.
+ * @param <T> - тип, определеяющий Entity
+ */
 public abstract class AbstractFacade<T> {
 
     private Class<T> entityClass;
@@ -19,7 +26,6 @@ public abstract class AbstractFacade<T> {
     protected abstract EntityManager getEntityManager();
 
     public void create(T entity) {
-        // TODO: fix this code
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<T>> constraintViolations = validator.validate(entity);

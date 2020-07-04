@@ -12,6 +12,10 @@ import javax.ejb.LocalBean;
 import repository.IdeaFacadeLocal;
 import repository.UserFacadeLocal;
 
+/**
+ * Сессионный EJB. Служит для преобразования CommentEntry в Comment и обратно.
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class CommentMapper {

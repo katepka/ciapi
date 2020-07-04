@@ -5,15 +5,15 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * SecurityManager
- * Checks is it a secured request and does the request has a permission
+ * SecurityManager проверяет, относится ли http запрос к защищенной странице
+ * и обладает ли запрос соответствующим разрешением.
  */
 public class SecurityManager {
     
     /**
-     * Checks is it a secured page request
-     * @param request checked for security
-     * @return true if the request is secured and false if not
+     * Проверяет, относится ли запрос к защищенной странице
+     * @param request проходит проверку
+     * @return true, если запрос относится к защищенной странице, и false, если нет
      */
     public static boolean isSecurityPage(HttpServletRequest request) {
         String urlPattern = UrlPatternUtil.getUrlPattern(request);
@@ -28,9 +28,9 @@ public class SecurityManager {
     }
  
     /**
-     * Checks the role has a permission
-     * @param request checked for a permission
-     * @return true if the role has a permission for request and false if doesn't
+     * Проверяет, обладает ли роль пользователя соответствующим разрешением (правами доступа)
+     * @param request проходит проверку
+     * @return true, если роль обладает правами на запрос, и false, если нет
      */
     public static boolean hasPermission(HttpServletRequest request) {
         String urlPattern = UrlPatternUtil.getUrlPattern(request);

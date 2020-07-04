@@ -2,6 +2,12 @@ package entry;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * Класс-модель локации.
+ * Содержит атрибуты и методы доступа, а также ограничения, 
+ * которые накладываются на атрибуты.
+ * @author Теплякова Е.А.
+ */
 public class LocationEntry extends AbstractDataEntry {
     
     @NotNull(message = "lat cannot be null")

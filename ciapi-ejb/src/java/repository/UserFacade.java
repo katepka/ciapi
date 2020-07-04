@@ -6,6 +6,11 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+/**
+ * Сессионный EJB. Определяет CRUD-операции над объектами типа User.
+ * Расширяет AbstractFacade<T>
+ * @author Теплякова Е.А.
+ */
 @Stateless
 public class UserFacade extends AbstractFacade<User> implements UserFacadeLocal {
 

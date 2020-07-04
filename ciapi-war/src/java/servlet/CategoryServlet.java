@@ -20,6 +20,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import repository.VoteIdeasFacadeLocal;
 
+/**
+ * Обрабатывает GET-запрос на формирование динамической страницы выбранной категории.  
+ * Помимо обращения к подсистеме взаимодействия с базой данных для получения информации 
+ * по данной категории (сведения о наименовании, описании, общем количестве идей 
+ * и идей реализованных, список идей в категории), также сервлет обрабатывает GET-запросы 
+ * на сортировку и фильтрацию идей в категории – по дате/популярности и по статусу соответственно. 
+ * Полученные данные о ресурсах системы в виде атрибутов запроса перенаправляются 
+ * на JSP-страницу category, которая динамически выводит представление в веб-браузере.
+ * 
+ * @author Теплякова Е.А.
+ */
 @WebServlet(name = "CategoryServlet", urlPatterns = {"/category"})
 public class CategoryServlet extends HttpServlet {
 
@@ -149,7 +160,11 @@ public class CategoryServlet extends HttpServlet {
             }
 
         } else {
-            // TODO: handle the situation when categoryId is null
+            request.setAttribute("numImplementedIdeas", numImplementedIdeas);
+            RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/notfound.jsp");
+            if (requestDispatcher != null) {
+                requestDispatcher.forward(request, response);
+            }
         }
 
     }
@@ -160,10 +175,5 @@ public class CategoryServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 }

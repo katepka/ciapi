@@ -16,6 +16,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import validation.EntryValidator;
 
+/**
+ * Обрабатывает POST-запрос на создание нового пользователя в системе. 
+ * Сервлет обращается к подсистеме взаимодействия с базой данных и 
+ * отправляет переданное через форму пользовательского ввода представление 
+ * о новом пользователе. Если пользовательский ввод соответствует ограничениям, 
+ * делается новая запись в базу данных. 
+ * Осуществляется переход к странице идентификации пользователя.
+ * 
+ * @author Теплякова Е.А.
+ */
 @WebServlet(name = "RegistrationServlet", urlPatterns = {"/registrate"})
 public class RegistrationServlet extends HttpServlet {
 
@@ -122,11 +132,6 @@ public class RegistrationServlet extends HttpServlet {
             }
         }
         
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 
 }

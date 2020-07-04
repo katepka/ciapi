@@ -9,6 +9,12 @@ import javax.ejb.LocalBean;
 import mapper.CategoryMapper;
 import repository.CategoryFacadeLocal;
 
+/**
+ * Класс обеспечивает совершение операций создания, сохранения, 
+ * поиска по идентификатору и выборки всех категорий.
+ * Методы принимают в качестве параметров и возвращают объекты типа CategoryEntry
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class CategoryActivity {

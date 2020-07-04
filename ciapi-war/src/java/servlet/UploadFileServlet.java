@@ -23,6 +23,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import util.AppConstants;
 
+/**
+ * Обрабатывает POST-запрос на загрузку на сервер содержимого формы типа 
+ * «multipart/form-data» (файла). 
+ * Ссылка на загруженный в папку проекта файл в виде атрибута запроса 
+ * перенаправляется обратно на JSP страницу создания новой идеи.
+ * 
+ * @author Теплякова Е.А.
+ */
 @WebServlet(name = "UploadFileServlet", urlPatterns = {"/upload"})
 public class UploadFileServlet extends HttpServlet {
 
@@ -81,11 +89,6 @@ public class UploadFileServlet extends HttpServlet {
                 requestDispatcher.forward(request, response);
             }
         }
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 
     private String saveFile(FileData tempFile, String path) {

@@ -6,6 +6,10 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRegistration;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Статические методы класса UrlPatternUtil проверяют, есть ли URL-паттерн в
+ * данном контексе сервлета и позволяет получить URL-паттерн из запроса
+ */
 class UrlPatternUtil {
 
     private static boolean hasUrlPattern(ServletContext servletContext, String urlPattern) { 

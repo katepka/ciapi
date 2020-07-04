@@ -15,19 +15,20 @@ import javax.servlet.http.HttpServletResponse;
 import util.AppUtils;
 
 /**
- * SecurityFilter
- * Checks all requests before to give access to secured pages
+ * Класс SecurityFilter проверяет все клиентские запросы, 
+ * прежде чем предоставить доступ к защищенным страницам.
+ * Если пользователь не прошел процедуру идентификации и аутентификации
+ * - его перенаправляет на страницу /login
+ * Если пользователь не прошел процедуру авторизации - его перенаправляет
+ * на страницу Access Denied
  */
 @WebFilter("/*")
 public class SecurityFilter implements Filter {
 
-    public SecurityFilter() {
-    }
+    public SecurityFilter() {}
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        
-    }
+    public void init(FilterConfig filterConfig) throws ServletException {}
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
@@ -70,8 +71,6 @@ public class SecurityFilter implements Filter {
     }
 
     @Override
-    public void destroy() {
-        
-    }
+    public void destroy() {}
     
 }

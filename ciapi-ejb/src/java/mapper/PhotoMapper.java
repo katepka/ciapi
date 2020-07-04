@@ -12,6 +12,10 @@ import javax.ejb.LocalBean;
 import repository.IdeaFacadeLocal;
 import repository.ImplementationInfoFacadeLocal;
 
+/**
+ * Сессионный EJB. Служит для преобразования PhotoEntry в Photo и обратно.
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class PhotoMapper {

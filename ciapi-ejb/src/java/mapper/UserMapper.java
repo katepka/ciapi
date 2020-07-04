@@ -10,6 +10,10 @@ import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import repository.RoleFacadeLocal;
 
+/**
+ * Сессионный EJB. Служит для преобразования UserEntry в User и обратно.
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class UserMapper {

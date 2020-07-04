@@ -21,6 +21,14 @@ import javax.ws.rs.ClientErrorException;
 import util.AppUtils;
 import validation.EntryValidator;
 
+/**
+ * Обрабатывает POST-запрос на добавление нового комментария к идее. 
+ * Сервлет обращается к подсистеме взаимодействия с базой данных 
+ * и отправляет переданное через форму пользовательского ввода представление о комментарии. 
+ * Делается новая запись в базу данных. Осуществляется переход к странице прокомментированной идеи.
+ * 
+ * @author Теплякова Е.А.
+ */
 @WebServlet(name = "CommentServlet", urlPatterns = {"/comment"})
 public class CommentServlet extends HttpServlet {
 
@@ -77,14 +85,12 @@ public class CommentServlet extends HttpServlet {
                     }
                 }
             } else {
-                // TODO: handle the situation when ideaId is null
+                RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/notfound.jsp");
+                    if (requestDispatcher != null) {
+                        requestDispatcher.forward(request, response);
+                    }
             }
         }
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 
 }

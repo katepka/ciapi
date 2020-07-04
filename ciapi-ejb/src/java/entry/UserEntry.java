@@ -4,6 +4,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * Класс-модель пользователя.
+ * Содержит атрибуты и методы доступа, а также ограничения, 
+ * которые накладываются на атрибуты.
+ * @author Теплякова Е.А.
+ */
 public class UserEntry extends AbstractDataEntry {
     
     @NotNull(message = "email cannot be null")

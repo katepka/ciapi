@@ -8,8 +8,7 @@ import java.util.Set;
 import static util.AppConstants.*;
 
 /**
- * SecurityConfig
- * Mapping roles - urlPatterns configs
+ * Класс SecurityConfig осуществляет маппинг "роль - URL-паттерны, доступные роли"
  */
 public class SecurityConfig {
     

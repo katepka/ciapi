@@ -7,6 +7,12 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
+/**
+ * Класс проверяет полученный в качестве параметра экземпляр AbstractDataEntry
+ * на соответствие заданным для полей ограничениям.
+ * При наличии несоответствий выбрасывается исключение типа ValidationEntryException
+ * @author Теплякова Е.А.
+ */
 public class EntryValidator {
     
     private EntryValidator() {}
