@@ -4,6 +4,7 @@
     Author     : mi
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -49,6 +50,9 @@
                             </tr>
                             <tr>
                                 <td>
+                                    <c:if test="${passwordMustBeValid != null}">
+                                        <p style="color: tomato">${passwordMustBeValid}</p>
+                                    </c:if>
                                     <input type="password" name="password">
                                 </td>
                             </tr>
@@ -57,6 +61,9 @@
                             </tr>
                             <tr>
                                 <td>
+                                    <c:if test="${passwordRepeatMustBeValid != null}">
+                                        <p style="color: tomato">${passwordRepeatMustBeValid}</p>
+                                    </c:if>
                                     <input type="password" name="passwordRepeat">
                                 </td>
                             </tr>
