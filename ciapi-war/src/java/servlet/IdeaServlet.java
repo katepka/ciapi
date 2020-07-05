@@ -6,6 +6,7 @@ import entity.VoteIdeas;
 import entry.CommentEntry;
 import entry.IdeaEntry;
 import entry.ImplementationInfoEntry;
+import entry.StatusEntry;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -127,10 +128,10 @@ public class IdeaServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-
-        /* ============== Добавление информации о реализации ===================*/
+        
         ideaId = request.getParameter("ideaId");
-        String implInfo = request.getParameter("implInfo").trim();
+        /* ============== Добавление информации о реализации ===================*/
+        String implInfo = request.getParameter("implInfo");
         if (ideaId != null && implInfo != null) {
             idea = ideaActivity.findById(Long.parseLong(ideaId));
             if (idea != null) {
@@ -143,6 +144,17 @@ public class IdeaServlet extends HttpServlet {
             }
         }
         response.sendRedirect(request.getContextPath() + "/ideas?ideaId=" + ideaId);
+        
+        /* ==================== Изменение статуса идеи =======================*/
+        String newStatusId = request.getParameter("newStatus");
+        
+        if (ideaId != null && newStatusId != null) {
+            idea = ideaActivity.findById(Long.parseLong(ideaId));
+            StatusEntry newStatus = new StatusEntry();
+            newStatus.setId(Long.parseLong(newStatusId));
+            idea.setStatus(newStatus);
+            ideaActivity.updateIdea(Long.parseLong(ideaId), idea);
+        }
     }
 
 }

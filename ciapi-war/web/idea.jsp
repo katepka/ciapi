@@ -59,7 +59,21 @@
                     </div>
                 </td>
                 <td align="right">
-                    <div>${idea.status.title}</div>
+                    <div>
+                        ${idea.status.title}
+                        <c:if test="${loginedUser.role.id == 1 || loginedUser.role.id == 3}">
+                            <form action="ideas" method="POST">
+                                <select name="newStatus">
+                                    <option value="1">Новая</option>
+                                    <option value="2">На голосовании</option>
+                                    <option value="3">Реализована</option>
+                                    <option value="4">Закрыта</option>
+                                </select>
+                                <input type="hidden" name="ideaId" value="${idea.id}">
+                                <input type="submit" name="changeStatus" value="Поменять статус">
+                            </form>
+                        </c:if>
+                    </div>
                     <div>${ideaLocationName} | Дата создания: ${idea.createdFormatted}</div>
                 </td>
             </tr>
