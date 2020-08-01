@@ -1,12 +1,18 @@
 package client;
 
+import entry.CommentEntry;
+import entry.IdeaEntry;
 import java.text.MessageFormat;
+import java.util.List;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import util.AppConstants;
 
 public class IdeaClient {
 
@@ -14,8 +20,8 @@ public class IdeaClient {
     private Client client;
 
     public IdeaClient() {
-        client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(ClientConstants.BASE_URI).path("ideas");
+        client = ClientBuilder.newClient();
+        webTarget = client.target(AppConstants.BASE_URI).path("ideas");
     }
 
     public Response createIdea_XML(Object requestEntity) throws ClientErrorException {
@@ -23,7 +29,7 @@ public class IdeaClient {
                         .post(Entity.entity(requestEntity, MediaType.APPLICATION_XML), Response.class);
     }
 
-    public Response createIdea_JSON(Object requestEntity) throws ClientErrorException {
+    public Response createIdea_JSON(IdeaEntry requestEntity) throws ClientErrorException {
         return webTarget.path("").request(MediaType.APPLICATION_JSON)
                         .post(Entity.entity(requestEntity, MediaType.APPLICATION_JSON), Response.class);
     }
@@ -64,16 +70,28 @@ public class IdeaClient {
         return resource.request(MediaType.APPLICATION_JSON).get(responseType);
     }
 
-    public <T> T getAllIdeas_XML(Class<T> responseType) throws ClientErrorException {
+    public List<IdeaEntry> getAllIdeas_XML() throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("");
-        return resource.request(MediaType.APPLICATION_XML).get(responseType);
+        return resource.request(MediaType.APPLICATION_XML).get(new GenericType<List<IdeaEntry>>() {});
     }
 
-    public <T> T getAllIdeas_JSON(Class<T> responseType) throws ClientErrorException {
+    public List<IdeaEntry> getAllIdeas_JSON() throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("");
-        return resource.request(MediaType.APPLICATION_JSON).get(responseType);
+        return resource.request(MediaType.APPLICATION_JSON).get(new GenericType<List<IdeaEntry>>() {});
+    }
+    
+    public List<CommentEntry> getCommentsByIdeaId_XML(String id) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(MessageFormat.format("{0}/comments", new Object[]{id}));
+        return resource.request(MediaType.APPLICATION_XML).get(new GenericType<List<CommentEntry>>() {});
+    }
+
+    public List<CommentEntry> getCommentsByIdeaId_JSON(String id) throws ClientErrorException {
+        WebTarget resource = webTarget;
+        resource = resource.path(MessageFormat.format("{0}/comments", new Object[]{id}));
+        return resource.request(MediaType.APPLICATION_JSON).get(new GenericType<List<CommentEntry>>() {});
     }
 
     public void close() {

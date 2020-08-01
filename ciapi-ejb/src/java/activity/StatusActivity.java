@@ -9,6 +9,12 @@ import javax.ejb.Stateless;
 import mapper.StatusMapper;
 import repository.StatusFacadeLocal;
 
+/**
+ * Класс обеспечивает совершение операций создания, сохранения, 
+ * поиска по идентификатору и выборки всех статусов идей.
+ * Методы принимают в качестве параметров и возвращают объекты типа StatusEntry
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class StatusActivity {

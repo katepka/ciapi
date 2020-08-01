@@ -4,6 +4,12 @@ import entity.Comment;
 import java.util.List;
 import javax.ejb.Local;
 
+/**
+ * Локальный интерфейс, задающий операции над объектами типа Comment 
+ * - создание, редактирование, удаление, поиск по первичному ключу, 
+ * выборка всех сущностей и другие.
+ * @author Теплякова Е.А.
+ */
 @Local
 public interface CommentFacadeLocal {
 
@@ -20,7 +26,9 @@ public interface CommentFacadeLocal {
     List<Comment> findRange(int[] range);
     
     List<Comment> findByAuthor(long authorId);
+    
+    List<Comment> findByIdea(long ideaId);
 
-    int count();
+    long count();
     
 }

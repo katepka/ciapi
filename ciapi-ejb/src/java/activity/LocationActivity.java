@@ -9,6 +9,12 @@ import javax.ejb.LocalBean;
 import mapper.LocationMapper;
 import repository.LocationFacadeLocal;
 
+/**
+ * Класс обеспечивает совершение операций создания, сохранения, 
+ * поиска по идентификатору, по имени и выборки всех локаций.
+ * Методы принимают в качестве параметров и возвращают объекты типа LocationEntry
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class LocationActivity {

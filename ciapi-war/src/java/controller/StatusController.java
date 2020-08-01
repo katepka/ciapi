@@ -23,9 +23,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import repository.StatusFacadeLocal;
-import security.Secured;
+import security.arch.Secured;
 import validation.EntryValidator;
+import repository.StatusFacadeLocal;
 
 @Path("statuses")
 public class StatusController {
@@ -137,7 +137,7 @@ public class StatusController {
         List<IdeaEntry> ideas = null;
         try {
             long statusId = Long.parseLong(id);
-            ideas = ideaActivity.findByCategory(statusId);
+            ideas = ideaActivity.findByStatus(statusId);
             if (ideas != null && !ideas.isEmpty()) {
                 GenericEntity<List<IdeaEntry>> entities = new GenericEntity<List<IdeaEntry>>(ideas){};
                 return Response.ok().entity(entities).build();

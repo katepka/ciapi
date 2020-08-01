@@ -1,7 +1,9 @@
 package controller;
 
+import activity.CommentActivity;
 import activity.IdeaActivity;
 import entity.Idea;
+import entry.CommentEntry;
 import entry.IdeaEntry;
 import java.util.List;
 import java.util.logging.Level;
@@ -21,16 +23,18 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import repository.IdeaFacadeLocal;
 import validation.EntryValidator;
+import repository.IdeaFacadeLocal;
 
 @Path("ideas")
 public class IdeaController {
 
+    CommentActivity commentActivity = lookupCommentActivityBean();
+
     IdeaActivity ideaActivity = lookupIdeaActivityBean();
 
     IdeaFacadeLocal ideaFacade = lookupIdeaFacadeLocal();
-    
+     
     @Context
     private UriInfo context;
 
@@ -71,6 +75,28 @@ public class IdeaController {
         }
     }
     
+    @GET
+    @Path("{id}/comments")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getCommentsByIdea(@PathParam("id") String id) {
+        List<CommentEntry> comments = null;
+        try {
+            long ideaId = Long.parseLong(id);
+            comments = commentActivity.findByIdea(ideaId);
+            if (comments == null || comments.isEmpty()) {
+                return Response.status(Response.Status.NOT_FOUND).build();
+            } else {
+                GenericEntity<List<CommentEntry>> entities
+                        = new GenericEntity<List<CommentEntry>>(comments) {
+                };
+                return Response.ok().entity(entities).build();
+            }
+        } catch (NumberFormatException nfe) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", nfe);
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
+        
     @POST
     @Path("/")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -137,6 +163,16 @@ public class IdeaController {
         try {
             javax.naming.Context c = new InitialContext();
             return (IdeaActivity) c.lookup("java:global/ciapi/ciapi-ejb/IdeaActivity!activity.IdeaActivity");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private CommentActivity lookupCommentActivityBean() {
+        try {
+            javax.naming.Context c = new InitialContext();
+            return (CommentActivity) c.lookup("java:global/ciapi/ciapi-ejb/CommentActivity!activity.CommentActivity");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

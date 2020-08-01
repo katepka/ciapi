@@ -7,6 +7,10 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 
+/**
+ * Сессионный EJB. Служит для преобразования StatusEntry в Status и обратно.
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class StatusMapper {
@@ -24,6 +28,9 @@ public class StatusMapper {
     
     public StatusEntry mapStatusToStatusEntry(Status entity) {
         StatusEntry entry = new StatusEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getTitle() != null) {
             entry.setTitle(entity.getTitle());    
         }

@@ -7,6 +7,10 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 
+/**
+ * Сессионный EJB. Служит для преобразования RoleEntry в Role и обратно.
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class RoleMapper {
@@ -21,6 +25,9 @@ public class RoleMapper {
     
     public RoleEntry mapRoleToRoleEntry(Role entity) {
         RoleEntry entry = new RoleEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getTitle() != null) {
             entry.setTitle(entity.getTitle());
         }

@@ -4,6 +4,12 @@ import entity.ImplementationInfo;
 import java.util.List;
 import javax.ejb.Local;
 
+/**
+ * Локальный интерфейс, задающий операции над объектами 
+ * типа ImplementationInfo - создание, редактирование, 
+ * удаление, поиск по первичному ключу, выборка всех сущностей и другие.
+ * @author Теплякова Е.А.
+ */
 @Local
 public interface ImplementationInfoFacadeLocal {
 
@@ -19,6 +25,6 @@ public interface ImplementationInfoFacadeLocal {
 
     List<ImplementationInfo> findRange(int[] range);
 
-    int count();
+    long count();
     
 }

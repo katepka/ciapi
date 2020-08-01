@@ -9,6 +9,12 @@ import javax.ejb.LocalBean;
 import mapper.ImplementationInfoMapper;
 import repository.ImplementationInfoFacadeLocal;
 
+/**
+ * Класс обеспечивает совершение операций создания, сохранения, 
+ * поиска по идентификатору и выборки всех объектов информация о реализации.
+ * Методы принимают в качестве параметров и возвращают объекты типа ImplementationInfoEntry
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class ImplementationInfoActivity {

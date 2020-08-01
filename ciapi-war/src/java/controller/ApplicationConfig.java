@@ -22,13 +22,14 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(controller.CategoryController.class);
         resources.add(controller.IdeaController.class);
+        resources.add(controller.LocationController.class);
         resources.add(controller.RatingController.class);
         resources.add(controller.RegistrationController.class);
         resources.add(controller.RoleController.class);
         resources.add(controller.StatusController.class);
         resources.add(controller.UserController.class);
-        resources.add(security.AuthenticationController.class);
-        resources.add(security.AuthenticationFilter.class);
+        resources.add(security.arch.AuthenticationController.class);
+        resources.add(security.arch.AuthenticationFilter.class);
     }
     
 }

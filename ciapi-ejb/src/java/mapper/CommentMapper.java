@@ -12,6 +12,10 @@ import javax.ejb.LocalBean;
 import repository.IdeaFacadeLocal;
 import repository.UserFacadeLocal;
 
+/**
+ * Сессионный EJB. Служит для преобразования CommentEntry в Comment и обратно.
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class CommentMapper {
@@ -50,6 +54,9 @@ public class CommentMapper {
     
     public CommentEntry mapCommentToCommentEntry(Comment entity) {
         CommentEntry entry = new CommentEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getText() != null) {
             entry.setText(entity.getText());
         }

@@ -15,6 +15,12 @@ import repository.CommentFacadeLocal;
 import repository.IdeaFacadeLocal;
 import repository.UserFacadeLocal;
 
+/**
+ * Класс обеспечивает совершение операций создания, сохранения, 
+ * поиска по идентификатору, поиска по автору и выборки всех комментариев.
+ * Методы принимают в качестве параметров и возвращают объекты типа CommentEntry
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class CommentActivity {
@@ -57,6 +63,12 @@ public class CommentActivity {
     
     public List<CommentEntry> findByAuthor(long authorId) {
         List<Comment> commentList = commentFacade.findByAuthor(authorId);
+        List<CommentEntry> entryList = commentMapper.mapCommentListToCommentEntryList(commentList);
+        return entryList;
+    }
+    
+    public List<CommentEntry> findByIdea(long ideaId) {
+        List<Comment> commentList = commentFacade.findByIdea(ideaId);
         List<CommentEntry> entryList = commentMapper.mapCommentListToCommentEntryList(commentList);
         return entryList;
     }

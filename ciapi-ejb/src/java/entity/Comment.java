@@ -3,6 +3,7 @@ package entity;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,7 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Comment.findAll", query = "SELECT c FROM Comment c"),
     @NamedQuery(name = "Comment.findById", query = "SELECT c FROM Comment c WHERE c.id = :id"),
     @NamedQuery(name = "Comment.findByCreated", query = "SELECT c FROM Comment c WHERE c.created = :created"),
-    @NamedQuery(name = "Comment.findByAuthor", query = "SELECT c FROM Comment c JOIN c.author s WHERE s.id = :authorId")})
+    @NamedQuery(name = "Comment.findByAuthor", query = "SELECT c FROM Comment c JOIN c.author s WHERE s.id = :authorId"),
+    @NamedQuery(name = "Comment.findByIdea", query = "SELECT c FROM Comment c JOIN c.idea s WHERE s.id = :ideaId")})
 public class Comment implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,17 +47,16 @@ public class Comment implements Serializable {
     private String text;
     
     @Basic(optional = false)
-    @NotNull
     @Column(name = "created")
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
     
     @JoinColumn(name = "idea_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.REMOVE)
     private Idea idea;
     
     @JoinColumn(name = "author_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.REMOVE)
     private User author;
 
     public Comment() {
@@ -99,16 +100,16 @@ public class Comment implements Serializable {
         return idea;
     }
 
-    public void setIdea(Idea ideaId) {
-        this.idea = ideaId;
+    public void setIdea(Idea idea) {
+        this.idea = idea;
     }
 
     public User getAuthor() {
         return author;
     }
 
-    public void setAuthor(User authorId) {
-        this.author = authorId;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     @Override
@@ -120,7 +121,6 @@ public class Comment implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Comment)) {
             return false;
         }

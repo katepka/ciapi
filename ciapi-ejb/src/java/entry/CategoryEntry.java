@@ -3,6 +3,12 @@ package entry;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * Класс-модель категории.
+ * Содержит атрибуты и методы доступа, а также ограничения, 
+ * которые накладываются на атрибуты.
+ * @author Теплякова Е.А.
+ */
 public class CategoryEntry extends AbstractDataEntry {
     @NotNull(message = "title cannot be null")
     @Size(min = 1, max = 255)

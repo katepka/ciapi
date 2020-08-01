@@ -24,6 +24,12 @@ import repository.LocationFacadeLocal;
 import repository.StatusFacadeLocal;
 import repository.UserFacadeLocal;
 
+/**
+ * Класс обеспечивает совершение операций создания, сохранения, 
+ * поиска по различным атрибутам и выборки всех идей.
+ * Методы принимают в качестве параметров и возвращают объекты типа IdeaEntry
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class IdeaActivity {
@@ -147,10 +153,12 @@ public class IdeaActivity {
             }
             
             // Новый координатор не создается
-            Long coordinatorId = entry.getCoordinator().getId();
-            User coordinator = userFacade.find(coordinatorId);
-            if (coordinator != null) {
-                entity.setCoordinator(coordinator);
+            if (entry.getCoordinator() != null) {
+                Long coordinatorId = entry.getCoordinator().getId();
+                User coordinator = userFacade.find(coordinatorId);
+                if (coordinator != null) {
+                    entity.setCoordinator(coordinator);
+                }
             }
             
             // Новый статус не создается
@@ -161,26 +169,39 @@ public class IdeaActivity {
             }
             
             // Новая локация - создается
-            Long locationId = entry.getLocation().getId();
-            Location location = locationFacade.find(locationId);
-            if (location != null) {
-                entity.setLocation(location);
-            } else {
-                Location newLocation = locationMapper.mapLocationEntryToLocation(entry.getLocation());
-                locationFacade.create(newLocation);
-                entity.setLocation(newLocation);
+            if (entry.getLocation() != null) {
+                Long locationId = entry.getLocation().getId();
+                if (locationId != null) {
+                    Location location = locationFacade.find(locationId);
+                    if (location != null) {
+                        entity.setLocation(location);
+                    } else {
+                        Location newLocation = locationMapper.mapLocationEntryToLocation(entry.getLocation());
+                        locationFacade.create(newLocation);
+                        entity.setLocation(newLocation);
+                    }
+                }
             }
             
             // Новая информация о реализации - создается
-            Long implementationInfoId = entry.getImplementationInfo().getId();
-            ImplementationInfo implementationInfo = implementationInfoFacade.find(implementationInfoId);
-            if (implementationInfo != null) {
-                entity.setImplInfo(implementationInfo);
-            } else {
-                ImplementationInfo newImplInfo = implementationInfoMapper
-                    .mapImplementationInfoEntryToImplementationInfo(entry.getImplementationInfo());
-                implementationInfoFacade.create(newImplInfo);
-                entity.setImplInfo(newImplInfo);
+            if (entry.getImplementationInfo() != null) {
+                Long implementationInfoId = entry.getImplementationInfo().getId();
+                if (implementationInfoId != null) {
+                    ImplementationInfo implementationInfo = implementationInfoFacade.find(implementationInfoId);
+                    if (implementationInfo != null) {
+                        entity.setImplInfo(implementationInfo);
+                    } else {
+                        ImplementationInfo newImplInfo = implementationInfoMapper
+                                .mapImplementationInfoEntryToImplementationInfo(entry.getImplementationInfo());
+                        implementationInfoFacade.create(newImplInfo);
+                        entity.setImplInfo(newImplInfo);
+                    }
+                } else {
+                    ImplementationInfo newImplInfo = implementationInfoMapper
+                            .mapImplementationInfoEntryToImplementationInfo(entry.getImplementationInfo());
+                    implementationInfoFacade.create(newImplInfo);
+                    entity.setImplInfo(newImplInfo);
+                }
             }
             
             ideaFacade.edit(entity);

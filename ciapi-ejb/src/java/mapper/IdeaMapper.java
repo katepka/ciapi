@@ -18,6 +18,10 @@ import repository.LocationFacadeLocal;
 import repository.StatusFacadeLocal;
 import repository.UserFacadeLocal;
 
+/**
+ * Сессионный EJB. Служит для преобразования IdeaEntry в Idea и обратно.
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class IdeaMapper {
@@ -46,6 +50,9 @@ public class IdeaMapper {
 
     public Idea mapIdeaEntryToIdea(IdeaEntry entry) {
         Idea entity = new Idea();
+        if (entry.getId() != null) {
+            entity.setId(entry.getId());
+        }
         if (entry.getTitle() != null) {
             entity.setTitle(entry.getTitle());
         }
@@ -54,6 +61,9 @@ public class IdeaMapper {
         }
         if (entry.getCreated() != null) {
             entity.setCreated(entry.getCreated());
+        }
+        if (entry.getPhotoRef()!= null) {
+            entity.setPhotoRef(entry.getPhotoRef());
         }
         
         Long statusId = entry.getStatus().getId();
@@ -74,22 +84,56 @@ public class IdeaMapper {
             entity.setCategory(category);
         }
         
-        Long locationId = entry.getLocation().getId();
-        Location location = locationFacade.find(locationId);
-        if (location != null) {
-            entity.setLocation(location);
+        if (entry.getPhotoRef() != null) {
+            entity.setPhotoRef(entry.getPhotoRef());
         }
         
-        Long coordinatorId = entry.getCoordinator().getId();
-        User coordinator = userFacade.find(coordinatorId);
-        if (coordinator != null) {
-            entity.setCoordinator(coordinator);
+        if (entry.getLocation() != null) {
+
+            Long locationId = entry.getLocation().getId();
+            if (locationId != null) {
+                Location location = locationFacade.find(locationId);
+                if (location != null) {
+                    entity.setLocation(location);
+                }
+            } else {
+                Location location = new Location();
+                if (entry.getLocation().getLat() != null && entry.getLocation().getLon() != null) {
+                    location.setLat(entry.getLocation().getLat());
+                    location.setLon(entry.getLocation().getLon());
+                    if (entry.getLocation().getName() != null) {
+                        location.setName(entry.getLocation().getName());
+                    }
+                    if (entry.getLocation().getRadius() != null) {
+                        location.setRadius(entry.getLocation().getRadius());
+                    }
+                    entity.setLocation(location);
+                } else {
+                    // TODO: handle the situation when entry doesn't contain a correct location data
+                }
+
+            }
         }
         
-        Long implInfoId = entry.getImplementationInfo().getId();
-        ImplementationInfo implInfo = implementationInfoFacade.find(implInfoId);
-        if (implInfo != null) {
-            entity.setImplInfo(implInfo);
+        
+        if (entry.getCoordinator() != null) {
+            Long coordinatorId = entry.getCoordinator().getId();
+            if (coordinatorId != null) {
+                User coordinator = userFacade.find(coordinatorId);
+                if (coordinator != null) {
+                    entity.setCoordinator(coordinator);
+                }
+            }
+        }
+
+        if (entry.getImplementationInfo() != null) {
+            Long implInfoId = entry.getImplementationInfo().getId();
+            if (implInfoId != null) {
+                ImplementationInfo implInfo = implementationInfoFacade.find(implInfoId);
+                if (implInfo != null) {
+                    entity.setImplInfo(implInfo);
+                }
+            }
         }
         
         return entity;
@@ -97,6 +141,10 @@ public class IdeaMapper {
     
     public IdeaEntry mapIdeaToIdeaEntry(Idea entity) {
         IdeaEntry entry = new IdeaEntry();
+        
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         
         if (entity.getTitle() != null) {
             entry.setTitle(entity.getTitle());
@@ -107,7 +155,10 @@ public class IdeaMapper {
         if (entity.getCreated() != null) {
             entry.setCreated(entity.getCreated());
         }
-        
+        if (entity.getPhotoRef()!= null) {
+            entry.setPhotoRef(entity.getPhotoRef());
+        }
+
         Status status = entity.getStatus();
         if (status != null) {
             entry.setStatus(statusMapper.mapStatusToStatusEntry(status));

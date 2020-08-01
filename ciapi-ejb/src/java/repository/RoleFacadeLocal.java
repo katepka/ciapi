@@ -4,6 +4,12 @@ import entity.Role;
 import java.util.List;
 import javax.ejb.Local;
 
+/**
+ * Локальный интерфейс, задающий операции над объектами 
+ * типа Role - создание, редактирование, удаление, 
+ * поиск по первичному ключу, выборка всех сущностей и другие.
+ * @author Теплякова Е.А.
+ */
 @Local
 public interface RoleFacadeLocal {
 
@@ -19,6 +25,6 @@ public interface RoleFacadeLocal {
 
     List<Role> findRange(int[] range);
 
-    int count();
+    long count();
     
 }

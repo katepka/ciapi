@@ -22,8 +22,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import repository.UserFacadeLocal;
 import validation.EntryValidator;
+import repository.UserFacadeLocal;
 
 @Path("users")
 public class UserController {
@@ -134,7 +134,7 @@ public class UserController {
         }
     }
     
-
+    
     private UserActivity lookupUserActivityBean() {
         try {
             javax.naming.Context c = new InitialContext();

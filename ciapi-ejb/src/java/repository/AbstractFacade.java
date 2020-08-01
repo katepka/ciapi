@@ -1,8 +1,20 @@
 package repository;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
+import javax.validation.ConstraintViolation;
+import javax.validation.*;
+import javax.validation.Validator;
 
+/**
+ * Абстрактный класс, обеспечивающий взаимодействие с базой данных и
+ * наболее общие операции над объектами-Entity - создание, редактирование,
+ * удаление, поиск по первичному ключу, выборка всех сущностей.
+ * @author Теплякова Е.А.
+ * @param <T> - тип, определеяющий Entity
+ */
 public abstract class AbstractFacade<T> {
 
     private Class<T> entityClass;
@@ -14,7 +26,18 @@ public abstract class AbstractFacade<T> {
     protected abstract EntityManager getEntityManager();
 
     public void create(T entity) {
-        getEntityManager().persist(entity);
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<T>> constraintViolations = validator.validate(entity);
+        if (constraintViolations.size() > 0) {
+            Iterator<ConstraintViolation<T>> iterator = constraintViolations.iterator();
+            while (iterator.hasNext()) {
+                ConstraintViolation<T> cv = iterator.next();
+                System.err.println(cv.getRootBeanClass().getName() + "." + cv.getPropertyPath() + " " + cv.getMessage());
+            }
+        } else {
+            getEntityManager().persist(entity);
+    }
     }
 
     public void edit(T entity) {
@@ -46,12 +69,12 @@ public abstract class AbstractFacade<T> {
         return q.getResultList();
     }
 
-    public int count() {
+    public long count() {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         javax.persistence.criteria.Root<T> rt = cq.from(entityClass);
         cq.select(getEntityManager().getCriteriaBuilder().count(rt));
         javax.persistence.Query q = getEntityManager().createQuery(cq);
-        return ((Long) q.getSingleResult()).intValue();
+        return (Long) q.getSingleResult();
     }
     
 }

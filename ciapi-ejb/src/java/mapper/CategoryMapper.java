@@ -7,6 +7,10 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 
+/**
+ * Сессионный EJB. Служит для преобразования CategoryEntry в Category и обратно.
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class CategoryMapper {
@@ -27,6 +31,9 @@ public class CategoryMapper {
     
     public CategoryEntry mapCategoryToCategoryEntry(Category entity) {
         CategoryEntry entry = new CategoryEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getTitle() != null) {
             entry.setTitle(entity.getTitle());
         }

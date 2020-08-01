@@ -1,12 +1,16 @@
 package repository;
 
 import entity.Comment;
-import entity.User;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+/**
+ * Сессионный EJB. Определяет CRUD-операции над объектами типа Comment.
+ * Расширяет AbstractFacade<T>
+ * @author Теплякова Е.А.
+ */
 @Stateless
 public class CommentFacade extends AbstractFacade<Comment> implements CommentFacadeLocal {
 
@@ -28,5 +32,11 @@ public class CommentFacade extends AbstractFacade<Comment> implements CommentFac
                 .setParameter("authorId", authorId)
                 .getResultList();
     }
-    
+
+    @Override
+    public List<Comment> findByIdea(long ideaId) {
+        return em.createNamedQuery("Comment.findByIdea")
+                .setParameter("ideaId", ideaId)
+                .getResultList();
+    } 
 }

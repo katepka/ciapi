@@ -6,10 +6,15 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
-import mapper.RoleMapper;
 import mapper.UserMapper;
 import repository.UserFacadeLocal;
 
+/**
+ * Класс обеспечивает совершение операций создания, сохранения, 
+ * поиска по различным атрибутам и выборки всех пользователей.
+ * Методы принимают в качестве параметров и возвращают объекты типа UserEntry
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class UserActivity {
@@ -42,6 +47,12 @@ public class UserActivity {
         List<User> userList = userFacade.findByRole(roleId);
         List<UserEntry> entryList = userMapper.mapUserListToUserEntryList(userList);
         return entryList;
+    }
+    
+    public UserEntry findUser(String email, String password) {
+        User user = userFacade.findUser(email, password);
+        UserEntry entry = userMapper.mapUserToUserEntry(user);
+        return entry;
     }
     
     public UserEntry updateUser(long id, UserEntry entry) {

@@ -7,6 +7,11 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 
+/**
+ * Сессионный EJB. Служит для преобразования ImplementationInfoEntry
+ * в ImplementationInfo и обратно.
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class ImplementationInfoMapper {
@@ -21,6 +26,9 @@ public class ImplementationInfoMapper {
     
     public ImplementationInfoEntry mapImplementationInfoToImplementationInfoEntry(ImplementationInfo entity) {
         ImplementationInfoEntry entry = new ImplementationInfoEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getDescription() != null) {
             entry.setDescription(entity.getDescription());
         }

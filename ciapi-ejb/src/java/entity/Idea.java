@@ -37,7 +37,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Idea.findByLocation", query = "SELECT i FROM Idea i JOIN i.location s WHERE s.id = :locationId"),
     @NamedQuery(name = "Idea.findByAuthor", query = "SELECT i FROM Idea i JOIN i.author s WHERE s.id = :authorId"),
     @NamedQuery(name = "Idea.findByCoordinator", query = "SELECT i FROM Idea i JOIN i.coordinator s WHERE s.id = :coordinatorId"),
-    @NamedQuery(name = "Idea.findByStatus", query = "SELECT i FROM Idea i JOIN i.status s WHERE s.id = :statusId")})
+    @NamedQuery(name = "Idea.findByStatus", query = "SELECT i FROM Idea i JOIN i.status s WHERE s.id = :statusId"),
+    @NamedQuery(name = "Idea.countByStatus", query = "SELECT COUNT(i) FROM Idea i JOIN i.status s WHERE s.id = :statusId"),
+    @NamedQuery(name = "Idea.countByCategory", query = "SELECT COUNT(i) FROM Idea i JOIN i.category c WHERE c.id = :categoryId")})
 public class Idea implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -61,7 +63,6 @@ public class Idea implements Serializable {
     private String description;
     
     @Basic(optional = false)
-    @NotNull
     @Column(name = "created")
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
@@ -75,26 +76,30 @@ public class Idea implements Serializable {
     private Category category;
     
     @JoinColumn(name = "coordinator_id", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(optional = true)
     private User coordinator;
     
     @JoinColumn(name = "impl_info_id", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(optional = true, cascade = CascadeType.PERSIST)
     private ImplementationInfo implInfo;
     
     @JoinColumn(name = "location_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = true, cascade = CascadeType.PERSIST)
     private Location location;
     
     @JoinColumn(name = "status_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Status status;
     
+    @Basic(optional = true)
+    @Column(name = "photoRef")
+    private String photoRef;
+    
     @OneToMany(mappedBy = "idea")
     private Collection<Photo> photoCollection;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idea")
-    private Collection<VotesIdeas> votesIdeasCollection;
+    private Collection<VoteIdeas> votesIdeasCollection;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idea")
     private Collection<Comment> commentCollection;
@@ -193,6 +198,14 @@ public class Idea implements Serializable {
         this.status = status;
     }
 
+    public String getPhotoRef() {
+        return photoRef;
+    }
+
+    public void setPhotoRef(String photoRef) {
+        this.photoRef = photoRef;
+    }
+
     @XmlTransient
     public Collection<Photo> getPhotoCollection() {
         return photoCollection;
@@ -203,11 +216,11 @@ public class Idea implements Serializable {
     }
 
     @XmlTransient
-    public Collection<VotesIdeas> getVotesIdeasCollection() {
+    public Collection<VoteIdeas> getVotesIdeasCollection() {
         return votesIdeasCollection;
     }
 
-    public void setVotesIdeasCollection(Collection<VotesIdeas> votesIdeasCollection) {
+    public void setVotesIdeasCollection(Collection<VoteIdeas> votesIdeasCollection) {
         this.votesIdeasCollection = votesIdeasCollection;
     }
 
@@ -229,7 +242,6 @@ public class Idea implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Idea)) {
             return false;
         }
@@ -242,7 +254,17 @@ public class Idea implements Serializable {
 
     @Override
     public String toString() {
-        return "entity.Idea[ id=" + id + " ]";
+        return "Idea{" + "id=" + id 
+                + ", title=" + title 
+                + ", description=" + description 
+                + ", created=" + created 
+                + ", author=" + author 
+                + ", category=" + category 
+                + ", coordinator=" + coordinator 
+                + ", implInfo=" + implInfo 
+                + ", location=" + location 
+                + ", status=" + status 
+                + ", photoRef=" + photoRef + '}';
     }
-    
+
 }

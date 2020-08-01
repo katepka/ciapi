@@ -2,6 +2,12 @@ package entry;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * Класс-модель локации.
+ * Содержит атрибуты и методы доступа, а также ограничения, 
+ * которые накладываются на атрибуты.
+ * @author Теплякова Е.А.
+ */
 public class LocationEntry extends AbstractDataEntry {
     
     @NotNull(message = "lat cannot be null")
@@ -18,7 +24,7 @@ public class LocationEntry extends AbstractDataEntry {
         return lat;
     }
 
-    public void setLat(float lat) {
+    public void setLat(Float lat) {
         this.lat = lat;
     }
 
@@ -26,7 +32,7 @@ public class LocationEntry extends AbstractDataEntry {
         return lon;
     }
 
-    public void setLon(float lon) {
+    public void setLon(Float lon) {
         this.lon = lon;
     }
 
@@ -34,7 +40,7 @@ public class LocationEntry extends AbstractDataEntry {
         return radius;
     }
 
-    public void setRadius(float radius) {
+    public void setRadius(Float radius) {
         this.radius = radius;
     }
 

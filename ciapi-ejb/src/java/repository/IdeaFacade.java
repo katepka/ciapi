@@ -6,6 +6,11 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+/**
+ * Сессионный EJB. Определяет CRUD-операции над объектами типа Idea.
+ * Расширяет AbstractFacade<T>
+ * @author Теплякова Е.А.
+ */
 @Stateless
 public class IdeaFacade extends AbstractFacade<Idea> implements IdeaFacadeLocal {
 
@@ -62,5 +67,20 @@ public class IdeaFacade extends AbstractFacade<Idea> implements IdeaFacadeLocal 
                 .setParameter("title", title)
                 .getResultList();
     }
-
+    
+    @Override
+    public long countByStatus(long statusId) {
+        return (Long) em.createNamedQuery("Idea.countByStatus")
+                .setParameter("statusId", statusId)
+                .getSingleResult();
+    }
+    
+    @Override
+    public long countByCategory(long categoryId) {
+        return (Long) em.createNamedQuery("Idea.countByCategory")
+                .setParameter("categoryId", categoryId)
+                .getSingleResult();
+    }
+    
 }
+

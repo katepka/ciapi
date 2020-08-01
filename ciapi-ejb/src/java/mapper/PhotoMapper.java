@@ -12,6 +12,10 @@ import javax.ejb.LocalBean;
 import repository.IdeaFacadeLocal;
 import repository.ImplementationInfoFacadeLocal;
 
+/**
+ * Сессионный EJB. Служит для преобразования PhotoEntry в Photo и обратно.
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class PhotoMapper {
@@ -47,6 +51,9 @@ public class PhotoMapper {
     
     public PhotoEntry mapPhotoToPhotoEntry(Photo entity) {
         PhotoEntry entry = new PhotoEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getPhotoRef() != null) {
             entry.setPhotoRef(entity.getPhotoRef());
         }

@@ -4,6 +4,12 @@ import entity.Idea;
 import java.util.List;
 import javax.ejb.Local;
 
+/**
+ * Локальный интерфейс, задающий операции над объектами типа Idea 
+ * - создание, редактирование, удаление, поиск по первичному ключу, 
+ * выборка всех сущностей и другие.
+ * @author Теплякова Е.А.
+ */
 @Local
 public interface IdeaFacadeLocal {
 
@@ -31,6 +37,10 @@ public interface IdeaFacadeLocal {
 
     List<Idea> findRange(int[] range);
 
-    int count();
+    long count();
+    
+    long countByStatus(long statusId);
+    
+    long countByCategory(long categoryId);
     
 }

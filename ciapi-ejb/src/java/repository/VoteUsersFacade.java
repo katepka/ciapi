@@ -5,8 +5,13 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+/**
+ * Сессионный EJB. Определяет CRUD-операции над объектами типа VotesUsers.
+ * Расширяет AbstractFacade<T>
+ * @author Теплякова Е.А.
+ */
 @Stateless
-public class VotesUsersFacade extends AbstractFacade<VotesUsers> implements VotesUsersFacadeLocal {
+public class VoteUsersFacade extends AbstractFacade<VotesUsers> implements VoteUsersFacadeLocal {
 
     @PersistenceContext(unitName = "ciapi-ejbPU")
     private EntityManager em;
@@ -16,7 +21,7 @@ public class VotesUsersFacade extends AbstractFacade<VotesUsers> implements Vote
         return em;
     }
 
-    public VotesUsersFacade() {
+    public VoteUsersFacade() {
         super(VotesUsers.class);
     }
     

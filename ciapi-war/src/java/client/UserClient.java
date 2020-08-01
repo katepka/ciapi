@@ -1,12 +1,17 @@
 package client;
 
+import entry.IdeaEntry;
+import entry.UserEntry;
 import java.text.MessageFormat;
+import java.util.List;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import util.AppConstants;
 
 public class UserClient {
 
@@ -15,19 +20,19 @@ public class UserClient {
 
     public UserClient() {
         client = javax.ws.rs.client.ClientBuilder.newClient();
-        webTarget = client.target(ClientConstants.BASE_URI).path("users");
+        webTarget = client.target(AppConstants.BASE_URI).path("users");
     }
 
-    public <T> T getAllUsers_XML(Class<T> responseType) throws ClientErrorException {
+    public List<UserEntry> getAllUsers_XML() throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("");
-        return resource.request(MediaType.APPLICATION_XML).get(responseType);
+        return resource.request(MediaType.APPLICATION_XML).get(new GenericType<List<UserEntry>>() {});
     }
 
-    public <T> T getAllUsers_JSON(Class<T> responseType) throws ClientErrorException {
+    public List<UserEntry> getAllUsers_JSON() throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path("");
-        return resource.request(MediaType.APPLICATION_JSON).get(responseType);
+        return resource.request(MediaType.APPLICATION_JSON).get(new GenericType<List<UserEntry>>() {});
     }
 
     public <T> T getUserById_XML(Class<T> responseType, String id) throws ClientErrorException {
@@ -66,16 +71,16 @@ public class UserClient {
                         .put(Entity.entity(requestEntity, MediaType.APPLICATION_JSON), Response.class);
     }
 
-    public <T> T getIdeasByAuthorId_XML(Class<T> responseType, String id) throws ClientErrorException {
+    public List<IdeaEntry> getIdeasByAuthorId_XML(String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(MessageFormat.format("{0}/ideas", new Object[]{id}));
-        return resource.request(MediaType.APPLICATION_XML).get(responseType);
+        return resource.request(MediaType.APPLICATION_XML).get(new GenericType<List<IdeaEntry>>() {});
     }
 
-    public <T> T getIdeasByAuthorId_JSON(Class<T> responseType, String id) throws ClientErrorException {
+    public List<IdeaEntry> getIdeasByAuthorId_JSON(String id) throws ClientErrorException {
         WebTarget resource = webTarget;
         resource = resource.path(MessageFormat.format("{0}/ideas", new Object[]{id}));
-        return resource.request(MediaType.APPLICATION_JSON).get(responseType);
+        return resource.request(MediaType.APPLICATION_JSON).get(new GenericType<List<IdeaEntry>>() {});
     }
 
     public void close() {

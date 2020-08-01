@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findById", query = "SELECT u FROM User u WHERE u.id = :id"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
     @NamedQuery(name = "User.findByName", query = "SELECT u FROM User u WHERE u.name = :name"),
+    @NamedQuery(name = "User.findUser", query = "SELECT u FROM User u WHERE u.email = :email AND u.password = :password"),
     @NamedQuery(name = "User.findByRole", query = "SELECT u FROM User u JOIN u.role s WHERE s.id = :roleId")})
 public class User implements Serializable {
 
@@ -38,7 +39,6 @@ public class User implements Serializable {
     @Column(name = "id")
     private Long id;
     
-//     @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -74,11 +74,11 @@ public class User implements Serializable {
     private Collection<VotesUsers> votesUsersCollection1;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private Collection<VotesIdeas> votesIdeasCollection;
+    private Collection<VoteIdeas> votesIdeasCollection;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "author")
     private Collection<Comment> commentCollection;
-
+    
     public User() {
     }
 
@@ -170,11 +170,11 @@ public class User implements Serializable {
     }
 
     @XmlTransient
-    public Collection<VotesIdeas> getVotesIdeasCollection() {
+    public Collection<VoteIdeas> getVotesIdeasCollection() {
         return votesIdeasCollection;
     }
 
-    public void setVotesIdeasCollection(Collection<VotesIdeas> votesIdeasCollection) {
+    public void setVotesIdeasCollection(Collection<VoteIdeas> votesIdeasCollection) {
         this.votesIdeasCollection = votesIdeasCollection;
     }
 
@@ -196,7 +196,6 @@ public class User implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof User)) {
             return false;
         }

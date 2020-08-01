@@ -4,6 +4,12 @@ import entity.Location;
 import java.util.List;
 import javax.ejb.Local;
 
+/**
+ * Локальный интерфейс, задающий операции над объектами 
+ * типа Location - создание, редактирование, удаление, 
+ * поиск по первичному ключу, выборка всех сущностей и другие.
+ * @author Теплякова Е.А.
+ */
 @Local
 public interface LocationFacadeLocal {
 
@@ -21,6 +27,6 @@ public interface LocationFacadeLocal {
 
     List<Location> findRange(int[] range);
 
-    int count();
+    long count();
     
 }

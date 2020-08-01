@@ -1,14 +1,22 @@
 package entry;
 
+import java.util.Comparator;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Класс-модель комментария.
+ * Содержит атрибуты и методы доступа, а также ограничения, 
+ * которые накладываются на атрибуты.
+ * @author Теплякова Е.А.
+ */
 public class CommentEntry extends AbstractDataEntry {
     @NotNull(message = "text cannot be null")
     private String text;
     
-    @NotNull(message = "created cannot be null")
     private Date created;
+    
+    private String createdFormatted;
     
     @NotNull(message = "author cannot be null")
     private UserEntry author;
@@ -32,6 +40,14 @@ public class CommentEntry extends AbstractDataEntry {
         this.created = created;
     }
 
+    public String getCreatedFormatted() {
+        return createdFormatted;
+    }
+
+    public void setCreatedFormatted(String createdFormatted) {
+        this.createdFormatted = createdFormatted;
+    }
+
     public UserEntry getAuthor() {
         return author;
     }
@@ -48,5 +64,11 @@ public class CommentEntry extends AbstractDataEntry {
         this.idea = idea;
     }
     
+    public static final Comparator<CommentEntry> COMPARE_BY_CREATED = new Comparator<CommentEntry>() {
+        @Override
+        public int compare(CommentEntry comment1, CommentEntry comment2) {
+            return comment2.created.compareTo(comment1.created);
+        }
+    };
     
 }

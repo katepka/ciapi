@@ -10,6 +10,10 @@ import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import repository.RoleFacadeLocal;
 
+/**
+ * Сессионный EJB. Служит для преобразования UserEntry в User и обратно.
+ * @author Теплякова Е.А.
+ */
 @Stateless
 @LocalBean
 public class UserMapper {
@@ -24,7 +28,9 @@ public class UserMapper {
         User entity = new User();
         Long roleId = entry.getRole().getId();
         Role role = roleFacade.find(roleId);
-        
+        if (entry.getId() != null) {
+            entity.setId(entry.getId());
+        }
         if (entry.getEmail() != null) {
             entity.setEmail(entry.getEmail());
         }
@@ -42,6 +48,9 @@ public class UserMapper {
     
     public UserEntry mapUserToUserEntry(User entity) {
         UserEntry entry = new UserEntry();
+        if (entity.getId() != null) {
+            entry.setId(entity.getId());
+        }
         if (entity.getEmail() != null) {
             entry.setEmail(entity.getEmail());
         }
